@@ -9,6 +9,12 @@
   #shopify-section-{{ section.id }} .pa-hero {
     min-height: {% if section.settings.full_height %}100svh{% else %}{{ section.settings.min_height }}px{% endif %};
   }
+  {%- if section.index == 1 -%}
+  /* Pull the hero up behind the fixed header so it fills from the very top */
+  #shopify-section-{{ section.id }} {
+    margin-top: calc(-1 * var(--pa-header-height, 80px));
+  }
+  {%- endif -%}
   #shopify-section-{{ section.id }} .pa-hero__img {
     object-position: {{ section.settings.image_position }};
   }
@@ -195,7 +201,16 @@
   transparent so it floats over the hero. Runs synchronously — no flash.
 {%- endcomment -%}
 {%- if section.index == 1 -%}
-  <script>document.getElementById('pa-site-header')?.classList.add('pa-header--transparent');</script>
+  <script>
+    (function () {
+      function applyTransparent() {
+        var h = document.getElementById('pa-site-header');
+        if (h) h.classList.add('pa-header--transparent');
+      }
+      applyTransparent();
+      document.addEventListener('DOMContentLoaded', applyTransparent);
+    })();
+  </script>
 {%- endif -%}
 
 <div class="pa-hero">
