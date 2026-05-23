@@ -26,10 +26,10 @@
   }
 
   .pa-header.is-scrolled {
-    background: var(--pa-ivory, #f9f8f4);
+    background: rgba(249, 248, 244, 0.88);
     border-bottom-color: var(--border-soft, #e3ddd1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   /* Transparent variant — used when hero banner is first section */
@@ -46,9 +46,11 @@
   /* When the user has scrolled, always override the transparent state —
      this rule has higher specificity (0,3,0) than either class alone */
   .pa-header.pa-header--transparent.is-scrolled {
-    background: var(--pa-ivory, #f9f8f4);
+    background: rgba(249, 248, 244, 0.88);
     border-bottom-color: var(--border-soft, #e3ddd1);
     color: var(--pa-ink, #1d1d1b);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .pa-header__inner {
@@ -76,6 +78,10 @@
     display: flex;
     align-items: center;
     gap: 24px;
+  }
+
+  .pa-header__util {
+    justify-content: flex-end;
   }
 
   .pa-header__link {
@@ -134,6 +140,25 @@
   .pa-header__logo--light { display: none; }
   .pa-header--transparent:not(.is-scrolled) .pa-header__logo--dark { display: none; }
   .pa-header--transparent:not(.is-scrolled) .pa-header__logo--light { display: block; }
+
+  /* CSS-native fallback: hero present → transparent until scrolled, frosted-glass after */
+  body:has(.section-pa-hero) .pa-header:not(.is-scrolled) {
+    background: transparent;
+    border-bottom-color: transparent;
+    color: var(--pa-ivory, #f9f8f4);
+  }
+  body:has(.section-pa-hero) .pa-header:not(.is-scrolled) .pa-header__logo--dark { display: none; }
+  body:has(.section-pa-hero) .pa-header:not(.is-scrolled) .pa-header__logo--light { display: block; }
+
+  body:has(.section-pa-hero) .pa-header.is-scrolled {
+    background: rgba(249, 248, 244, 0.88);
+    border-bottom-color: var(--border-soft, #e3ddd1);
+    color: var(--pa-ink, #1d1d1b);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  body:has(.section-pa-hero) .pa-header.is-scrolled .pa-header__logo--dark { display: block; }
+  body:has(.section-pa-hero) .pa-header.is-scrolled .pa-header__logo--light { display: none; }
 
   /* ── Mobile ── */
 
