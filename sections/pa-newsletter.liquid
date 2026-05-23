@@ -1,0 +1,270 @@
+{% comment %}
+  Petrichor Atelier — Newsletter
+  Cocoa background section with large editorial heading left and underline email
+  form right. Uses Shopify's {% form 'customer' %} for email capture.
+  Mirrors the newsletter section in Storefront.jsx.
+{% endcomment %}
+
+<style>
+  #shopify-section-{{ section.id }} .pa-nl {
+    background: var(--pa-cocoa);
+    color: var(--pa-ivory);
+    padding: 120px 0;
+  }
+
+  #shopify-section-{{ section.id }} .pa-nl__inner {
+    max-width: var(--max-content);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  /* ── Left: heading ── */
+  #shopify-section-{{ section.id }} .pa-nl__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.014em;
+    margin: 0;
+    color: var(--pa-ivory);
+  }
+
+  #shopify-section-{{ section.id }} .pa-nl__heading em,
+  #shopify-section-{{ section.id }} .pa-nl__heading i {
+    font-family: var(--font-editorial);
+    font-style: italic;
+  }
+
+  #shopify-section-{{ section.id }} .pa-nl__subheading {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 19px;
+    line-height: var(--lh-subhead);
+    color: rgba(249, 248, 244, 0.78);
+    margin: 24px 0 0;
+    max-width: 36ch;
+  }
+
+  /* ── Right: form ── */
+  #shopify-section-{{ section.id }} .pa-nl__form-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(249, 248, 244, 0.45);
+    padding-bottom: 10px;
+    gap: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .pa-nl__input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: none;
+    color: var(--pa-ivory);
+    font-family: var(--font-body);
+    font-size: 16px;
+    padding: 0;
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .pa-nl__input::placeholder {
+    color: rgba(249, 248, 244, 0.45);
+  }
+
+  #shopify-section-{{ section.id }} .pa-nl__submit {
+    background: transparent;
+    border: 0;
+    color: var(--pa-ivory);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: var(--t-eyebrow);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0;
+    white-space: nowrap;
+    transition: opacity var(--dur-base) var(--ease-soft);
+  }
+
+  #shopify-section-{{ section.id }} .pa-nl__submit:hover {
+    opacity: 0.65;
+  }
+
+  #shopify-section-{{ section.id }} .pa-nl__disclaimer {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: rgba(249, 248, 244, 0.55);
+    margin-top: 14px;
+  }
+
+  /* ── Success state ── */
+  #shopify-section-{{ section.id }} .pa-nl__success {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--pa-ivory);
+  }
+
+  /* ── Error messages ── */
+  #shopify-section-{{ section.id }} .pa-nl__errors {
+    font-family: var(--font-body);
+    font-size: var(--t-body-sm);
+    color: rgba(249, 248, 244, 0.75);
+    margin-top: 12px;
+    list-style: none;
+    padding: 0;
+  }
+
+  #shopify-section-{{ section.id }} .pa-nl__errors li::before {
+    content: '— ';
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 989px) {
+    #shopify-section-{{ section.id }} .pa-nl__inner {
+      grid-template-columns: 1fr;
+      gap: 56px;
+    }
+    #shopify-section-{{ section.id }} .pa-nl__subheading {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .pa-nl {
+      padding: 80px 0;
+    }
+    #shopify-section-{{ section.id }} .pa-nl__inner {
+      padding: 0 var(--gutter-mobile);
+    }
+  }
+</style>
+
+<div class="pa-nl">
+  <div class="pa-nl__inner">
+
+    <!-- ── Left: heading ── -->
+    <div class="pa-nl__text">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="pa-nl__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="pa-nl__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <!-- ── Right: form ── -->
+    <div class="pa-nl__form-wrap">
+      {%- if customer.email_marketing_consent.state == 'subscribed' -%}
+        <p class="pa-nl__success">{{ section.settings.success_message | escape }}</p>
+      {%- else -%}
+        {%- form 'customer', id: 'pa-newsletter-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+
+          {%- if form.posted_successfully? -%}
+            <p class="pa-nl__success">{{ section.settings.success_message | escape }}</p>
+          {%- else -%}
+            <div class="pa-nl__form-row">
+              <input
+                class="pa-nl__input"
+                type="email"
+                name="contact[email]"
+                id="pa-nl-email-{{ section.id }}"
+                value="{{ form.email }}"
+                autocomplete="email"
+                autocorrect="off"
+                autocapitalize="off"
+                placeholder="{{ section.settings.placeholder | escape }}"
+                required
+                aria-label="{{ section.settings.placeholder | escape }}"
+              >
+              <button type="submit" class="pa-nl__submit">
+                {{ section.settings.button_label | escape }} &rarr;
+              </button>
+            </div>
+
+            {%- if form.errors -%}
+              <ul class="pa-nl__errors" role="alert">
+                {%- for error in form.errors -%}
+                  <li>{{ form.errors.messages[error] }}</li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+            {%- if section.settings.disclaimer != blank -%}
+              <p class="pa-nl__disclaimer">{{ section.settings.disclaimer | escape }}</p>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endform -%}
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "PA — Newsletter",
+  "tag": "section",
+  "class": "section-pa-newsletter",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "No sales.<br><em>One letter a month.</em>",
+      "info": "Use italic in the editor for the editorial serif style."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading (italic)",
+      "default": "On what we're wearing, the houses we keep coming back to, and the things that smell good before they look it."
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Email placeholder",
+      "default": "hello@petrichor.com.au"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "default": "Quiet. Unsubscribe whenever. No third parties, ever."
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "You're on the list. One letter a month — nothing more."
+    }
+  ],
+  "presets": [
+    {
+      "name": "PA — Newsletter"
+    }
+  ]
+}
+{% endschema %}

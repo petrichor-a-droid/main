@@ -13,77 +13,88 @@
       "type": "pa-hero-banner",
       "settings": {}
     },
-    "image_banner": {
-      "type": "image-banner",
+    "pa_featured_collection": {
+      "type": "pa-featured-collection",
+      "settings": {
+        "eyebrow": "In the atelier",
+        "heading": "Four pieces we keep<br><em>reaching for.</em>",
+        "view_all_label": "The full edit",
+        "products_to_show": 4
+      }
+    },
+    "pa_editorial_split": {
+      "type": "pa-editorial-split",
+      "settings": {
+        "eyebrow": "From the atelier",
+        "heading": "Some perfumes shout.<br><em>The ones we love whisper.</em>",
+        "body_copy": "Petrichor Atelier is a small Sydney atelier importing niche fragrance houses that rarely cross the equator. Houses making scent the way independent filmmakers make films — slowly, with a point of view, for the people who want to feel something rare.",
+        "closing_line": "Step inside. Sit with one. Take your time.",
+        "show_submark": true
+      }
+    },
+    "pa_collection_row": {
+      "type": "pa-collection-row",
+      "settings": {
+        "eyebrow": "Discovery · 03",
+        "heading": "For the curious.",
+        "products_to_show": 3
+      }
+    },
+    "pa_journal": {
+      "type": "pa-journal",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "card_1": {
+          "type": "card",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "tone": "pine",
+            "eyebrow": "House study · 03",
+            "title": "Of paper and pine",
+            "subtitle": "Three houses we kept reaching for this winter."
           }
         },
-        "button": {
-          "type": "buttons",
+        "card_2": {
+          "type": "card",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "tone": "sage",
+            "eyebrow": "Field notes",
+            "title": "Salt on the air",
+            "subtitle": "On marine fragrances done quietly. No coconut. No sunblock."
+          }
+        },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "tone": "clay",
+            "eyebrow": "Atelier · 12",
+            "title": "The room above the shop",
+            "subtitle": "A weekend in the back room. Three notebooks. One scent."
           }
         }
       },
-      "block_order": [
-        "heading",
-        "button"
-      ],
+      "block_order": ["card_1", "card_2", "card_3"],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "eyebrow": "The journal",
+        "heading": "Notes on what we're wearing."
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "pa_newsletter": {
+      "type": "pa-newsletter",
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "heading": "No sales.<br><em>One letter a month.</em>",
+        "subheading": "On what we're wearing, the houses we keep coming back to, and the things that smell good before they look it.",
+        "placeholder": "hello@petrichor.com.au",
+        "button_label": "Subscribe",
+        "disclaimer": "Quiet. Unsubscribe whenever. No third parties, ever.",
+        "success_message": "You're on the list. One letter a month — nothing more."
       }
     }
   },
   "order": [
     "pa_hero_banner",
-    "image_banner",
-    "featured_collection"
+    "pa_featured_collection",
+    "pa_editorial_split",
+    "pa_collection_row",
+    "pa_journal",
+    "pa_newsletter"
   ]
 }

@@ -1,0 +1,320 @@
+{% comment %}
+  Petrichor Atelier — Journal
+  3-column editorial card grid. Each card has an image (or atmospheric gradient
+  fallback), eyebrow, display heading, and italic subtitle.
+  Mirrors the journal section in Storefront.jsx.
+{% endcomment %}
+
+<style>
+  #shopify-section-{{ section.id }} .pa-journal {
+    padding: 40px 0 120px;
+    background: var(--bg-canvas);
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__inner {
+    max-width: var(--max-content);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  /* ── Header ── */
+  #shopify-section-{{ section.id }} .pa-journal__header {
+    margin-bottom: 48px;
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__eyebrow {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--t-eyebrow);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: clamp(32px, 3.8vw, 48px);
+    line-height: var(--lh-heading);
+    letter-spacing: -0.012em;
+    margin: 12px 0 0;
+    color: var(--fg-1);
+  }
+
+  /* ── Grid ── */
+  #shopify-section-{{ section.id }} .pa-journal__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  /* ── Card ── */
+  #shopify-section-{{ section.id }} .pa-journal__card {
+    display: block;
+    text-decoration: none;
+    color: var(--fg-1);
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__card-media {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__card:hover .pa-journal__card-img {
+    transform: scale(1.03);
+  }
+
+  /* Atmospheric gradient fallbacks — one per editorial tone */
+  #shopify-section-{{ section.id }} .pa-journal__card-gradient {
+    position: absolute;
+    inset: 0;
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__card-gradient--pine {
+    background: linear-gradient(170deg, var(--pa-forest) 0%, var(--pa-pine) 60%, #1d2a23 100%);
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__card-gradient--sage {
+    background: linear-gradient(170deg, var(--pa-eucalypt) 0%, #82978a 60%, #5e7268 100%);
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__card-gradient--clay {
+    background: linear-gradient(170deg, var(--pa-clay) 0%, #8c7560 60%, #6e5a47 100%);
+  }
+
+  /* Scrim over photo to ensure text contrast when image is set */
+  #shopify-section-{{ section.id }} .pa-journal__card-img ~ .pa-journal__card-gradient {
+    background: linear-gradient(170deg, transparent 40%, rgba(29, 29, 27, 0.25) 100%);
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__card-body {
+    padding-top: 18px;
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__card-eyebrow {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__card-title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: 28px;
+    line-height: 1.1;
+    letter-spacing: -0.012em;
+    margin: 8px 0 6px;
+    color: var(--fg-1);
+  }
+
+  #shopify-section-{{ section.id }} .pa-journal__card-subtitle {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--fg-2);
+    margin: 0;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 989px) {
+    #shopify-section-{{ section.id }} .pa-journal__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .pa-journal {
+      padding: 32px 0 80px;
+    }
+    #shopify-section-{{ section.id }} .pa-journal__inner {
+      padding: 0 var(--gutter-mobile);
+    }
+    #shopify-section-{{ section.id }} .pa-journal__grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    #shopify-section-{{ section.id }} .pa-journal__card-media {
+      aspect-ratio: 3 / 2;
+    }
+  }
+</style>
+
+<div class="pa-journal">
+  <div class="pa-journal__inner">
+
+    <div class="pa-journal__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="pa-journal__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="pa-journal__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+
+    <div class="pa-journal__grid">
+      {%- for block in section.blocks -%}
+        {%- assign card_url = block.settings.link | default: '#' -%}
+        <a
+          href="{{ card_url }}"
+          class="pa-journal__card"
+          {{ block.shopify_attributes }}
+          {% if card_url == '#' %}role="presentation"{% endif %}
+        >
+          <div class="pa-journal__card-media">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 1000
+                | image_tag:
+                  class: 'pa-journal__card-img',
+                  widths: '500, 750, 1000',
+                  sizes: '(max-width: 749px) calc(100vw - 40px), (max-width: 989px) calc(50vw - 44px), 33vw',
+                  alt: block.settings.image.alt | default: block.settings.title | escape,
+                  loading: 'lazy'
+              }}
+            {%- endif -%}
+
+            <div
+              class="pa-journal__card-gradient pa-journal__card-gradient--{{ block.settings.tone }}"
+              aria-hidden="true"
+            ></div>
+          </div>
+
+          <div class="pa-journal__card-body">
+            {%- if block.settings.eyebrow != blank -%}
+              <span class="pa-journal__card-eyebrow">{{ block.settings.eyebrow | escape }}</span>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h3 class="pa-journal__card-title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.subtitle != blank -%}
+              <p class="pa-journal__card-subtitle">{{ block.settings.subtitle | escape }}</p>
+            {%- endif -%}
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "PA — Journal",
+  "tag": "section",
+  "class": "section-pa-journal",
+  "max_blocks": 3,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The journal"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Notes on what we're wearing."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Journal card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "5:4 landscape works best. Leave blank to use the gradient."
+        },
+        {
+          "type": "select",
+          "id": "tone",
+          "label": "Gradient tone (no image)",
+          "options": [
+            { "value": "pine", "label": "Pine" },
+            { "value": "sage", "label": "Sage" },
+            { "value": "clay", "label": "Clay" }
+          ],
+          "default": "pine"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "Subtitle (italic)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PA — Journal",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "tone": "pine",
+            "eyebrow": "House study · 03",
+            "title": "Of paper and pine",
+            "subtitle": "Three houses we kept reaching for this winter."
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "tone": "sage",
+            "eyebrow": "Field notes",
+            "title": "Salt on the air",
+            "subtitle": "On marine fragrances done quietly. No coconut. No sunblock."
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "tone": "clay",
+            "eyebrow": "Atelier · 12",
+            "title": "The room above the shop",
+            "subtitle": "A weekend in the back room. Three notebooks. One scent."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

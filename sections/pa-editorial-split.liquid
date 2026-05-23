@@ -1,0 +1,250 @@
+{% comment %}
+  Petrichor Atelier — Editorial Split
+  "From the atelier" — cream background, left text column with eyebrow/heading/body/
+  closing line, right image column with atmospheric pine gradient and submark.
+  Mirrors the editorial pause section in Storefront.jsx.
+{% endcomment %}
+
+<style>
+  #shopify-section-{{ section.id }} .pa-es {
+    background: var(--bg-surface);
+    padding: 120px 0;
+  }
+
+  #shopify-section-{{ section.id }} .pa-es__inner {
+    max-width: var(--max-content);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  /* ── Left: text column ── */
+
+  #shopify-section-{{ section.id }} .pa-es__eyebrow {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--t-eyebrow);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+
+  #shopify-section-{{ section.id }} .pa-es__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: clamp(36px, 4.4vw, 56px);
+    line-height: var(--lh-heading);
+    letter-spacing: -0.012em;
+    margin: 14px 0 24px;
+    color: var(--fg-1);
+  }
+
+  #shopify-section-{{ section.id }} .pa-es__heading em,
+  #shopify-section-{{ section.id }} .pa-es__heading i {
+    font-family: var(--font-editorial);
+    font-style: italic;
+  }
+
+  #shopify-section-{{ section.id }} .pa-es__body {
+    font-family: var(--font-body);
+    font-size: var(--t-body);
+    line-height: var(--lh-body);
+    color: var(--fg-2);
+    max-inline-size: 52ch;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .pa-es__closing {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 20px;
+    line-height: var(--lh-subhead);
+    color: var(--fg-1);
+    margin: 24px 0 0;
+  }
+
+  /* ── Right: image / placeholder column ── */
+
+  #shopify-section-{{ section.id }} .pa-es__media {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .pa-es__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Atmospheric pine gradient — shown when no image is set */
+  #shopify-section-{{ section.id }} .pa-es__gradient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 30%, rgba(198, 209, 181, 0.4) 0%, transparent 50%),
+      linear-gradient(160deg, var(--pa-forest) 0%, var(--pa-pine) 40%, #1d2a23 100%);
+  }
+
+  /* Semi-transparent scrim over a photo to keep the submark readable */
+  #shopify-section-{{ section.id }} .pa-es__img ~ .pa-es__gradient {
+    background:
+      radial-gradient(ellipse at 30% 30%, rgba(198, 209, 181, 0.15) 0%, transparent 50%),
+      linear-gradient(160deg, rgba(48, 75, 61, 0.1) 0%, rgba(29, 42, 35, 0.35) 100%);
+  }
+
+  #shopify-section-{{ section.id }} .pa-es__submark {
+    position: absolute;
+    right: 32px;
+    bottom: 32px;
+    width: 72px;
+    height: auto;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 989px) {
+    #shopify-section-{{ section.id }} .pa-es__inner {
+      grid-template-columns: 1fr;
+      gap: 56px;
+    }
+    /* Image moves below text on mobile */
+    #shopify-section-{{ section.id }} .pa-es__media {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .pa-es {
+      padding: 80px 0;
+    }
+    #shopify-section-{{ section.id }} .pa-es__inner {
+      padding: 0 var(--gutter-mobile);
+    }
+  }
+</style>
+
+<div class="pa-es">
+  <div class="pa-es__inner">
+
+    <!-- ── Left: text ── -->
+    <div class="pa-es__text">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="pa-es__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="pa-es__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.body_copy != blank -%}
+        <p class="pa-es__body">{{ section.settings.body_copy | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.closing_line != blank -%}
+        <p class="pa-es__closing">{{ section.settings.closing_line | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <!-- ── Right: image / gradient ── -->
+    <div class="pa-es__media">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 1200
+          | image_tag:
+            class: 'pa-es__img',
+            widths: '600, 800, 1000, 1200',
+            sizes: '(max-width: 749px) calc(100vw - 40px), (max-width: 989px) calc(100vw - 40px), calc(50vw - 60px)',
+            alt: section.settings.image.alt | default: shop.name | escape,
+            loading: 'lazy'
+        }}
+      {%- endif -%}
+
+      <div class="pa-es__gradient" aria-hidden="true"></div>
+
+      {%- if section.settings.show_submark -%}
+        <img
+          src="{{ 'submark-2-ivory.svg' | asset_url }}"
+          class="pa-es__submark"
+          alt=""
+          aria-hidden="true"
+          width="72"
+          height="72"
+          loading="lazy"
+        >
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "PA — Editorial Split",
+  "tag": "section",
+  "class": "section-pa-editorial-split",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "From the atelier"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Some perfumes shout.<br><em>The ones we love whisper.</em>",
+      "info": "Use italic in the editor for the editorial serif style."
+    },
+    {
+      "type": "textarea",
+      "id": "body_copy",
+      "label": "Body copy",
+      "default": "Petrichor Atelier is a small Sydney atelier importing niche fragrance houses that rarely cross the equator. Houses making scent the way independent filmmakers make films — slowly, with a point of view, for the people who want to feel something rare."
+    },
+    {
+      "type": "text",
+      "id": "closing_line",
+      "label": "Closing line (italic)",
+      "default": "Step inside. Sit with one. Take your time."
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo",
+      "info": "3:4 portrait works best. Leave blank to use the atmospheric pine gradient."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_submark",
+      "label": "Show submark",
+      "default": true,
+      "info": "Displays the ivory submark logo in the lower-right of the image."
+    }
+  ],
+  "presets": [
+    {
+      "name": "PA — Editorial Split"
+    }
+  ]
+}
+{% endschema %}
