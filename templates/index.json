@@ -9,6 +9,10 @@
  */
 {
   "sections": {
+    "pa_hero_banner": {
+      "type": "pa-hero-banner",
+      "settings": {}
+    },
     "image_banner": {
       "type": "image-banner",
       "blocks": {
@@ -78,6 +82,7 @@
     }
   },
   "order": [
+    "pa_hero_banner",
     "image_banner",
     "featured_collection"
   ]
