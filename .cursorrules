@@ -1,0 +1,195 @@
+# Petrichor Atelier — Shopify Theme Dev Rules
+# Drop this file at the root of your theme repo as: .cursorrules
+
+## Project context
+
+You are helping develop a custom Shopify theme for **Petrichor Atelier** — a Sydney-based premium niche fragrance curator. The theme is based on Shopify's Dawn theme (Online Store 2.0). All development happens on the `staging` branch; `main` is production.
+
+---
+
+## File structure (Shopify Dawn)
+
+```
+├── assets/           ← CSS, JS, fonts, SVG logos, images
+├── config/           ← settings_schema.json, settings_data.json
+├── layout/           ← theme.liquid (main HTML shell)
+├── locales/          ← translation strings
+├── sections/         ← .liquid section files (editable in theme editor)
+├── snippets/         ← reusable .liquid partials
+└── templates/        ← page templates (JSON or .liquid)
+```
+
+Key rules:
+- Sections go in `/sections/` with a `{% schema %}` block at the bottom
+- Snippets go in `/snippets/` and are included via `{% render 'snippet-name' %}`
+- CSS goes in `/assets/` — reference with `{{ 'filename.css' | asset_url | stylesheet_tag }}`
+- JS goes in `/assets/` — reference with `{{ 'filename.js' | asset_url | script_tag }}`
+- The design token file is `assets/petrichor-tokens.css` — always import it first
+
+---
+
+## Design system
+
+The full design token file is `assets/petrichor-tokens.css`. Always use these tokens — never hardcode hex values.
+
+### Brand colours
+
+| Token | Hex | Use |
+|-------|-----|-----|
+| `--pa-cocoa` | `#342627` | Core dark, near-black |
+| `--pa-sage` | `#c6d1b5` | Core light, soft sage |
+| `--pa-pine` | `#304b3d` | Buttons, inverse surfaces |
+| `--pa-ivory` | `#f9f8f4` | Default page background |
+| `--pa-cream` | `#efebe4` | Secondary surface |
+| `--pa-ink` | `#1d1d1b` | True near-black for emphasis |
+| `--pa-mint` | `#ace2b4` | Accent — the unexpected twist |
+| `--pa-olive` | `#7e8c54` | Muted accent green |
+| `--pa-clay` | `#aa9379` | Warm earthy tan |
+| `--pa-mist` | `#d8d8d8` | Neutral grey |
+
+Use semantic tokens in product code (not raw swatches):
+- `--bg-canvas` (ivory), `--bg-surface` (cream), `--bg-inverse` (pine), `--bg-inverse-deep` (cocoa)
+- `--fg-1` (ink), `--fg-2` (cocoa), `--fg-3` (muted), `--fg-on-inverse` (ivory)
+- `--border-soft`, `--border-default`, `--border-strong`
+- `--brand-primary` (pine), `--brand-primary-hover` (#263d31), `--accent` (mint)
+
+### Typography
+
+- **Display / headlines** — `EB Garamond`, weight 400 (regular). Subheadlines use italic.
+- **Body / UI / CTAs** — `Instrument Sans`, weight 400 body, 600 semibold for CTAs.
+- **Editorial accents** — `Instrument Serif`, italic only (pull quotes, captions).
+
+CSS font variables: `--font-display`, `--font-body`, `--font-editorial`
+
+Type scale: `--t-display` through `--t-micro`
+Letter spacing: `--ls-display` (-0.02em), `--ls-heading` (-0.012em), `--ls-eyebrow` (0.22em), `--ls-cta` (0.14em)
+
+### Layout
+
+- Default page background: `--pa-ivory`
+- Outer gutters: `--gutter` (40px desktop), `--gutter-mobile` (20px)
+- Use hairline `1px` borders (`--border-soft`) to divide sections — not boxes or heavy borders
+- Hero / cinematic sections: `pa-inverse` (pine bg) or `pa-inverse-deep` (cocoa bg)
+- Product images and display blocks are often square (`--radius-none`) for an editorial feel
+- Cards use `--radius-md` (8px) at most
+
+### Spacing
+
+4px base scale: `--space-1` (4px) through `--space-12` (128px)
+
+### Motion
+
+- Slow and considered — no bounces, no spring physics
+- `--dur-fast` 160ms, `--dur-base` 240ms, `--dur-slow` 420ms, `--dur-cinematic` 720ms
+- Easing: `--ease-out`, `--ease-in-out`, `--ease-soft`
+- Image card hover: scale `1.02` over `--dur-cinematic` `--ease-out`
+- Button hover: background darkens to `--brand-primary-hover`
+
+---
+
+## Brand voice (apply to placeholder copy)
+
+- **Tone:** Cool, intelligent, approachable. Never try-hard, never salesy.
+- **Casing:** Sentence case for headlines. ALL CAPS only for eyebrows, nav, buttons, tiny metadata — always with generous letter-spacing.
+- **No emoji. No exclamation marks (at most one per page).**
+- **CTAs:** "Explore the edit" · "Step inside" · "Smell first" — never "Buy now!" or "Add to cart" (only at checkout)
+- **Section labels:** `NEW ARRIVALS` · `IN THE ATELIER` · `THE EDIT` · `OUR HOUSES`
+- **Pronouns:** "we" for the brand, "you" sparingly
+
+---
+
+## Liquid section template
+
+Always follow this structure for new sections:
+
+```liquid
+{{ 'petrichor-tokens.css' | asset_url | stylesheet_tag }}
+
+<section class="pa-section [pa-paper|pa-inverse|pa-surface]" id="shopify-section-{{ section.id }}">
+  <div class="pa-section__inner" style="max-width: var(--max-content); margin: 0 auto; padding: var(--space-11) var(--gutter);">
+
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="pa-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="pa-h2">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <!-- section content here -->
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Section name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "IN THE ATELIER"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Fragrance deeply felt."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Section name"
+    }
+  ]
+}
+{% endschema %}
+```
+
+---
+
+## Logo assets
+
+All logos are SVG files in `assets/`. Naming pattern:
+`{primary|secondary-1|secondary-2|submark-1|submark-2}-logo-{black|ivory|cream|pine|olive|sage|cocoa|mint-accent}.svg`
+
+Use in Liquid:
+```liquid
+{% comment %} On light (ivory/cream) backgrounds: {% endcomment %}
+<img src="{{ 'primary-logo-black.svg' | asset_url }}" alt="Petrichor Atelier" width="180" height="auto">
+
+{% comment %} On dark (pine/cocoa) backgrounds: {% endcomment %}
+<img src="{{ 'primary-logo-ivory.svg' | asset_url }}" alt="Petrichor Atelier" width="180" height="auto">
+```
+
+Clear space rule: minimum clear space = logo's own height on all sides.
+
+---
+
+## Icons
+
+Use **Lucide** icons at 1.5px stroke, `currentColor`:
+```html
+<script src="https://unpkg.com/lucide@latest"></script>
+<i data-lucide="shopping-bag" style="width:20px;height:20px;stroke-width:1.5"></i>
+<script>lucide.createIcons();</script>
+```
+
+No emoji. No unicode-as-icon (except `→` `←` `·` for editorial use).
+
+---
+
+## What NOT to do
+
+- Do not hardcode hex values — always use CSS tokens
+- Do not use gradients on brand elements (brand guidelines explicitly forbid them)
+- Do not use hand-drawn illustrations or repeating patterns
+- Do not use heavy drop shadows — only the defined `--shadow-*` values
+- Do not add cookie popups or chat bubbles on first load — they break the editorial feel
+- Do not use salesy CTAs ("Buy now!", "Shop now!", "Don't miss out!")
+- Do not use emoji anywhere
+- Do not use Spring physics or bounce animations
+- Do not add border-radius larger than `--radius-md` (8px) to product images or hero panels
