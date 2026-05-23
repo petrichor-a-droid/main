@@ -38,6 +38,11 @@
     border-bottom-color: transparent;
   }
 
+  /* Switch text to ivory when floating over a dark hero */
+  .pa-header--transparent:not(.is-scrolled) {
+    color: var(--pa-ivory, #f9f8f4);
+  }
+
   .pa-header__inner {
     max-width: var(--max-content, 1280px);
     margin: 0 auto;
@@ -52,7 +57,7 @@
 
   .pa-header__row--utility {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     gap: 24px;
     padding: 14px 0 12px;
@@ -118,13 +123,9 @@
     display: block;
   }
 
-  .pa-header__logo-text {
-    font-family: var(--font-display, 'EB Garamond', 'Garamond', serif);
-    font-size: 20px;
-    font-weight: 400;
-    letter-spacing: -0.012em;
-    color: inherit;
-  }
+  .pa-header__logo--light { display: none; }
+  .pa-header--transparent:not(.is-scrolled) .pa-header__logo--dark { display: none; }
+  .pa-header--transparent:not(.is-scrolled) .pa-header__logo--light { display: block; }
 
   /* ── Mobile ── */
 
@@ -200,25 +201,10 @@
           >Account</a>
         {%- endif -%}
 
-        <!-- Lucide shopping-bag — 16px / 1.5 stroke -->
-        <a
-          href="{{ routes.cart_url }}"
-          class="pa-header__link"
-          id="pa-cart-icon"
-          aria-label="{{ 'templates.cart.cart' | t }}{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="1.5"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 0 1-8 0"/>
-          </svg>
-          Bag
-          {%- if cart.item_count > 0 -%}
-            <span class="pa-header__cart-count" aria-hidden="true">({{ cart.item_count }})</span>
-            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
-          {%- endif -%}
+        <a href="/pages/wishlist" class="pa-header__link">Wishlist (0)</a>
+
+        <a href="{{ routes.cart_url }}" class="pa-header__link" id="pa-cart-icon">
+          Bag{%- if cart.item_count > 0 -%}<span class="pa-header__cart-count"> ({{ cart.item_count }})</span>{%- endif -%}
         </a>
       </div>
 
@@ -251,22 +237,16 @@
       {%- endif -%}
 
         <a href="{{ routes.root_url }}" class="pa-header__logo-link">
-          {%- if settings.logo != blank -%}
-            {%- assign logo_alt    = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'pa-header__logo',
-                width: settings.logo_width,
-                height: logo_height,
-                alt: logo_alt,
-                preload: true
-            }}
-          {%- else -%}
-            <span class="pa-header__logo-text">{{ shop.name }}</span>
-          {%- endif -%}
+          <img src="{{ 'primary-logo-cocoa.svg' | asset_url }}"
+               class="pa-header__logo pa-header__logo--dark"
+               alt="{{ shop.name | escape }}"
+               height="18"
+               width="auto">
+          <img src="{{ 'primary-logo-ivory.svg' | asset_url }}"
+               class="pa-header__logo pa-header__logo--light"
+               alt="{{ shop.name | escape }}"
+               height="18"
+               width="auto">
         </a>
 
       {%- if request.page_type == 'index' -%}
