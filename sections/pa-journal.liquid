@@ -12,9 +12,9 @@
   }
 
   #shopify-section-{{ section.id }} .pa-journal__inner {
-    max-width: var(--max-content);
+    max-width: var(--max-content, 1280px);
     margin: 0 auto;
-    padding: 0 var(--gutter);
+    padding: 0 var(--gutter, 40px);
   }
 
   /* ── Header ── */
@@ -143,7 +143,7 @@
       padding: 32px 0 80px;
     }
     #shopify-section-{{ section.id }} .pa-journal__inner {
-      padding: 0 var(--gutter-mobile);
+      padding: 0 var(--gutter-mobile, 20px);
     }
     #shopify-section-{{ section.id }} .pa-journal__grid {
       grid-template-columns: 1fr;

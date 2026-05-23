@@ -70,9 +70,9 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: var(--max-content);
+    max-width: var(--max-content, 1280px);
     margin: 0 auto;
-    padding: 160px var(--gutter) 80px;
+    padding: 160px var(--gutter, 40px) 80px;
   }
 
   #shopify-section-{{ section.id }} .pa-hero__eyebrow {
@@ -182,7 +182,7 @@
   /* ── Mobile ── */
   @media (max-width: 749px) {
     #shopify-section-{{ section.id }} .pa-hero__inner {
-      padding: 140px var(--gutter-mobile) 56px;
+      padding: 140px var(--gutter-mobile, 20px) 56px;
     }
     #shopify-section-{{ section.id }} .pa-hero__heading {
       max-width: 100%;

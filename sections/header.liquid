@@ -43,6 +43,14 @@
     color: var(--pa-ivory, #f9f8f4);
   }
 
+  /* When the user has scrolled, always override the transparent state —
+     this rule has higher specificity (0,3,0) than either class alone */
+  .pa-header.pa-header--transparent.is-scrolled {
+    background: var(--pa-ivory, #f9f8f4);
+    border-bottom-color: var(--border-soft, #e3ddd1);
+    color: var(--pa-ink, #1d1d1b);
+  }
+
   .pa-header__inner {
     max-width: var(--max-content, 1280px);
     margin: 0 auto;
