@@ -25,19 +25,21 @@
 
   .pa-header {
     position: fixed;
-    inset: 0 0 auto 0;
-    z-index: 100;
-    color: var(--pa-ink);
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 300;
+    color: var(--pa-ink, #1d1d1b);
     transition:
-      background     var(--dur-base) var(--ease-soft),
-      border-color   var(--dur-base) var(--ease-soft),
-      backdrop-filter var(--dur-base) var(--ease-soft);
+      background      var(--dur-base, 240ms) var(--ease-soft, ease),
+      border-color    var(--dur-base, 240ms) var(--ease-soft, ease),
+      backdrop-filter var(--dur-base, 240ms) var(--ease-soft, ease);
   }
 
   /* Default (solid) — ivory immediately */
   .pa-header:not(.pa-header--transparent) {
-    background: var(--pa-ivory);
-    border-bottom: 1px solid var(--border-soft);
+    background: var(--pa-ivory, #f9f8f4);
+    border-bottom: 1px solid var(--border-soft, #e3ddd1);
   }
 
   /* Transparent variant — no bg until scrolled */
@@ -165,8 +167,9 @@
     }
   }
 
-  /* Offset body so content doesn't sit under fixed header */
-  body { padding-top: var(--pa-header-height, 0); }
+  /* Offset body so content doesn't sit under fixed header.
+     80px is a safe fallback until JS measures the real height. */
+  body { padding-top: var(--pa-header-height, 80px); }
 </style>
 
 <div
