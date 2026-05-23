@@ -1,137 +1,76 @@
-{% comment %}
-  Petrichor Atelier — Hero Banner
-  Cinematic pine hero with layered atmospheric gradients, optional full-bleed
-  photography, display heading with editorial italics, and a two-column footer
-  (subheading left, CTA right) matching the Storefront.jsx design.
-{% endcomment %}
-
-{%- style -%}
-  #shopify-section-{{ section.id }} .pa-hero {
-    min-height: {% if section.settings.full_height %}100svh{% else %}{{ section.settings.min_height }}px{% endif %};
-  }
-  #shopify-section-{{ section.id }} .pa-hero__img {
-    object-position: {{ section.settings.image_position }};
-  }
-  #shopify-section-{{ section.id }} .pa-hero__overlay {
-    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
-  }
-{%- endstyle -%}
+{{ 'petrichor-tokens.css' | asset_url | stylesheet_tag }}
 
 <style>
-  /* Scoped to this section type — safe to inline once */
   #shopify-section-{{ section.id }} .pa-hero {
     position: relative;
-    overflow: hidden;
-    background: var(--pa-pine);
-    color: var(--pa-ivory);
+    min-height: {{ section.settings.min_height }}px;
     display: flex;
     align-items: flex-end;
+    overflow: hidden;
+    background: var(--bg-inverse-deep);
   }
-
-  /* ── Background photo ── */
   #shopify-section-{{ section.id }} .pa-hero__media {
     position: absolute;
     inset: 0;
+    z-index: 0;
   }
-  #shopify-section-{{ section.id }} .pa-hero__img {
+  #shopify-section-{{ section.id }} .pa-hero__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: {{ section.settings.image_position }};
     display: block;
   }
-
-  /* Flat dark scrim (opacity set per-section via Liquid above) */
   #shopify-section-{{ section.id }} .pa-hero__overlay {
     position: absolute;
     inset: 0;
-    background: var(--pa-ink);
-    pointer-events: none;
-  }
-
-  /* Atmospheric layered gradients — always present, mirrors the JSX */
-  #shopify-section-{{ section.id }} .pa-hero__atmosphere {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 20% 40%, rgba(167, 188, 175, 0.18) 0%, transparent 40%),
-      radial-gradient(ellipse at 80% 90%, rgba(29, 29, 27, 0.55)   0%, transparent 50%),
-      linear-gradient(180deg, rgba(48, 75, 61, 0) 0%, rgba(29, 29, 27, 0.45) 100%);
-    pointer-events: none;
-  }
-
-  /* ── Content ── */
-  #shopify-section-{{ section.id }} .pa-hero__inner {
-    position: relative;
+    background: linear-gradient(180deg, transparent 40%, rgba(29, 29, 27, 0.55));
     z-index: 1;
+  }
+  #shopify-section-{{ section.id }} .pa-hero__content {
+    position: relative;
+    z-index: 2;
     width: 100%;
+    padding: var(--space-12) var(--gutter) var(--space-10);
     max-width: var(--max-content);
     margin: 0 auto;
-    padding: 160px var(--gutter) 80px;
   }
-
   #shopify-section-{{ section.id }} .pa-hero__eyebrow {
-    display: block;
     font-family: var(--font-body);
-    font-size: 12px;
     font-weight: var(--fw-medium);
+    font-size: var(--t-eyebrow);
     letter-spacing: var(--ls-eyebrow);
     text-transform: uppercase;
-    color: rgba(249, 248, 244, 0.65);
-    margin-bottom: 28px;
+    color: var(--pa-sage);
+    display: block;
+    margin-bottom: var(--space-5);
   }
-
   #shopify-section-{{ section.id }} .pa-hero__heading {
     font-family: var(--font-display);
     font-weight: var(--fw-regular);
-    font-size: clamp(72px, 11vw, 168px);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
-    margin: 0;
+    font-size: var(--t-h1);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--ls-heading);
     color: var(--pa-ivory);
-    text-wrap: balance;
+    margin: 0 0 var(--space-5);
     max-width: 14ch;
   }
-
-  /* Italic words use the editorial serif (merchant adds <em> via rich text editor) */
-  #shopify-section-{{ section.id }} .pa-hero__heading em,
-  #shopify-section-{{ section.id }} .pa-hero__heading i {
+  #shopify-section-{{ section.id }} .pa-hero__heading em {
     font-family: var(--font-editorial);
     font-style: italic;
   }
-
-  /* ── Two-column footer row ── */
-  #shopify-section-{{ section.id }} .pa-hero__foot {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-top: 56px;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-
-  #shopify-section-{{ section.id }} .pa-hero__sub {
+  #shopify-section-{{ section.id }} .pa-hero__subhead {
     font-family: var(--font-display);
     font-style: italic;
-    font-size: clamp(17px, 1.8vw, 22px);
-    line-height: 1.4;
-    margin: 0;
-    max-width: 460px;
-    color: rgba(249, 248, 244, 0.85);
+    font-weight: var(--fw-regular);
+    font-size: clamp(18px, 2.2vw, 26px);
+    line-height: var(--lh-subhead);
+    color: var(--fg-on-inverse-2, color-mix(in srgb, var(--pa-ivory) 75%, var(--pa-sage)));
+    margin: 0 0 var(--space-8);
+    max-width: 44ch;
   }
-
-  /* CTA group */
-  #shopify-section-{{ section.id }} .pa-hero__ctas {
-    display: flex;
-    align-items: center;
-    gap: var(--space-7);
-    flex-shrink: 0;
-  }
-
-  /* Primary CTA — outline-inverse button */
   #shopify-section-{{ section.id }} .pa-hero__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    display: inline-block;
     font-family: var(--font-body);
     font-weight: var(--fw-semibold);
     font-size: var(--t-cta);
@@ -139,152 +78,88 @@
     text-transform: uppercase;
     color: var(--pa-ivory);
     text-decoration: none;
-    border: 1px solid rgba(249, 248, 244, 0.55);
-    padding: 14px 24px;
-    white-space: nowrap;
-    transition:
-      background   var(--dur-base) var(--ease-soft),
-      color        var(--dur-base) var(--ease-soft),
-      border-color var(--dur-base) var(--ease-soft);
+    border-bottom: 1px solid color-mix(in srgb, var(--pa-ivory) 45%, transparent);
+    padding-bottom: 3px;
+    transition: border-color var(--dur-base) var(--ease-out);
   }
   #shopify-section-{{ section.id }} .pa-hero__cta:hover {
-    background: var(--pa-ivory);
-    color: var(--pa-pine);
     border-color: var(--pa-ivory);
   }
-  #shopify-section-{{ section.id }} .pa-hero__cta:focus-visible {
-    outline: 2px solid var(--pa-ivory);
-    outline-offset: 3px;
-  }
-
-  /* Secondary CTA — mint underline */
-  #shopify-section-{{ section.id }} .pa-hero__cta--secondary {
-    border: none;
-    padding: 0;
+  #shopify-section-{{ section.id }} .pa-hero__cta + .pa-hero__cta {
+    margin-left: var(--space-7);
     color: var(--pa-mint);
-    border-bottom: 1px solid color-mix(in srgb, var(--pa-mint) 45%, transparent);
-    padding-bottom: 3px;
-    background: none;
-    transition: border-color var(--dur-base) var(--ease-soft);
+    border-color: color-mix(in srgb, var(--pa-mint) 45%, transparent);
   }
-  #shopify-section-{{ section.id }} .pa-hero__cta--secondary:hover {
-    background: none;
-    color: var(--pa-mint);
+  #shopify-section-{{ section.id }} .pa-hero__cta + .pa-hero__cta:hover {
     border-color: var(--pa-mint);
   }
-
-  /* ── Mobile ── */
   @media (max-width: 749px) {
-    #shopify-section-{{ section.id }} .pa-hero__inner {
-      padding: 140px var(--gutter-mobile) 56px;
+    #shopify-section-{{ section.id }} .pa-hero__content {
+      padding: var(--space-10) var(--gutter-mobile) var(--space-9);
     }
     #shopify-section-{{ section.id }} .pa-hero__heading {
       max-width: 100%;
     }
-    #shopify-section-{{ section.id }} .pa-hero__foot {
-      flex-direction: column;
-      align-items: flex-start;
-      margin-top: 40px;
-      gap: 28px;
-    }
   }
 </style>
 
-{%- comment -%}
-  When this is the first template section, tell the sticky header to start
-  transparent so it floats over the hero. Runs synchronously — no flash.
-{%- endcomment -%}
-{%- if section.index == 1 -%}
-  <script>document.getElementById('pa-site-header')?.classList.add('pa-header--transparent');</script>
-{%- endif -%}
-
 <div class="pa-hero">
-
   {%- if section.settings.image != blank -%}
     <div class="pa-hero__media">
       {{
         section.settings.image
-        | image_url: width: 3840
+        | image_url: width: 2000
         | image_tag:
-          class: 'pa-hero__img',
-          sizes: '100vw',
-          widths: '750, 1100, 1500, 1780, 2000, 3000, 3840',
+          loading: 'eager',
           fetchpriority: 'high',
-          alt: section.settings.image.alt | default: shop.name | escape
+          widths: '750, 1100, 1500, 2000',
+          sizes: '100vw'
       }}
     </div>
-    <div class="pa-hero__overlay" aria-hidden="true"></div>
+    <div class="pa-hero__overlay"></div>
   {%- endif -%}
 
-  <div class="pa-hero__atmosphere" aria-hidden="true"></div>
-
-  <div class="pa-hero__inner">
-
+  <div class="pa-hero__content">
     {%- if section.settings.eyebrow != blank -%}
-      <span class="pa-hero__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      <span class="pa-hero__eyebrow">{{ section.settings.eyebrow }}</span>
     {%- endif -%}
 
     {%- if section.settings.heading != blank -%}
       <h1 class="pa-hero__heading">{{ section.settings.heading }}</h1>
     {%- endif -%}
 
-    <div class="pa-hero__foot">
+    {%- if section.settings.subheading != blank -%}
+      <p class="pa-hero__subhead">{{ section.settings.subheading }}</p>
+    {%- endif -%}
 
-      {%- if section.settings.subheading != blank -%}
-        <p class="pa-hero__sub">{{ section.settings.subheading | escape }}</p>
-      {%- endif -%}
+    {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+      <a href="{{ section.settings.cta_url }}" class="pa-hero__cta">
+        {{- section.settings.cta_label -}}
+      </a>
+    {%- endif -%}
 
-      {%- if section.settings.cta_label != blank or section.settings.cta_2_label != blank -%}
-        <div class="pa-hero__ctas">
-
-          {%- if section.settings.cta_label != blank -%}
-            <a
-              href="{{ section.settings.cta_url | default: routes.collections_url }}"
-              class="pa-hero__cta"
-            >
-              {{ section.settings.cta_label | escape }}
-              {%- comment -%} Lucide arrow-right — 14px / 1.5 stroke {%- endcomment -%}
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                   fill="none" stroke="currentColor" stroke-width="1.5"
-                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                <path d="M5 12h14"/>
-                <path d="m12 5 7 7-7 7"/>
-              </svg>
-            </a>
-          {%- endif -%}
-
-          {%- if section.settings.cta_2_label != blank and section.settings.cta_2_url != blank -%}
-            <a
-              href="{{ section.settings.cta_2_url }}"
-              class="pa-hero__cta pa-hero__cta--secondary"
-            >{{ section.settings.cta_2_label | escape }}</a>
-          {%- endif -%}
-
-        </div>
-      {%- endif -%}
-
-    </div>
+    {%- if section.settings.cta_2_label != blank and section.settings.cta_2_url != blank -%}
+      <a href="{{ section.settings.cta_2_url }}" class="pa-hero__cta">
+        {{- section.settings.cta_2_label -}}
+      </a>
+    {%- endif -%}
   </div>
 </div>
 
 {% schema %}
 {
-  "name": "PA — Hero Banner",
+  "name": "PA — Hero banner",
   "tag": "section",
   "class": "section-pa-hero",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
   "settings": [
     {
       "type": "header",
-      "content": "Background"
+      "content": "Image"
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Background image",
-      "info": "Omit to use the brand pine colour and atmospheric gradients alone."
+      "label": "Background image"
     },
     {
       "type": "select",
@@ -301,34 +176,12 @@
     },
     {
       "type": "range",
-      "id": "overlay_opacity",
-      "min": 0,
-      "max": 80,
-      "step": 5,
-      "unit": "%",
-      "label": "Image overlay darkness",
-      "default": 40
-    },
-    {
-      "type": "header",
-      "content": "Height"
-    },
-    {
-      "type": "checkbox",
-      "id": "full_height",
-      "label": "Full viewport height",
-      "default": false
-    },
-    {
-      "type": "range",
       "id": "min_height",
-      "min": 480,
-      "max": 1080,
-      "step": 40,
-      "unit": "px",
-      "label": "Minimum height",
-      "default": 720,
-      "info": "Ignored when "Full viewport height" is on."
+      "label": "Minimum height (px)",
+      "min": 400,
+      "max": 900,
+      "step": 50,
+      "default": 700
     },
     {
       "type": "header",
@@ -337,21 +190,20 @@
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Petrichor Atelier · Sydney"
+      "label": "Eyebrow label",
+      "default": "IN THE ATELIER"
     },
     {
-      "type": "inline_richtext",
+      "type": "richtext",
       "id": "heading",
       "label": "Heading",
-      "default": "Fragrance <em>deeply</em> <em>felt</em>.",
-      "info": "Use italic in the editor for the editorial serif style."
+      "default": "<p>Fragrance<br><em>deeply felt.</em></p>"
     },
     {
-      "type": "textarea",
+      "type": "text",
       "id": "subheading",
       "label": "Subheading",
-      "default": "A curation of rare houses, brought home to Australia — for the people who want to feel something rare."
+      "default": "A curation of rare houses, brought home to Australia."
     },
     {
       "type": "header",
@@ -361,7 +213,7 @@
       "type": "text",
       "id": "cta_label",
       "label": "Button label",
-      "default": "Step inside"
+      "default": "Explore the edit"
     },
     {
       "type": "url",
@@ -385,7 +237,7 @@
   ],
   "presets": [
     {
-      "name": "PA — Hero Banner"
+      "name": "PA — Hero banner"
     }
   ]
 }
