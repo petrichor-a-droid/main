@@ -1,0 +1,341 @@
+{% comment %}
+  Petrichor Atelier — branded sticky header.
+
+  Two-row layout:
+    Row 1  left  → primary nav links + search
+           right → Contact, Account, Bag (with count)
+    Row 2  centre → logo
+
+  Parameters:
+    menu        {String}  Linklist handle. Default: 'main-menu'
+    transparent {Boolean} Start transparent (for hero-adjacent pages). Default: false
+
+  Usage:
+    {% render 'pa-header', menu: section.settings.menu, transparent: true %}
+{% endcomment %}
+
+{%- liquid
+  assign nav_list   = menu | default: 'main-menu'
+  assign nav_links  = linklists[nav_list].links
+  assign is_transp  = transparent | default: false
+-%}
+
+<style>
+  /* ── Petrichor Atelier Header ──────────────────────────────── */
+
+  .pa-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    color: var(--pa-ink);
+    transition:
+      background     var(--dur-base) var(--ease-soft),
+      border-color   var(--dur-base) var(--ease-soft),
+      backdrop-filter var(--dur-base) var(--ease-soft);
+  }
+
+  /* Default (solid) — ivory immediately */
+  .pa-header:not(.pa-header--transparent) {
+    background: var(--pa-ivory);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  /* Transparent variant — no bg until scrolled */
+  .pa-header--transparent {
+    background: transparent;
+    border-bottom: 1px solid transparent;
+  }
+
+  /* Scrolled state — frosted ivory for both variants */
+  .pa-header.is-scrolled {
+    background: rgba(249, 248, 244, 0.94);
+    border-bottom-color: var(--border-soft);
+    backdrop-filter: saturate(120%) blur(10px);
+    -webkit-backdrop-filter: saturate(120%) blur(10px);
+  }
+
+  .pa-header__inner {
+    max-width: var(--max-content);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  @media (max-width: 749px) {
+    .pa-header__inner { padding: 0 var(--gutter-mobile); }
+  }
+
+  /* ── Row 1: utility nav ────────────────────────────────────── */
+
+  .pa-header__row--utility {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: var(--space-6);
+    padding-top: 14px;
+    padding-bottom: 12px;
+  }
+
+  .pa-header__nav,
+  .pa-header__util {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  /* Shared link style */
+  .pa-header__link {
+    font-family: var(--font-body);
+    font-weight: var(--fw-medium);
+    font-size: 12px;
+    letter-spacing: 0.01em;
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity var(--dur-fast) var(--ease-soft);
+  }
+
+  .pa-header__link:hover            { opacity: 0.55; }
+  .pa-header__link[aria-current]    { opacity: 0.45; }
+
+  .pa-header__cart-count { opacity: 0.65; }
+
+  /* ── Row 2: centred logo ───────────────────────────────────── */
+
+  .pa-header__row--logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 0 18px;
+  }
+
+  .pa-header__logo-wrap {
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: 1;
+  }
+
+  .pa-header__logo-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .pa-header__logo {
+    height: 17.6px;
+    width: auto;
+    display: block;
+    transition: opacity var(--dur-base);
+  }
+
+  .pa-header__logo-text {
+    font-family: var(--font-display);
+    font-size: var(--t-h5);
+    font-weight: var(--fw-regular);
+    letter-spacing: var(--ls-heading);
+    color: inherit;
+  }
+
+  /* ── Mobile: hamburger + cart, hide full nav ───────────────── */
+
+  .pa-header__mob-left,
+  .pa-header__mob-right { display: none; }
+
+  @media (max-width: 989px) {
+    .pa-header__nav,
+    .pa-header__util         { display: none; }
+
+    .pa-header__row--utility {
+      grid-template-columns: auto 1fr auto;
+    }
+
+    .pa-header__mob-left,
+    .pa-header__mob-right {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  /* Offset body so content doesn't sit under fixed header */
+  body { padding-top: var(--pa-header-height, 0); }
+</style>
+
+<div
+  id="pa-site-header"
+  class="pa-header{% if is_transp %} pa-header--transparent{% endif %}"
+  role="banner"
+>
+  <div class="pa-header__inner">
+
+    {%- comment -%} ── Row 1: utility nav ── {%- endcomment -%}
+    <div class="pa-header__row--utility">
+
+      {%- comment -%} Mobile: hamburger opener {%- endcomment -%}
+      <button
+        class="pa-header__link pa-header__mob-left"
+        type="button"
+        aria-label="{{ 'sections.header.menu' | t }}"
+        onclick="document.querySelector('header-drawer details')?.setAttribute('open','')"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="1.5"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <line x1="4" x2="20" y1="6"  y2="6"/>
+          <line x1="4" x2="20" y1="12" y2="12"/>
+          <line x1="4" x2="20" y1="18" y2="18"/>
+        </svg>
+      </button>
+
+      {%- comment -%} Desktop: primary nav + search {%- endcomment -%}
+      <nav class="pa-header__nav" aria-label="{{ 'accessibility.main_nav' | t | default: 'Primary navigation' }}">
+        {%- for link in nav_links -%}
+          <a
+            href="{{ link.url }}"
+            class="pa-header__link"
+            {% if link.active %}aria-current="page"{% endif %}
+          >{{ link.title }}</a>
+        {%- endfor -%}
+
+        {%- comment -%} Search — Lucide search 13px / 1.5 stroke {%- endcomment -%}
+        <a href="{{ routes.search_url }}" class="pa-header__link" aria-label="{{ 'general.search.search' | t }}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+          Search
+        </a>
+      </nav>
+
+      {%- comment -%} Desktop: utility links + cart {%- endcomment -%}
+      <div class="pa-header__util">
+        <a href="{{ routes.root_url }}pages/contact" class="pa-header__link">Contact</a>
+
+        {%- if shop.customer_accounts_enabled -%}
+          <a
+            href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+            class="pa-header__link"
+            rel="nofollow"
+          >Account</a>
+        {%- endif -%}
+
+        {%- comment -%} Cart — Lucide shopping-bag 16px / 1.5 stroke {%- endcomment -%}
+        <a
+          href="{{ routes.cart_url }}"
+          class="pa-header__link"
+          id="pa-cart-icon"
+          aria-label="{{ 'templates.cart.cart' | t }}{% if cart.item_count > 0 %}, {{ cart.item_count }} {{ 'templates.cart.cart_count' | t: count: cart.item_count }}{% endif %}"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          Bag
+          {%- if cart.item_count > 0 -%}
+            <span class="pa-header__cart-count" aria-hidden="true">({{ cart.item_count }})</span>
+            <span class="visually-hidden">
+              {{- 'sections.header.cart_count' | t: count: cart.item_count -}}
+            </span>
+          {%- endif -%}
+        </a>
+      </div>
+
+      {%- comment -%} Mobile: cart icon only on right {%- endcomment -%}
+      <a
+        href="{{ routes.cart_url }}"
+        class="pa-header__link pa-header__mob-right"
+        aria-label="{{ 'templates.cart.cart' | t }}"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="1.5"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        {%- if cart.item_count > 0 -%}
+          <span class="pa-header__cart-count" aria-hidden="true">({{ cart.item_count }})</span>
+        {%- endif -%}
+      </a>
+
+    </div>{%- comment -%} /row--utility {%- endcomment -%}
+
+    {%- comment -%} ── Row 2: centred logo ── {%- endcomment -%}
+    <div class="pa-header__row--logo">
+      {%- if request.page_type == 'index' -%}
+        <h1 class="pa-header__logo-wrap">
+      {%- else -%}
+        <div class="pa-header__logo-wrap">
+      {%- endif -%}
+
+        <a href="{{ routes.root_url }}" class="pa-header__logo-link">
+          {%- if settings.logo != blank -%}
+            {%- assign logo_alt    = settings.logo.alt | default: shop.name | escape -%}
+            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+            {{
+              settings.logo
+              | image_url: width: 600
+              | image_tag:
+                class: 'pa-header__logo',
+                width: settings.logo_width,
+                height: logo_height,
+                alt: logo_alt,
+                preload: true
+            }}
+          {%- else -%}
+            <span class="pa-header__logo-text">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+
+      {%- if request.page_type == 'index' -%}
+        </h1>
+      {%- else -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    var header  = document.getElementById('pa-site-header');
+    var docEl   = document.documentElement;
+    var THRESH  = 10;
+
+    if (!header) return;
+
+    function setHeight() {
+      var h = header.offsetHeight + 'px';
+      docEl.style.setProperty('--pa-header-height', h);
+      docEl.style.setProperty('--header-height', h); /* Dawn compat */
+    }
+
+    function onScroll() {
+      if (window.scrollY > THRESH) {
+        header.classList.add('is-scrolled');
+      } else {
+        header.classList.remove('is-scrolled');
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', setHeight);
+
+    onScroll();
+    setHeight();
+  })();
+</script>

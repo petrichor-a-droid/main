@@ -1,0 +1,316 @@
+/* ============================================================
+   PETRICHOR ATELIER — Shopify Dawn Theme Tokens
+   Drop this file into: assets/petrichor-tokens.css
+   Then reference it in layout/theme.liquid:
+     {{ 'petrichor-tokens.css' | asset_url | stylesheet_tag }}
+   ============================================================ */
+
+/* ---------- Font faces — upload TTFs to Shopify Assets ----------
+   Upload all fonts from the design system /fonts/ folder to
+   Shopify Admin → Online Store → Themes → Assets.
+   Then update the urls below to use {{ 'FontName.ttf' | asset_url }}
+   ---------------------------------------------------------------- */
+@font-face {
+  font-family: "EB Garamond";
+  src: url("{{ 'EBGaramond-Regular.ttf' | asset_url }}") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "EB Garamond";
+  src: url("{{ 'EBGaramond-Italic.ttf' | asset_url }}") format("truetype");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "EB Garamond";
+  src: url("{{ 'EBGaramond-Medium.ttf' | asset_url }}") format("truetype");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "EB Garamond";
+  src: url("{{ 'EBGaramond-SemiBold.ttf' | asset_url }}") format("truetype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "EB Garamond";
+  src: url("{{ 'EBGaramond-Bold.ttf' | asset_url }}") format("truetype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("{{ 'InstrumentSans-Regular.ttf' | asset_url }}") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("{{ 'InstrumentSans-Medium.ttf' | asset_url }}") format("truetype");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("{{ 'InstrumentSans-SemiBold.ttf' | asset_url }}") format("truetype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("{{ 'InstrumentSans-Bold.ttf' | asset_url }}") format("truetype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* ---------- Google Fonts (Instrument Serif — editorial italic only) ---------- */
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+
+  /* ------ Brand colours ------ */
+  --pa-cocoa:     #342627;   /* warm near-black — core dark */
+  --pa-sage:      #c6d1b5;   /* soft sage — core light */
+  --pa-forest:    #485b45;   /* mid-tone moss */
+  --pa-pine:      #304b3d;   /* dark pine — buttons & inverse */
+  --pa-ivory:     #f9f8f4;   /* default paper / page bg */
+  --pa-olive:     #7e8c54;   /* muted accent green */
+  --pa-cream:     #efebe4;   /* warm secondary surface */
+  --pa-eucalypt:  #a7bcaf;   /* dusty grey-green */
+  --pa-ink:       #1d1d1b;   /* true near-black */
+  --pa-mint:      #ace2b4;   /* the unexpected twist */
+  --pa-mist:      #d8d8d8;   /* neutral grey */
+  --pa-clay:      #aa9379;   /* warm earthy tan */
+
+  /* Tones (color-mix with ivory) */
+  --pa-pine-80:   color-mix(in srgb, #304b3d 80%, #f9f8f4);
+  --pa-pine-60:   color-mix(in srgb, #304b3d 60%, #f9f8f4);
+  --pa-pine-40:   color-mix(in srgb, #304b3d 40%, #f9f8f4);
+  --pa-pine-20:   color-mix(in srgb, #304b3d 20%, #f9f8f4);
+  --pa-sage-80:   color-mix(in srgb, #c6d1b5 80%, #f9f8f4);
+  --pa-sage-60:   color-mix(in srgb, #c6d1b5 60%, #f9f8f4);
+  --pa-cream-80:  color-mix(in srgb, #efebe4 80%, #f9f8f4);
+  --pa-cocoa-20:  color-mix(in srgb, #342627 20%, #f9f8f4);
+
+  /* ------ Semantic surfaces ------ */
+  --bg-canvas:       var(--pa-ivory);
+  --bg-surface:      var(--pa-cream);
+  --bg-tint-sage:    color-mix(in srgb, var(--pa-sage) 18%, var(--pa-ivory));
+  --bg-inverse:      var(--pa-pine);
+  --bg-inverse-deep: var(--pa-cocoa);
+
+  /* ------ Foreground / text ------ */
+  --fg-1:           var(--pa-ink);
+  --fg-2:           var(--pa-cocoa);
+  --fg-3:           color-mix(in srgb, var(--pa-cocoa) 55%, var(--pa-ivory));
+  --fg-on-inverse:  var(--pa-ivory);
+  --fg-on-inverse-2: color-mix(in srgb, var(--pa-ivory) 75%, var(--pa-sage));
+
+  /* ------ Borders ------ */
+  --border-soft:    #e3ddd1;
+  --border-default: #cbc4b3;
+  --border-strong:  var(--pa-cocoa);
+  --border-on-inverse: color-mix(in srgb, var(--pa-ivory) 22%, transparent);
+
+  /* ------ Brand interactive ------ */
+  --brand-primary:       var(--pa-pine);
+  --brand-primary-hover: #263d31;
+  --brand-primary-press: #1f3328;
+  --brand-secondary:     var(--pa-cocoa);
+  --accent:              var(--pa-mint);
+
+  /* ------ Status (muted earth tones) ------ */
+  --status-positive: #5a7a4a;
+  --status-warning:  #b08642;
+  --status-danger:   #8a3a2f;
+  --status-info:     #4a6a7a;
+
+  /* ------ Focus ring ------ */
+  --focus-ring: color-mix(in srgb, var(--pa-pine) 55%, transparent);
+
+  /* ------ Typography ------ */
+  --font-display:           "EB Garamond", "Garamond", "Times New Roman", serif;
+  --font-editorial:         "Instrument Serif", "EB Garamond", serif;
+  --font-body:              "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-body-condensed:    "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+
+  /* Type scale */
+  --t-display: clamp(64px, 11vw, 168px);
+  --t-h1:      clamp(48px, 7vw, 96px);
+  --t-h2:      clamp(36px, 5vw, 64px);
+  --t-h3:      clamp(28px, 3.4vw, 44px);
+  --t-h4:      24px;
+  --t-h5:      20px;
+  --t-eyebrow: 12px;
+  --t-body:    17px;
+  --t-body-sm: 15px;
+  --t-caption: 13px;
+  --t-cta:     14px;
+
+  /* Line heights */
+  --lh-display: 0.96;
+  --lh-heading: 1.04;
+  --lh-subhead: 1.18;
+  --lh-body:    1.55;
+  --lh-tight:   1.25;
+
+  /* Letter spacing */
+  --ls-display: -0.02em;
+  --ls-heading: -0.012em;
+  --ls-body:    0;
+  --ls-eyebrow: 0.22em;
+  --ls-cta:     0.14em;
+
+  /* Weights */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* ------ Spacing (4px base) ------ */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  32px;
+  --space-8:  40px;
+  --space-9:  56px;
+  --space-10: 72px;
+  --space-11: 96px;
+  --space-12: 128px;
+
+  /* Gutters */
+  --gutter-mobile: 20px;
+  --gutter:        40px;
+  --gutter-wide:   80px;
+  --max-content:   1280px;
+
+  /* ------ Radii (restrained) ------ */
+  --radius-none: 0;
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   14px;
+  --radius-pill: 999px;
+  --radius-card: var(--radius-md);
+
+  /* ------ Shadows (soft, warm) ------ */
+  --shadow-xs: 0 1px 2px rgba(29, 29, 27, 0.05);
+  --shadow-sm: 0 2px 6px rgba(29, 29, 27, 0.06), 0 1px 2px rgba(29, 29, 27, 0.04);
+  --shadow-md: 0 8px 24px rgba(29, 29, 27, 0.08), 0 2px 6px rgba(29, 29, 27, 0.04);
+  --shadow-lg: 0 24px 60px rgba(29, 29, 27, 0.10), 0 6px 16px rgba(29, 29, 27, 0.05);
+
+  /* ------ Motion (slow, no bounces) ------ */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-soft:   cubic-bezier(0.4, 0.0, 0.2, 1);
+  --dur-fast:    160ms;
+  --dur-base:    240ms;
+  --dur-slow:    420ms;
+  --dur-cinematic: 720ms;
+}
+
+/* ============================================================
+   DAWN THEME OVERRIDES
+   These map Petrichor tokens onto Dawn's CSS variable names
+   so the built-in Dawn components pick up the brand colours
+   without needing to rewrite every component.
+   ============================================================ */
+:root {
+  /* Dawn uses these — we override them with our brand */
+  --color-base-text:              29, 29, 27;      /* --pa-ink */
+  --color-base-background-1:      249, 248, 244;   /* --pa-ivory */
+  --color-base-background-2:      239, 235, 228;   /* --pa-cream */
+  --color-base-solid-button-labels: 249, 248, 244; /* --pa-ivory */
+  --color-base-outline-button-labels: 29, 29, 27;  /* --pa-ink */
+  --color-base-accent-1:          48, 75, 61;      /* --pa-pine */
+  --color-base-accent-2:          52, 38, 39;      /* --pa-cocoa */
+
+  /* Dawn font stacks */
+  --font-heading-family: "EB Garamond", "Garamond", serif;
+  --font-heading-style:  normal;
+  --font-heading-weight: 400;
+  --font-body-family:    "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-body-style:     normal;
+  --font-body-weight:    400;
+
+  /* Dawn button radius — keep restrained */
+  --buttons-radius: 0px;
+  --inputs-radius:  4px;
+  --buttons-border-width: 1px;
+  --inputs-border-width:  1px;
+  --card-corner-radius:   0px;
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   Use these directly in your Liquid section HTML.
+   ============================================================ */
+
+/* Surfaces */
+.pa-paper       { background: var(--bg-canvas);  color: var(--fg-1); }
+.pa-surface     { background: var(--bg-surface); color: var(--fg-1); }
+.pa-tint        { background: var(--bg-tint-sage); color: var(--pa-ink); }
+.pa-inverse     { background: var(--bg-inverse); color: var(--fg-on-inverse); }
+.pa-inverse-deep{ background: var(--bg-inverse-deep); color: var(--fg-on-inverse); }
+
+/* Typography */
+.pa-display {
+  font-family: var(--font-display);
+  font-weight: var(--fw-regular);
+  font-size: var(--t-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+.pa-h1 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-regular);
+  font-size: var(--t-h1);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+}
+.pa-h2 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-regular);
+  font-size: var(--t-h2);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+}
+.pa-subhead {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--fw-regular);
+  font-size: clamp(22px, 2.6vw, 32px);
+  line-height: var(--lh-subhead);
+  color: var(--fg-2);
+}
+.pa-eyebrow {
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--t-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-3);
+  display: block;
+  margin-bottom: var(--space-4);
+}
+.pa-editorial {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-weight: var(--fw-regular);
+}
+.pa-cta {
+  font-family: var(--font-body);
+  font-weight: var(--fw-semibold);
+  font-size: var(--t-cta);
+  letter-spacing: var(--ls-cta);
+  text-transform: uppercase;
+}
+
+/* Divider — hairline rule (use instead of heavy borders) */
+.pa-rule {
+  border: none;
+  border-top: 1px solid var(--border-soft);
+  margin: var(--space-9) 0;
+}
+.pa-rule--on-inverse {
+  border-top-color: var(--border-on-inverse);
+}
