@@ -173,8 +173,8 @@
                   class: 'pa-cr__card-img',
                   widths: '500, 700, 1000',
                   sizes: '(max-width: 749px) calc(50vw - 30px), (max-width: 989px) calc(50vw - 54px), 33vw',
-                  alt: product.featured_image.alt | default: product.title | escape,
-                  loading: 'lazy'
+                  loading: 'lazy',
+                  alt: product.featured_image.alt | default: product.title | escape
               }}
             {%- else -%}
               {{ 'product-1' | placeholder_svg_tag: 'pa-cr__card-placeholder' }}

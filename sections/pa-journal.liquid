@@ -185,8 +185,8 @@
                   class: 'pa-journal__card-img',
                   widths: '500, 750, 1000',
                   sizes: '(max-width: 749px) calc(100vw - 40px), (max-width: 989px) calc(50vw - 44px), 33vw',
-                  alt: block.settings.image.alt | default: block.settings.title | escape,
-                  loading: 'lazy'
+                  loading: 'lazy',
+                  alt: block.settings.image.alt | default: block.settings.title | escape
               }}
             {%- endif -%}
 

@@ -162,8 +162,8 @@
             class: 'pa-es__img',
             widths: '600, 800, 1000, 1200',
             sizes: '(max-width: 749px) calc(100vw - 40px), (max-width: 989px) calc(100vw - 40px), calc(50vw - 60px)',
-            alt: section.settings.image.alt | default: shop.name | escape,
-            loading: 'lazy'
+            loading: 'lazy',
+            alt: section.settings.image.alt | default: shop.name | escape
         }}
       {%- endif -%}
 
@@ -208,7 +208,7 @@
       "type": "inline_richtext",
       "id": "heading",
       "label": "Heading",
-      "default": "Some perfumes shout.<br><em>The ones we love whisper.</em>",
+      "default": "Some perfumes shout. <em>The ones we love whisper.</em>",
       "info": "Use italic in the editor for the editorial serif style."
     },
     {
