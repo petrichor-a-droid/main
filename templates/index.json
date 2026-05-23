@@ -11,15 +11,29 @@
   "sections": {
     "pa_hero_banner": {
       "type": "pa-hero-banner",
-      "settings": {}
+      "settings": {
+        "image_position": "center center",
+        "overlay_opacity": 40,
+        "full_height": false,
+        "min_height": 720,
+        "eyebrow": "",
+        "heading": "Fragrance <em>deeply</em> <em>felt</em>.",
+        "subheading": "A curation of rare houses, brought home to Australia — for the people who want to feel something rare.",
+        "cta_label": "Step inside",
+        "cta_url": "",
+        "cta_2_label": "",
+        "cta_2_url": ""
+      }
     },
     "pa_featured_collection": {
       "type": "pa-featured-collection",
       "settings": {
+        "collection": "",
+        "products_to_show": 4,
         "eyebrow": "In the atelier",
         "heading": "Four pieces we keep <em>reaching for.</em>",
         "view_all_label": "The full edit",
-        "products_to_show": 4
+        "view_all_url": ""
       }
     },
     "pa_editorial_split": {
@@ -35,9 +49,10 @@
     "pa_collection_row": {
       "type": "pa-collection-row",
       "settings": {
+        "collection": "",
+        "products_to_show": 3,
         "eyebrow": "Discovery · 03",
-        "heading": "For the curious.",
-        "products_to_show": 3
+        "heading": "For the curious."
       }
     },
     "pa_journal": {
@@ -49,7 +64,8 @@
             "tone": "pine",
             "eyebrow": "House study · 03",
             "title": "Of paper and pine",
-            "subtitle": "Three houses we kept reaching for this winter."
+            "subtitle": "Three houses we kept reaching for this winter.",
+            "link": ""
           }
         },
         "card_2": {
@@ -58,7 +74,8 @@
             "tone": "sage",
             "eyebrow": "Field notes",
             "title": "Salt on the air",
-            "subtitle": "On marine fragrances done quietly. No coconut. No sunblock."
+            "subtitle": "On marine fragrances done quietly. No coconut. No sunblock.",
+            "link": ""
           }
         },
         "card_3": {
@@ -67,11 +84,16 @@
             "tone": "clay",
             "eyebrow": "Atelier · 12",
             "title": "The room above the shop",
-            "subtitle": "A weekend in the back room. Three notebooks. One scent."
+            "subtitle": "A weekend in the back room. Three notebooks. One scent.",
+            "link": ""
           }
         }
       },
-      "block_order": ["card_1", "card_2", "card_3"],
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3"
+      ],
       "settings": {
         "eyebrow": "The journal",
         "heading": "Notes on what we're wearing."
