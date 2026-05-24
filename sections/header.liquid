@@ -191,7 +191,7 @@
   .pa-drawer-scrim {
     position: fixed;
     inset: 0;
-    background: rgba(29, 29, 27, 0.55);
+    background: rgba(48, 75, 61, 0.65);
     z-index: 299;
     opacity: 0;
     pointer-events: none;
@@ -208,8 +208,8 @@
     left: 0;
     height: 100%;
     width: 520px;
-    background: var(--pa-pine, #304b3d);
-    color: var(--pa-ivory, #f9f8f4);
+    background: var(--pa-ivory, #f9f8f4);
+    color: var(--pa-ink, #1d1d1b);
     z-index: 300;
     transform: translateX(-100%);
     transition: transform 420ms cubic-bezier(.22, 1, .36, 1);
@@ -225,7 +225,7 @@
     align-items: center;
     gap: 28px;
     padding: 20px 32px;
-    border-bottom: 1px solid rgba(249, 248, 244, 0.1);
+    border-bottom: 1px solid rgba(29, 29, 27, 0.1);
     flex-shrink: 0;
   }
 
@@ -235,7 +235,7 @@
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(249, 248, 244, 0.45);
+    color: rgba(29, 29, 27, 0.35);
     background: none;
     border: none;
     border-bottom: 1px solid transparent;
@@ -244,10 +244,10 @@
     transition: color 160ms ease, border-color 160ms ease;
   }
   .pa-drawer__tab.is-active {
-    color: var(--pa-ivory, #f9f8f4);
-    border-bottom-color: rgba(249, 248, 244, 0.55);
+    color: var(--pa-ink, #1d1d1b);
+    border-bottom-color: rgba(29, 29, 27, 0.45);
   }
-  .pa-drawer__tab:hover { color: rgba(249, 248, 244, 0.8); }
+  .pa-drawer__tab:hover { color: rgba(29, 29, 27, 0.7); }
 
   /* ── Scrollable body ── */
   .pa-drawer__body {
@@ -263,7 +263,7 @@
   .pa-drawer__nav { padding: 8px 0 24px; }
 
   .pa-drawer__nav-item {
-    border-bottom: 1px solid rgba(249, 248, 244, 0.08);
+    border-bottom: 1px solid rgba(29, 29, 27, 0.08);
   }
 
   .pa-drawer__nav-link {
@@ -277,7 +277,7 @@
     font-size: clamp(26px, 3.5vw, 34px);
     line-height: 1;
     letter-spacing: -0.01em;
-    color: var(--pa-ivory, #f9f8f4);
+    color: var(--pa-ink, #1d1d1b);
     text-decoration: none;
     background: none;
     border: none;
@@ -285,11 +285,11 @@
     text-align: left;
     transition: opacity 160ms ease;
   }
-  .pa-drawer__nav-link:hover { opacity: 0.65; }
+  .pa-drawer__nav-link:hover { opacity: 0.55; }
 
   .pa-drawer__chevron {
     flex-shrink: 0;
-    opacity: 0.5;
+    opacity: 0.4;
     transition: transform 280ms ease;
   }
   .pa-drawer__nav-item.is-open .pa-drawer__chevron { transform: rotate(180deg); }
@@ -316,12 +316,12 @@
     font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(249, 248, 244, 0.6);
+    color: rgba(29, 29, 27, 0.5);
     text-decoration: none;
     padding: 7px 0;
     transition: color 160ms ease;
   }
-  .pa-drawer__sub-link:hover { color: var(--pa-ivory, #f9f8f4); }
+  .pa-drawer__sub-link:hover { color: var(--pa-ink, #1d1d1b); }
 
   /* ── Search section ── */
   .pa-drawer__search { padding: 32px 32px 24px; }
@@ -330,7 +330,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    border-bottom: 1px solid rgba(249, 248, 244, 0.25);
+    border-bottom: 1px solid rgba(29, 29, 27, 0.2);
     padding-bottom: 14px;
   }
 
@@ -341,17 +341,17 @@
     outline: none;
     font-family: var(--font-display, 'EB Garamond', Georgia, serif);
     font-size: clamp(24px, 3vw, 32px);
-    color: var(--pa-ivory, #f9f8f4);
+    color: var(--pa-ink, #1d1d1b);
   }
-  .pa-drawer__search-input::placeholder { color: rgba(249, 248, 244, 0.3); }
+  .pa-drawer__search-input::placeholder { color: rgba(29, 29, 27, 0.3); }
 
   .pa-drawer__search-btn {
     background: none;
     border: none;
-    color: var(--pa-ivory, #f9f8f4);
+    color: var(--pa-ink, #1d1d1b);
     cursor: pointer;
     padding: 0;
-    opacity: 0.55;
+    opacity: 0.45;
     transition: opacity 160ms ease;
     flex-shrink: 0;
   }
@@ -363,7 +363,7 @@
     align-items: center;
     gap: 32px;
     padding: 20px 32px;
-    border-top: 1px solid rgba(249, 248, 244, 0.1);
+    border-top: 1px solid rgba(29, 29, 27, 0.1);
     flex-shrink: 0;
   }
 
@@ -373,11 +373,11 @@
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(249, 248, 244, 0.55);
+    color: rgba(29, 29, 27, 0.45);
     text-decoration: none;
     transition: color 160ms ease;
   }
-  .pa-drawer__footer-link:hover { color: var(--pa-ivory, #f9f8f4); }
+  .pa-drawer__footer-link:hover { color: var(--pa-ink, #1d1d1b); }
 
   @media (max-width: 989px) {
     .pa-drawer       { width: 86vw; }
