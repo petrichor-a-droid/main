@@ -1,0 +1,522 @@
+{% comment %}
+  Petrichor Atelier — Product Page
+  50/50 split: image carousel (left) + product info with sticky panel (right).
+{% endcomment %}
+
+{%- liquid
+  assign product_form_id = 'pa-product-form-' | append: section.id
+  assign first_variant   = product.selected_or_first_available_variant
+  assign media_images    = product.media | where: 'media_type', 'image'
+-%}
+
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+
+<style>
+  /* ── Page layout ── */
+  .pa-pp {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--bg-canvas, #f9f8f4);
+    min-height: calc(100vh - var(--pa-header-height, 80px));
+  }
+
+  /* ── Gallery (left) ── */
+  .pa-pp__gallery {
+    position: sticky;
+    top: var(--pa-header-height, 80px);
+    height: calc(100vh - var(--pa-header-height, 80px));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg-surface, #f1ede7);
+  }
+
+  /* Main image viewport */
+  .pa-gallery__viewport {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .pa-gallery__slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 320ms ease;
+    pointer-events: none;
+  }
+  .pa-gallery__slide.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .pa-gallery__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Chevron navigation */
+  .pa-gallery__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--pa-ivory, #f9f8f4);
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    opacity: 0.75;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    color: var(--pa-ink, #1d1d1b);
+    transition: opacity 160ms ease, box-shadow 160ms ease;
+  }
+  .pa-gallery__nav:hover {
+    opacity: 1;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.16);
+  }
+  .pa-gallery__nav--prev { left: 16px; }
+  .pa-gallery__nav--next { right: 16px; }
+
+  /* Thumbnail strip */
+  .pa-gallery__thumbs {
+    display: flex;
+    gap: 8px;
+    padding: 14px 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-shrink: 0;
+    background: var(--bg-surface, #f1ede7);
+  }
+  .pa-gallery__thumbs::-webkit-scrollbar { display: none; }
+
+  .pa-gallery__thumb {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    overflow: hidden;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    opacity: 0.5;
+    transition: border-color 160ms ease, opacity 160ms ease;
+  }
+  .pa-gallery__thumb.is-active {
+    border-color: var(--pa-ink, #1d1d1b);
+    opacity: 1;
+  }
+  .pa-gallery__thumb:hover { opacity: 0.8; }
+
+  .pa-gallery__thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Info panel (right) ── */
+  .pa-pp__info {
+    overflow-y: auto;
+    padding: 64px 60px 80px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(29, 29, 27, 0.2) transparent;
+  }
+  .pa-pp__info::-webkit-scrollbar { width: 4px; }
+  .pa-pp__info::-webkit-scrollbar-thumb { background: rgba(29, 29, 27, 0.2); border-radius: 2px; }
+
+  .pa-pp__info-inner { max-width: 480px; }
+
+  .pa-pp__vendor {
+    display: block;
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-3, #8a8078);
+    margin-bottom: 12px;
+  }
+
+  .pa-pp__title {
+    font-family: var(--font-display, 'EB Garamond', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(28px, 3vw, 42px);
+    line-height: 1.1;
+    letter-spacing: -0.012em;
+    color: var(--fg-1, #1d1d1b);
+    margin: 0 0 16px;
+  }
+
+  .pa-pp__price {
+    margin-bottom: 28px;
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 16px;
+    color: var(--fg-1, #1d1d1b);
+  }
+
+  .pa-pp__description {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--fg-2, #4a4540);
+    margin-bottom: 36px;
+  }
+  .pa-pp__description p { margin: 0 0 1em; }
+  .pa-pp__description p:last-child { margin-bottom: 0; }
+
+  /* ── Variant options ── */
+  .pa-pp__variants { margin-bottom: 36px; }
+
+  .pa-pp__option { margin-bottom: 20px; }
+
+  .pa-pp__option-label {
+    display: block;
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-3, #8a8078);
+    margin-bottom: 10px;
+  }
+
+  .pa-pp__option-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pa-variant-radio {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .pa-variant-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 18px;
+    border: 1px solid var(--border-soft, #e3ddd1);
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+  }
+  .pa-variant-radio:checked + .pa-variant-label {
+    border-color: var(--pa-ink, #1d1d1b);
+    background: var(--pa-ink, #1d1d1b);
+    color: var(--pa-ivory, #f9f8f4);
+  }
+  .pa-variant-label:hover { border-color: var(--pa-ink, #1d1d1b); }
+
+  /* ── Action buttons ── */
+  .pa-pp__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pa-pp__form { margin: 0; }
+
+  .pa-pp-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 17px 24px;
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease, opacity 200ms ease;
+    text-decoration: none;
+    background: none;
+  }
+  .pa-pp-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .pa-pp-btn--primary {
+    background: var(--pa-ink, #1d1d1b);
+    color: var(--pa-ivory, #f9f8f4);
+    border-color: var(--pa-ink, #1d1d1b);
+  }
+  .pa-pp-btn--primary:hover:not(:disabled) {
+    background: var(--pa-pine, #304b3d);
+    border-color: var(--pa-pine, #304b3d);
+  }
+
+  .pa-pp-btn--secondary {
+    background: transparent;
+    color: var(--pa-ink, #1d1d1b);
+    border-color: var(--pa-ink, #1d1d1b);
+  }
+  .pa-pp-btn--secondary:hover {
+    background: var(--pa-ink, #1d1d1b);
+    color: var(--pa-ivory, #f9f8f4);
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 989px) {
+    .pa-pp {
+      grid-template-columns: 1fr;
+    }
+    .pa-pp__gallery {
+      position: relative;
+      top: 0;
+      height: 72vw;
+      max-height: 520px;
+    }
+    .pa-pp__info {
+      padding: 40px 24px 64px;
+      overflow-y: visible;
+    }
+    .pa-pp__info-inner { max-width: 100%; }
+  }
+</style>
+
+<div class="pa-pp"
+     id="MainProduct-{{ section.id }}"
+     data-section="{{ section.id }}"
+     data-product-id="{{ product.id }}"
+     data-url="{{ product.url }}">
+
+  <!-- ── Gallery (left) ── -->
+  <div class="pa-pp__gallery">
+    <div id="pa-gallery-{{ section.id }}">
+
+      <div class="pa-gallery__viewport">
+        {%- if media_images.size > 0 -%}
+          {%- for media in media_images -%}
+            {%- assign img_loading = 'lazy' -%}
+            {%- if forloop.first -%}{%- assign img_loading = 'eager' -%}{%- endif -%}
+            <div class="pa-gallery__slide{% if forloop.first %} is-active{% endif %}"
+                 data-index="{{ forloop.index0 }}"
+                 aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
+              {{
+                media
+                | image_url: width: 1400
+                | image_tag:
+                  class: 'pa-gallery__img',
+                  widths: '600, 900, 1100, 1400',
+                  loading: img_loading,
+                  alt: media.alt | default: product.title | escape
+              }}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          <div class="pa-gallery__slide is-active" data-index="0" aria-hidden="false">
+            {{ 'product-1' | placeholder_svg_tag: 'pa-gallery__img' }}
+          </div>
+        {%- endif -%}
+
+        {%- if media_images.size > 1 -%}
+          <button class="pa-gallery__nav pa-gallery__nav--prev"
+                  type="button"
+                  aria-label="Previous image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="1.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+          </button>
+          <button class="pa-gallery__nav pa-gallery__nav--next"
+                  type="button"
+                  aria-label="Next image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="1.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </button>
+        {%- endif -%}
+      </div>
+
+      {%- if media_images.size > 1 -%}
+        <div class="pa-gallery__thumbs">
+          {%- for media in media_images -%}
+            <button class="pa-gallery__thumb{% if forloop.first %} is-active{% endif %}"
+                    type="button"
+                    data-target="{{ forloop.index0 }}"
+                    aria-label="View image {{ forloop.index }}">
+              {{
+                media
+                | image_url: width: 160
+                | image_tag:
+                  class: 'pa-gallery__thumb-img',
+                  alt: '',
+                  loading: 'lazy'
+              }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+
+  <!-- ── Info panel (right) ── -->
+  <div class="pa-pp__info">
+    <div class="pa-pp__info-inner">
+
+      {%- if product.vendor != blank -%}
+        <span class="pa-pp__vendor">{{ product.vendor | escape }}</span>
+      {%- endif -%}
+
+      <h1 class="pa-pp__title">{{ product.title | escape }}</h1>
+
+      <div class="pa-pp__price" id="price-{{ section.id }}">
+        {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: '' -%}
+      </div>
+
+      {%- unless product.has_only_default_variant -%}
+        <div class="pa-pp__variants">
+          {%- for option in product.options_with_values -%}
+            <div class="pa-pp__option">
+              <span class="pa-pp__option-label">{{ option.name }}</span>
+              <div class="pa-pp__option-values">
+                {%- for value in option.values -%}
+                  {%- assign opt_id = 'pa-opt-' | append: section.id | append: '-' | append: option.position | append: '-' | append: forloop.index -%}
+                  <input
+                    type="radio"
+                    id="{{ opt_id }}"
+                    name="options[{{ option.name | escape }}]"
+                    value="{{ value | escape }}"
+                    form="{{ product_form_id }}"
+                    class="pa-variant-radio"
+                    {% if option.selected_value == value %}checked{% endif %}
+                  >
+                  <label for="{{ opt_id }}" class="pa-variant-label">
+                    {{ value | escape }}
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endunless -%}
+
+      {%- if product.description != blank -%}
+        <div class="pa-pp__description">
+          {{ product.description }}
+        </div>
+      {%- endif -%}
+
+      <div class="pa-pp__actions">
+        {%- form 'product', product,
+              id: product_form_id,
+              class: 'pa-pp__form',
+              novalidate: 'novalidate',
+              data-type: 'add-to-cart-form'
+        -%}
+          <input type="hidden"
+                 name="id"
+                 value="{{ first_variant.id }}"
+                 class="product-variant-id"
+                 data-productid="{{ product.id }}">
+          <button
+            type="submit"
+            name="add"
+            class="pa-pp-btn pa-pp-btn--primary"
+            {% unless first_variant.available %}disabled{% endunless %}
+          >
+            {%- if first_variant.available -%}Add to cart{%- else -%}Sold out{%- endif -%}
+          </button>
+        {%- endform -%}
+
+        <button type="button" class="pa-pp-btn pa-pp-btn--secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 1.5C10.5 3.5 9.26 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          </svg>
+          Add to Wish List
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  (function () {
+    var gallery = document.getElementById('pa-gallery-{{ section.id }}');
+    if (!gallery) return;
+
+    var slides  = Array.from(gallery.querySelectorAll('.pa-gallery__slide'));
+    var thumbs  = Array.from(gallery.querySelectorAll('.pa-gallery__thumb'));
+    var btnPrev = gallery.querySelector('.pa-gallery__nav--prev');
+    var btnNext = gallery.querySelector('.pa-gallery__nav--next');
+    var current = 0;
+
+    function goTo(index) {
+      if (slides.length < 2) return;
+      index = ((index % slides.length) + slides.length) % slides.length;
+
+      slides[current].classList.remove('is-active');
+      slides[current].setAttribute('aria-hidden', 'true');
+      if (thumbs[current]) thumbs[current].classList.remove('is-active');
+
+      current = index;
+
+      slides[current].classList.add('is-active');
+      slides[current].setAttribute('aria-hidden', 'false');
+      if (thumbs[current]) {
+        thumbs[current].classList.add('is-active');
+        thumbs[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+
+    if (btnPrev) btnPrev.addEventListener('click', function () { goTo(current - 1); });
+    if (btnNext) btnNext.addEventListener('click', function () { goTo(current + 1); });
+
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        goTo(parseInt(thumb.dataset.target, 10));
+      });
+    });
+
+    // Touch swipe
+    var touchStartX = null;
+    var viewport = gallery.querySelector('.pa-gallery__viewport');
+    if (viewport) {
+      viewport.addEventListener('touchstart', function (e) {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      viewport.addEventListener('touchend', function (e) {
+        if (touchStartX === null) return;
+        var delta = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) > 44) goTo(delta < 0 ? current + 1 : current - 1);
+        touchStartX = null;
+      }, { passive: true });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "PA — Product",
+  "tag": "section",
+  "class": "section-pa-main-product",
+  "settings": [],
+  "presets": [{ "name": "PA — Product" }]
+}
+{% endschema %}

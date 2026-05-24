@@ -54,8 +54,6 @@
   }
 
   .pa-header__inner {
-    max-width: var(--max-content, 1280px);
-    margin: 0 auto;
     padding: 0 var(--gutter, 40px);
   }
 
@@ -188,11 +186,15 @@
      PA Navigation Drawer
      ================================================================ */
 
+  /* Scrim sits above header (z 300) so it truly blocks the page */
   .pa-drawer-scrim {
     position: fixed;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     background: rgba(48, 75, 61, 0.65);
-    z-index: 299;
+    z-index: 400;
     opacity: 0;
     pointer-events: none;
     transition: opacity 420ms ease;
@@ -202,31 +204,66 @@
     pointer-events: auto;
   }
 
+  /* Drawer covers the full viewport — acts as both modal overlay and slide-in panel */
   .pa-drawer {
     position: fixed;
     top: 0;
+    right: 0;
+    bottom: 0;
     left: 0;
-    height: 100%;
+    z-index: 401;
+    pointer-events: none;
+  }
+  .pa-drawer.is-open { pointer-events: auto; }
+
+  /* Pine overlay — fades in/out as the pseudo-element of the full-screen drawer */
+  .pa-drawer::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: rgb(48, 75, 61);
+    opacity: 0;
+    transition: opacity 360ms ease;
+  }
+  .pa-drawer.is-open::before { opacity: 0.6; }
+  /* Dim on hover over pine area to signal it's clickable */
+  .pa-drawer.is-open:hover::before { opacity: 0.45; transition-duration: 200ms; }
+  /* Restore when cursor moves inside the ivory panel */
+  .pa-drawer.is-open:has(.pa-drawer__panel:hover)::before { opacity: 0.6; transition-duration: 200ms; }
+
+  /* Ivory content panel slides in from left */
+  .pa-drawer__panel {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 520px;
+    height: 100%;
     background: var(--pa-ivory, #f9f8f4);
     color: var(--pa-ink, #1d1d1b);
-    z-index: 300;
-    transform: translateX(-100%);
-    transition: transform 420ms cubic-bezier(.22, 1, .36, 1);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    transform: translateX(-100%);
+    transition: transform 420ms cubic-bezier(.22, 1, .36, 1);
   }
-  .pa-drawer.is-open { transform: translateX(0); }
+  .pa-drawer.is-open .pa-drawer__panel { transform: translateX(0); }
 
   /* ── Tab bar ── */
   .pa-drawer__head {
     display: flex;
     align-items: center;
-    gap: 28px;
+    justify-content: space-between;
+    gap: 16px;
     padding: 20px 32px;
     border-bottom: 1px solid rgba(29, 29, 27, 0.1);
     flex-shrink: 0;
+  }
+
+  .pa-drawer__tabs {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
   }
 
   .pa-drawer__tab {
@@ -239,89 +276,57 @@
     background: none;
     border: none;
     border-bottom: 1px solid transparent;
-    padding: 0 0 4px;
+    padding: 0 0 3px;
     cursor: pointer;
     transition: color 160ms ease, border-color 160ms ease;
+    white-space: nowrap;
   }
   .pa-drawer__tab.is-active {
     color: var(--pa-ink, #1d1d1b);
-    border-bottom-color: rgba(29, 29, 27, 0.45);
+    border-bottom-color: rgba(29, 29, 27, 0.5);
   }
-  .pa-drawer__tab:hover { color: rgba(29, 29, 27, 0.7); }
+  .pa-drawer__tab:hover { color: rgba(29, 29, 27, 0.65); }
+
+  .pa-drawer__close {
+    background: none;
+    border: none;
+    color: rgba(29, 29, 27, 0.45);
+    cursor: pointer;
+    padding: 0;
+    line-height: 0;
+    flex-shrink: 0;
+    transition: color 160ms ease;
+  }
+  .pa-drawer__close:hover { color: var(--pa-ink, #1d1d1b); }
 
   /* ── Scrollable body ── */
   .pa-drawer__body {
     flex: 1;
+    min-height: 0; /* required: flex items default to min-height:auto which prevents overflow-y from triggering */
     overflow-y: auto;
     overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch; /* smooth momentum scroll on iOS */
   }
 
-  /* ── Nav section ── */
+  /* ── Nav sections — one per top-level link ── */
   .pa-drawer__section { display: none; }
   .pa-drawer__section.is-active { display: block; }
 
-  .pa-drawer__nav { padding: 8px 0 24px; }
-
-  .pa-drawer__nav-item {
-    border-bottom: 1px solid rgba(29, 29, 27, 0.08);
-  }
+  .pa-drawer__nav { padding: 24px 0 32px; }
 
   .pa-drawer__nav-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 16px 32px;
+    display: block;
+    padding: 11px 32px;
     font-family: var(--font-display, 'EB Garamond', Georgia, serif);
     font-weight: 400;
-    font-size: clamp(26px, 3.5vw, 34px);
-    line-height: 1;
+    font-size: clamp(24px, 3.2vw, 32px);
+    line-height: 1.1;
     letter-spacing: -0.01em;
     color: var(--pa-ink, #1d1d1b);
     text-decoration: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-align: left;
     transition: opacity 160ms ease;
   }
-  .pa-drawer__nav-link:hover { opacity: 0.55; }
-
-  .pa-drawer__chevron {
-    flex-shrink: 0;
-    opacity: 0.4;
-    transition: transform 280ms ease;
-  }
-  .pa-drawer__nav-item.is-open .pa-drawer__chevron { transform: rotate(180deg); }
-
-  /* Sub-menu — max-height animation */
-  .pa-drawer__sub {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 300ms ease;
-    padding: 0 32px;
-  }
-  .pa-drawer__nav-item.is-open .pa-drawer__sub { max-height: 480px; }
-
-  .pa-drawer__sub-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding-bottom: 20px;
-  }
-
-  .pa-drawer__sub-link {
-    font-family: var(--font-body, 'Instrument Sans', sans-serif);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(29, 29, 27, 0.5);
-    text-decoration: none;
-    padding: 7px 0;
-    transition: color 160ms ease;
-  }
-  .pa-drawer__sub-link:hover { color: var(--pa-ink, #1d1d1b); }
+  .pa-drawer__nav-link:hover { opacity: 0.5; }
 
   /* ── Search section ── */
   .pa-drawer__search { padding: 32px 32px 24px; }
@@ -380,9 +385,24 @@
   .pa-drawer__footer-link:hover { color: var(--pa-ink, #1d1d1b); }
 
   @media (max-width: 989px) {
-    .pa-drawer       { width: 86vw; }
+    .pa-drawer__panel  { width: 86vw; }
     .pa-drawer__footer { display: flex; }
   }
+
+  /* ================================================================
+     Custom thin scrollbar — always visible, consistent across contexts
+     ================================================================ */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(29, 29, 27, 0.22) transparent;
+  }
+  ::-webkit-scrollbar        { width: 4px; }
+  ::-webkit-scrollbar-track  { background: transparent; }
+  ::-webkit-scrollbar-thumb  {
+    background: rgba(29, 29, 27, 0.22);
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(29, 29, 27, 0.42); }
 </style>
 
 <div id="pa-site-header" class="pa-header" role="banner">
@@ -436,11 +456,19 @@
       <!-- Desktop: primary nav + search -->
       <nav class="pa-header__nav" aria-label="Primary navigation">
         {%- for link in nav_links -%}
-          <a
-            href="{{ link.url }}"
-            class="pa-header__link"
-            {% if link.active %}aria-current="page"{% endif %}
-          >{{ link.title }}</a>
+          {%- if link.links != empty -%}
+            <button
+              type="button"
+              class="pa-header__link"
+              onclick="paOpenDrawer('link-{{ forloop.index }}')"
+            >{{ link.title }}</button>
+          {%- else -%}
+            <a
+              href="{{ link.url }}"
+              class="pa-header__link"
+              {% if link.active %}aria-current="page"{% endif %}
+            >{{ link.title }}</a>
+          {%- endif -%}
         {%- endfor -%}
 
         <button type="button" class="pa-header__link" aria-label="{{ 'general.search.search' | t }}" onclick="paOpenDrawer('search')">
@@ -553,55 +581,47 @@
       └─ About us              → /pages/about
 {%- endcomment -%}
 
-<!-- ── Scrim overlay ── -->
-<div class="pa-drawer-scrim" id="pa-drawer-scrim" aria-hidden="true"></div>
-
 <!-- ── Navigation Drawer ── -->
 <div class="pa-drawer" id="pa-drawer" role="dialog" aria-modal="true" aria-label="Navigation" aria-hidden="true">
+  <div class="pa-drawer__panel">
 
   <div class="pa-drawer__head">
-    <button class="pa-drawer__tab is-active" data-tab="nav" onclick="paDrawerTab('nav')">Menu</button>
-    <button class="pa-drawer__tab" data-tab="search" onclick="paDrawerTab('search')">Search</button>
+    <div class="pa-drawer__tabs">
+      {%- for link in nav_links -%}
+        <button
+          class="pa-drawer__tab{% if forloop.first %} is-active{% endif %}"
+          data-tab="link-{{ forloop.index }}"
+          onclick="paDrawerTab('link-{{ forloop.index }}')"
+        >{{- link.title -}}</button>
+      {%- endfor -%}
+      <button class="pa-drawer__tab" data-tab="search" onclick="paDrawerTab('search')">Search</button>
+    </div>
+    <button class="pa-drawer__close" type="button" aria-label="Close menu" onclick="paCloseDrawer()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="1.5"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 6 6 18M6 6l12 12"/>
+      </svg>
+    </button>
   </div>
 
   <div class="pa-drawer__body">
 
-    <!-- Nav section -->
-    <div class="pa-drawer__section is-active" id="pa-drawer-nav">
-      <nav class="pa-drawer__nav" aria-label="Site navigation">
-        {%- for link in nav_links -%}
-          <div class="pa-drawer__nav-item">
-            {%- if link.links != empty -%}
-              <button
-                class="pa-drawer__nav-link"
-                type="button"
-                onclick="paDrawerToggle(this)"
-                aria-expanded="false"
-              >
-                {{- link.title -}}
-                <svg class="pa-drawer__chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="m6 9 6 6 6-6"/>
-                </svg>
-              </button>
-              <div class="pa-drawer__sub">
-                <div class="pa-drawer__sub-inner">
-                  {%- for sub in link.links -%}
-                    <a href="{{ sub.url }}" class="pa-drawer__sub-link">{{ sub.title }}</a>
-                  {%- endfor -%}
-                </div>
-              </div>
-            {%- else -%}
-              <a href="{{ link.url }}" class="pa-drawer__nav-link"
-                 {% if link.active %}aria-current="page"{% endif %}>
-                {{- link.title -}}
-              </a>
-            {%- endif -%}
-          </div>
-        {%- endfor -%}
-      </nav>
-    </div>
+    <!-- One section per top-level nav item — sub-links shown as flat list -->
+    {%- for link in nav_links -%}
+      <div class="pa-drawer__section{% if forloop.first %} is-active{% endif %}"
+           id="pa-drawer-link-{{ forloop.index }}">
+        <nav class="pa-drawer__nav" aria-label="{{ link.title | escape }}">
+          {%- for sub in link.links -%}
+            <a
+              href="{{ sub.url }}"
+              class="pa-drawer__nav-link"
+              {% if sub.active %}aria-current="page"{% endif %}
+            >{{- sub.title -}}</a>
+          {%- endfor -%}
+        </nav>
+      </div>
+    {%- endfor -%}
 
     <!-- Search section -->
     <div class="pa-drawer__section" id="pa-drawer-search">
@@ -645,6 +665,7 @@
     <a href="{{ routes.root_url }}pages/contact" class="pa-drawer__footer-link">Contact</a>
   </div>
 
+  </div><!-- /pa-drawer__panel -->
 </div><!-- /pa-drawer -->
 
 <script>
@@ -659,6 +680,7 @@
     }
 
     function onScroll() {
+      if (document.body.style.position === 'fixed') return; // drawer scroll-lock active — don't change state
       header.classList.toggle('is-scrolled', window.scrollY > 10);
     }
 
@@ -672,22 +694,49 @@
 <script>
   (function () {
     var drawer = document.getElementById('pa-drawer');
-    var scrim  = document.getElementById('pa-drawer-scrim');
-    if (!drawer || !scrim) return;
+    if (!drawer) return;
+
+    // Move to body — ensures position:fixed is viewport-relative even if a
+    // Shopify section ancestor has a CSS transform.
+    document.body.appendChild(drawer);
+
+    var _scrollY = 0;
+
+    function lockScroll() {
+      _scrollY = window.scrollY;
+      document.body.style.position   = 'fixed';
+      document.body.style.top        = '-' + _scrollY + 'px';
+      document.body.style.left       = '0';
+      document.body.style.right      = '0';
+      document.body.style.overflowY  = 'scroll'; // preserve scrollbar gutter
+    }
+
+    function unlockScroll() {
+      document.body.style.position   = '';
+      document.body.style.top        = '';
+      document.body.style.left       = '';
+      document.body.style.right      = '';
+      document.body.style.overflowY  = '';
+      window.scrollTo(0, _scrollY);
+      // Re-evaluate header state now that scroll position is restored
+      window.dispatchEvent(new Event('scroll'));
+    }
 
     function openDrawer(tab) {
       drawer.classList.add('is-open');
-      scrim.classList.add('is-open');
       drawer.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
+      lockScroll();
+      if (tab === 'nav') {
+        var first = drawer.querySelector('.pa-drawer__tab');
+        tab = first ? first.dataset.tab : null;
+      }
       if (tab) paDrawerTab(tab);
     }
 
     function closeDrawer() {
       drawer.classList.remove('is-open');
-      scrim.classList.remove('is-open');
       drawer.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
+      unlockScroll();
     }
 
     function paDrawerTab(tab) {
@@ -705,21 +754,12 @@
       }
     }
 
-    function paDrawerToggle(btn) {
-      var item   = btn.closest('.pa-drawer__nav-item');
-      var isOpen = item.classList.contains('is-open');
-      drawer.querySelectorAll('.pa-drawer__nav-item.is-open').forEach(function (el) {
-        el.classList.remove('is-open');
-        var t = el.querySelector('[aria-expanded]');
-        if (t) t.setAttribute('aria-expanded', 'false');
-      });
-      if (!isOpen) {
-        item.classList.add('is-open');
-        btn.setAttribute('aria-expanded', 'true');
-      }
-    }
+    // Drawer covers the full viewport. A click on the pine overlay area
+    // (outside the ivory panel) bubbles to the drawer and closes it.
+    drawer.addEventListener('click', function (e) {
+      if (!e.target.closest('.pa-drawer__panel')) closeDrawer();
+    });
 
-    scrim.addEventListener('click', closeDrawer);
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closeDrawer();
     });
@@ -727,7 +767,6 @@
     window.paOpenDrawer  = openDrawer;
     window.paCloseDrawer = closeDrawer;
     window.paDrawerTab   = paDrawerTab;
-    window.paDrawerToggle = paDrawerToggle;
   })();
 </script>
 
