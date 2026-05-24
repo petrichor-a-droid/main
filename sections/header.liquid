@@ -389,20 +389,12 @@
     .pa-drawer__footer { display: flex; }
   }
 
-  /* ================================================================
-     Custom thin scrollbar — always visible, consistent across contexts
-     ================================================================ */
-  html {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(29, 29, 27, 0.22) transparent;
-  }
-  ::-webkit-scrollbar        { width: 4px; }
-  ::-webkit-scrollbar-track  { background: transparent; }
-  ::-webkit-scrollbar-thumb  {
-    background: rgba(29, 29, 27, 0.22);
-    border-radius: 2px;
-  }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(29, 29, 27, 0.42); }
+  /* PA — page scrollbar */
+  html { scrollbar-gutter: stable; }
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #1d1d1b; border-radius: 0; }
+  ::-webkit-scrollbar-button { display: none; }
 </style>
 
 <div id="pa-site-header" class="pa-header" role="banner">

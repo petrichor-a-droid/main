@@ -1,20 +1,44 @@
 /* PA Cart Drawer */
 
-/* ── Overlay ── */
+
+/* Pine overlay on the cart-drawer element itself.
+   Dawn's .drawer is position:fixed; width:100vw; height:100% — guaranteed viewport coverage.
+   Transitioning background-color avoids stacking-context issues with fixed children. */
+cart-drawer {
+  background: rgba(48, 75, 61, 0) !important;
+  /* Include visibility so Dawn's hidden/visible transition isn't stripped by !important,
+     allowing the panel slide-out to complete before the element disappears on close. */
+  transition: background-color 420ms cubic-bezier(.22, 1, .36, 1),
+              visibility 420ms cubic-bezier(.22, 1, .36, 1) !important;
+}
+
+cart-drawer.active {
+  background: rgba(48, 75, 61, 0.6) !important;
+}
+
+cart-drawer.active.pa-cd--overlay-hover {
+  background: rgba(48, 75, 61, 0.45) !important;
+  transition-duration: 200ms !important;
+}
+
+/* ── Overlay div: transparent click-capture layer (Dawn's cart.js binds click→close on it) ── */
 #CartDrawer-Overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 40;
-  background: rgba(29, 29, 27, 0.40);
-  opacity: 0;
+  background: none;
   pointer-events: none;
-  transition: opacity 420ms cubic-bezier(.22, 1, .36, 1);
 }
 
 cart-drawer.active #CartDrawer-Overlay {
-  opacity: 1;
   pointer-events: auto;
 }
+
+/* Scrollbar no-shift is handled entirely in JS (see cart-drawer.liquid script):
+   CartDrawer.open/close are patched so padding-right changes in the same synchronous
+   call as the overflow-hidden toggle — one browser recalc, guaranteed no layout shift. */
+
+/* Scrollbar styling lives in sections/header.liquid <style> block (inline, loads first). */
 
 /* ── Panel — override Dawn's drawer__inner ── */
 .pa-cd__panel {

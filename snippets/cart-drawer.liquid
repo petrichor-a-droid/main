@@ -199,3 +199,26 @@
     </div>
   </div>
 </cart-drawer>
+
+<script>
+  (function () {
+    // ── Cart drawer interactions ──
+    var cartDrawer = document.querySelector('cart-drawer');
+    if (!cartDrawer) return;
+
+    cartDrawer.addEventListener('click', function (e) {
+      if (!e.target.closest('.pa-cd__panel') && !e.target.closest('.drawer__inner')) {
+        cartDrawer.close();
+      }
+    });
+
+    cartDrawer.addEventListener('mouseover', function (e) {
+      var overPanel = e.target.closest('.pa-cd__panel') || e.target.closest('.drawer__inner');
+      cartDrawer.classList.toggle('pa-cd--overlay-hover', !overPanel);
+    });
+
+    cartDrawer.addEventListener('mouseleave', function () {
+      cartDrawer.classList.remove('pa-cd--overlay-hover');
+    });
+  })();
+</script>
