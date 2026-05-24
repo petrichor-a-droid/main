@@ -4,6 +4,8 @@
   "The full edit →" view-all link. Mirrors the featured grid in Storefront.jsx.
 {% endcomment %}
 
+{{ 'pa-product-card.css' | asset_url | stylesheet_tag }}
+
 {%- liquid
   assign col        = collections[section.settings.collection]
   assign prod_limit = section.settings.products_to_show | default: 4
@@ -77,108 +79,7 @@
     opacity: 0.55;
   }
 
-  /* ── Product grid ── */
-  #shopify-section-{{ section.id }} .pa-fc__grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 28px;
-  }
-
-  /* ── Product card ── */
-  #shopify-section-{{ section.id }} .pa-fc__card {
-    display: block;
-    text-decoration: none;
-    color: var(--fg-1);
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card-img-wrap {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 3 / 4;
-    background: var(--bg-surface);
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform var(--dur-slow) var(--ease-out);
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card:hover .pa-fc__card-img {
-    transform: scale(1.03);
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card-placeholder {
-    width: 100%;
-    height: 100%;
-    display: block;
-    background: var(--bg-surface);
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card-body {
-    padding-top: 16px;
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card-vendor {
-    display: block;
-    font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: var(--fw-medium);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--fg-3);
-    margin-bottom: 4px;
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card-title {
-    font-family: var(--font-display);
-    font-weight: var(--fw-regular);
-    font-size: 20px;
-    line-height: 1.2;
-    letter-spacing: var(--ls-heading);
-    margin: 0;
-    color: var(--fg-1);
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card-price {
-    font-family: var(--font-body);
-    font-size: var(--t-body-sm);
-    color: var(--fg-1);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card-price s {
-    opacity: 0.5;
-    margin-left: 6px;
-  }
-
-  #shopify-section-{{ section.id }} .pa-fc__card-notes {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 14px;
-    color: var(--fg-2);
-    margin: 6px 0 0;
-    line-height: 1.4;
-  }
-
   /* ── Mobile ── */
-  @media (max-width: 989px) {
-    #shopify-section-{{ section.id }} .pa-fc__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-    }
-  }
-
   @media (max-width: 749px) {
     #shopify-section-{{ section.id }} .pa-fc {
       padding: 80px 0 56px;
@@ -188,10 +89,6 @@
     }
     #shopify-section-{{ section.id }} .pa-fc__header {
       margin-bottom: 40px;
-    }
-    #shopify-section-{{ section.id }} .pa-fc__grid {
-      grid-template-columns: 1fr;
-      gap: 40px;
     }
   }
 </style>
@@ -219,65 +116,10 @@
 
     <div class="pa-fc__grid">
       {%- for product in col.products limit: prod_limit -%}
-        <a href="{{ product.url }}" class="pa-fc__card">
-          <div class="pa-fc__card-img-wrap">
-            {%- if product.featured_image -%}
-              {{
-                product.featured_image
-                | image_url: width: 800
-                | image_tag:
-                  class: 'pa-fc__card-img',
-                  widths: '400, 600, 800',
-                  sizes: '(max-width: 749px) calc(50vw - 30px), (max-width: 989px) calc(50vw - 54px), 25vw',
-                  loading: 'lazy',
-                  alt: product.featured_image.alt | default: product.title | escape
-              }}
-            {%- else -%}
-              {{ 'product-1' | placeholder_svg_tag: 'pa-fc__card-placeholder' }}
-            {%- endif -%}
-          </div>
-
-          <div class="pa-fc__card-body">
-            <div class="pa-fc__card-meta">
-              <div>
-                {%- if product.vendor != blank -%}
-                  <span class="pa-fc__card-vendor">{{ product.vendor | escape }}</span>
-                {%- endif -%}
-                <h3 class="pa-fc__card-title">{{ product.title | escape }}</h3>
-              </div>
-              <div class="pa-fc__card-price">
-                {%- if product.compare_at_price > product.price -%}
-                  {{ product.price | money }}
-                  <s>{{ product.compare_at_price | money }}</s>
-                {%- else -%}
-                  {{ product.price | money }}
-                {%- endif -%}
-              </div>
-            </div>
-            {%- assign card_notes = product.metafields.custom.notes.value -%}
-            {%- if card_notes != blank -%}
-              <p class="pa-fc__card-notes">{{ card_notes | escape }}</p>
-            {%- endif -%}
-          </div>
-        </a>
+        {%- render 'pa-product-card', card_product: product, loading: 'lazy' -%}
       {%- else -%}
-        {%- comment -%} No products — show placeholder cards {%- endcomment -%}
         {%- for i in (1..prod_limit) -%}
-          <div class="pa-fc__card">
-            <div class="pa-fc__card-img-wrap">
-              {{ 'product-' | append: i | placeholder_svg_tag: 'pa-fc__card-placeholder' }}
-            </div>
-            <div class="pa-fc__card-body">
-              <div class="pa-fc__card-meta">
-                <div>
-                  <span class="pa-fc__card-vendor">Vendor</span>
-                  <h3 class="pa-fc__card-title">Product name</h3>
-                </div>
-                <div class="pa-fc__card-price">{{ 1999 | money }}</div>
-              </div>
-              <p class="pa-fc__card-notes">Notes</p>
-            </div>
-          </div>
+          {%- render 'pa-product-card' -%}
         {%- endfor -%}
       {%- endfor -%}
     </div>

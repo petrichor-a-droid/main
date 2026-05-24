@@ -1,0 +1,72 @@
+{% comment %}
+  Renders a PA-styled product card.
+  Accepts:
+    - card_product {Object} Product — shows placeholder if blank
+    - loading      {String} 'lazy' | 'eager' (default: 'lazy')
+    - sizes        {String} img sizes attribute
+{% endcomment %}
+
+{%- liquid
+  assign img_loading = loading | default: 'lazy'
+  assign img_sizes   = sizes   | default: '(max-width: 749px) calc(50vw - 20px), (max-width: 989px) calc(50vw - 40px), 25vw'
+-%}
+
+{%- if card_product != blank -%}
+  <a href="{{ card_product.url }}" class="pa-fc__card">
+    <div class="pa-fc__card-img-wrap">
+      {%- if card_product.featured_image -%}
+        {{
+          card_product.featured_image
+          | image_url: width: 800
+          | image_tag:
+            class: 'pa-fc__card-img',
+            widths: '400, 600, 800',
+            sizes: img_sizes,
+            loading: img_loading,
+            alt: card_product.featured_image.alt | default: card_product.title | escape
+        }}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'pa-fc__card-placeholder' }}
+      {%- endif -%}
+    </div>
+
+    <div class="pa-fc__card-body">
+      <div class="pa-fc__card-meta">
+        <div>
+          {%- if card_product.vendor != blank -%}
+            <span class="pa-fc__card-vendor">{{ card_product.vendor | escape }}</span>
+          {%- endif -%}
+          <h3 class="pa-fc__card-title">{{ card_product.title | escape }}</h3>
+        </div>
+        <div class="pa-fc__card-price">
+          {%- if card_product.compare_at_price > card_product.price -%}
+            {{ card_product.price | money }}
+            <s>{{ card_product.compare_at_price | money }}</s>
+          {%- else -%}
+            {{ card_product.price | money }}
+          {%- endif -%}
+        </div>
+      </div>
+      {%- assign card_notes = card_product.metafields.custom.notes.value -%}
+      {%- if card_notes != blank -%}
+        <p class="pa-fc__card-notes">{{ card_notes | escape }}</p>
+      {%- endif -%}
+    </div>
+  </a>
+{%- else -%}
+  <div class="pa-fc__card">
+    <div class="pa-fc__card-img-wrap">
+      {{ 'product-1' | placeholder_svg_tag: 'pa-fc__card-placeholder' }}
+    </div>
+    <div class="pa-fc__card-body">
+      <div class="pa-fc__card-meta">
+        <div>
+          <span class="pa-fc__card-vendor">Vendor</span>
+          <h3 class="pa-fc__card-title">Product name</h3>
+        </div>
+        <div class="pa-fc__card-price">{{ 1999 | money }}</div>
+      </div>
+      <p class="pa-fc__card-notes">Notes</p>
+    </div>
+  </div>
+{%- endif -%}

@@ -4,6 +4,8 @@
   Mirrors the "second product row" section in Storefront.jsx.
 {% endcomment %}
 
+{{ 'pa-product-card.css' | asset_url | stylesheet_tag }}
+
 {%- liquid
   assign col        = collections[section.settings.collection]
   assign prod_limit = section.settings.products_to_show | default: 3
@@ -52,108 +54,7 @@
     font-style: italic;
   }
 
-  /* ── Grid ── */
-  #shopify-section-{{ section.id }} .pa-cr__grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 28px;
-  }
-
-  /* ── Product card ── */
-  #shopify-section-{{ section.id }} .pa-cr__card {
-    display: block;
-    text-decoration: none;
-    color: var(--fg-1);
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card-img-wrap {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 3 / 4;
-    background: var(--bg-surface);
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform var(--dur-slow) var(--ease-out);
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card:hover .pa-cr__card-img {
-    transform: scale(1.03);
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card-placeholder {
-    width: 100%;
-    height: 100%;
-    display: block;
-    background: var(--bg-surface);
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card-body {
-    padding-top: 16px;
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card-vendor {
-    display: block;
-    font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: var(--fw-medium);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--fg-3);
-    margin-bottom: 4px;
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card-title {
-    font-family: var(--font-display);
-    font-weight: var(--fw-regular);
-    font-size: 20px;
-    line-height: 1.2;
-    letter-spacing: var(--ls-heading);
-    margin: 0;
-    color: var(--fg-1);
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card-price {
-    font-family: var(--font-body);
-    font-size: var(--t-body-sm);
-    color: var(--fg-1);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card-price s {
-    opacity: 0.5;
-    margin-left: 6px;
-  }
-
-  #shopify-section-{{ section.id }} .pa-cr__card-notes {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 14px;
-    color: var(--fg-2);
-    margin: 6px 0 0;
-    line-height: 1.4;
-  }
-
   /* ── Mobile ── */
-  @media (max-width: 989px) {
-    #shopify-section-{{ section.id }} .pa-cr__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-    }
-  }
-
   @media (max-width: 749px) {
     #shopify-section-{{ section.id }} .pa-cr {
       padding: 80px 0 56px;
@@ -163,10 +64,6 @@
     }
     #shopify-section-{{ section.id }} .pa-cr__header {
       margin-bottom: 32px;
-    }
-    #shopify-section-{{ section.id }} .pa-cr__grid {
-      grid-template-columns: 1fr;
-      gap: 40px;
     }
   }
 </style>
@@ -183,66 +80,13 @@
       {%- endif -%}
     </div>
 
-    <div class="pa-cr__grid">
+    <div class="pa-fc__grid" style="--pa-grid-cols: 3;">
       {%- for product in col.products limit: prod_limit -%}
-        <a href="{{ product.url }}" class="pa-cr__card">
-          <div class="pa-cr__card-img-wrap">
-            {%- if product.featured_image -%}
-              {{
-                product.featured_image
-                | image_url: width: 1000
-                | image_tag:
-                  class: 'pa-cr__card-img',
-                  widths: '500, 700, 1000',
-                  sizes: '(max-width: 749px) calc(50vw - 30px), (max-width: 989px) calc(50vw - 54px), 33vw',
-                  loading: 'lazy',
-                  alt: product.featured_image.alt | default: product.title | escape
-              }}
-            {%- else -%}
-              {{ 'product-1' | placeholder_svg_tag: 'pa-cr__card-placeholder' }}
-            {%- endif -%}
-          </div>
-
-          <div class="pa-cr__card-body">
-            <div class="pa-cr__card-meta">
-              <div>
-                {%- if product.vendor != blank -%}
-                  <span class="pa-cr__card-vendor">{{ product.vendor | escape }}</span>
-                {%- endif -%}
-                <h3 class="pa-cr__card-title">{{ product.title | escape }}</h3>
-              </div>
-              <div class="pa-cr__card-price">
-                {%- if product.compare_at_price > product.price -%}
-                  {{ product.price | money }}
-                  <s>{{ product.compare_at_price | money }}</s>
-                {%- else -%}
-                  {{ product.price | money }}
-                {%- endif -%}
-              </div>
-            </div>
-            {%- assign card_notes = product.metafields.custom.notes.value -%}
-            {%- if card_notes != blank -%}
-              <p class="pa-cr__card-notes">{{ card_notes | escape }}</p>
-            {%- endif -%}
-          </div>
-        </a>
+        {%- render 'pa-product-card', card_product: product, loading: 'lazy',
+          sizes: '(max-width: 749px) calc(50vw - 20px), (max-width: 989px) calc(50vw - 40px), 33vw' -%}
       {%- else -%}
         {%- for i in (1..prod_limit) -%}
-          <div class="pa-cr__card">
-            <div class="pa-cr__card-img-wrap">
-              {{ 'product-' | append: i | placeholder_svg_tag: 'pa-cr__card-placeholder' }}
-            </div>
-            <div class="pa-cr__card-body">
-              <div class="pa-cr__card-meta">
-                <div>
-                  <span class="pa-cr__card-vendor">Vendor</span>
-                  <h3 class="pa-cr__card-title">Product name</h3>
-                </div>
-                <div class="pa-cr__card-price">{{ 1999 | money }}</div>
-              </div>
-              <p class="pa-cr__card-notes">Notes</p>
-            </div>
-          </div>
+          {%- render 'pa-product-card' -%}
         {%- endfor -%}
       {%- endfor -%}
     </div>
