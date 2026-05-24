@@ -183,6 +183,206 @@
   /* Push page content below the fixed header.
      80px is a safe fallback until JS measures the real height. */
   body { padding-top: var(--pa-header-height, 80px); }
+
+  /* ================================================================
+     PA Navigation Drawer
+     ================================================================ */
+
+  .pa-drawer-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(29, 29, 27, 0.55);
+    z-index: 299;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 420ms ease;
+  }
+  .pa-drawer-scrim.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .pa-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 520px;
+    background: var(--pa-pine, #304b3d);
+    color: var(--pa-ivory, #f9f8f4);
+    z-index: 300;
+    transform: translateX(-100%);
+    transition: transform 420ms cubic-bezier(.22, 1, .36, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .pa-drawer.is-open { transform: translateX(0); }
+
+  /* ── Tab bar ── */
+  .pa-drawer__head {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 20px 32px;
+    border-bottom: 1px solid rgba(249, 248, 244, 0.1);
+    flex-shrink: 0;
+  }
+
+  .pa-drawer__tab {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(249, 248, 244, 0.45);
+    background: none;
+    border: none;
+    border-bottom: 1px solid transparent;
+    padding: 0 0 4px;
+    cursor: pointer;
+    transition: color 160ms ease, border-color 160ms ease;
+  }
+  .pa-drawer__tab.is-active {
+    color: var(--pa-ivory, #f9f8f4);
+    border-bottom-color: rgba(249, 248, 244, 0.55);
+  }
+  .pa-drawer__tab:hover { color: rgba(249, 248, 244, 0.8); }
+
+  /* ── Scrollable body ── */
+  .pa-drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* ── Nav section ── */
+  .pa-drawer__section { display: none; }
+  .pa-drawer__section.is-active { display: block; }
+
+  .pa-drawer__nav { padding: 8px 0 24px; }
+
+  .pa-drawer__nav-item {
+    border-bottom: 1px solid rgba(249, 248, 244, 0.08);
+  }
+
+  .pa-drawer__nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px 32px;
+    font-family: var(--font-display, 'EB Garamond', Georgia, serif);
+    font-weight: 400;
+    font-size: clamp(26px, 3.5vw, 34px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--pa-ivory, #f9f8f4);
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: opacity 160ms ease;
+  }
+  .pa-drawer__nav-link:hover { opacity: 0.65; }
+
+  .pa-drawer__chevron {
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: transform 280ms ease;
+  }
+  .pa-drawer__nav-item.is-open .pa-drawer__chevron { transform: rotate(180deg); }
+
+  /* Sub-menu — max-height animation */
+  .pa-drawer__sub {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 300ms ease;
+    padding: 0 32px;
+  }
+  .pa-drawer__nav-item.is-open .pa-drawer__sub { max-height: 480px; }
+
+  .pa-drawer__sub-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 20px;
+  }
+
+  .pa-drawer__sub-link {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(249, 248, 244, 0.6);
+    text-decoration: none;
+    padding: 7px 0;
+    transition: color 160ms ease;
+  }
+  .pa-drawer__sub-link:hover { color: var(--pa-ivory, #f9f8f4); }
+
+  /* ── Search section ── */
+  .pa-drawer__search { padding: 32px 32px 24px; }
+
+  .pa-drawer__search-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(249, 248, 244, 0.25);
+    padding-bottom: 14px;
+  }
+
+  .pa-drawer__search-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: var(--font-display, 'EB Garamond', Georgia, serif);
+    font-size: clamp(24px, 3vw, 32px);
+    color: var(--pa-ivory, #f9f8f4);
+  }
+  .pa-drawer__search-input::placeholder { color: rgba(249, 248, 244, 0.3); }
+
+  .pa-drawer__search-btn {
+    background: none;
+    border: none;
+    color: var(--pa-ivory, #f9f8f4);
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.55;
+    transition: opacity 160ms ease;
+    flex-shrink: 0;
+  }
+  .pa-drawer__search-btn:hover { opacity: 1; }
+
+  /* ── Mobile footer (Account + Contact) ── */
+  .pa-drawer__footer {
+    display: none;
+    align-items: center;
+    gap: 32px;
+    padding: 20px 32px;
+    border-top: 1px solid rgba(249, 248, 244, 0.1);
+    flex-shrink: 0;
+  }
+
+  .pa-drawer__footer-link {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(249, 248, 244, 0.55);
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+  .pa-drawer__footer-link:hover { color: var(--pa-ivory, #f9f8f4); }
+
+  @media (max-width: 989px) {
+    .pa-drawer       { width: 86vw; }
+    .pa-drawer__footer { display: flex; }
+  }
 </style>
 
 <div id="pa-site-header" class="pa-header" role="banner">
@@ -197,7 +397,7 @@
           class="pa-header__link"
           type="button"
           aria-label="{{ 'sections.header.menu' | t }}"
-          onclick="document.querySelector('header-drawer details')?.setAttribute('open','')"
+          onclick="paOpenDrawer('nav')"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                fill="none" stroke="currentColor" stroke-width="1.5"
@@ -207,14 +407,14 @@
             <line x1="4" x2="20" y1="18" y2="18"/>
           </svg>
         </button>
-        <a href="{{ routes.search_url }}" class="pa-header__link" aria-label="{{ 'general.search.search' | t }}">
+        <button type="button" class="pa-header__link" aria-label="{{ 'general.search.search' | t }}" onclick="paOpenDrawer('search')">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                fill="none" stroke="currentColor" stroke-width="1.5"
                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
             <circle cx="11" cy="11" r="8"/>
             <path d="m21 21-4.3-4.3"/>
           </svg>
-        </a>
+        </button>
       </div>
 
       <!-- Mobile: centred secondary logo -->
@@ -243,8 +443,7 @@
           >{{ link.title }}</a>
         {%- endfor -%}
 
-        <!-- Lucide search — 13px / 1.5 stroke -->
-        <a href="{{ routes.search_url }}" class="pa-header__link" aria-label="{{ 'general.search.search' | t }}">
+        <button type="button" class="pa-header__link" aria-label="{{ 'general.search.search' | t }}" onclick="paOpenDrawer('search')">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
                fill="none" stroke="currentColor" stroke-width="1.5"
                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -252,7 +451,7 @@
             <path d="m21 21-4.3-4.3"/>
           </svg>
           Search
-        </a>
+        </button>
       </nav>
 
       <!-- Desktop: utility + cart -->
@@ -330,6 +529,124 @@
   </div><!-- /pa-header__inner -->
 </div><!-- /pa-header -->
 
+{%- comment -%}
+  Navigation Drawer — reads from the same main-menu linklist as the header nav.
+  Sub-menus are driven by nested links in Shopify Admin → Online Store → Navigation.
+
+  Recommended main-menu structure to create in the Shopify admin:
+  ┌─ Shop
+  │   ├─ New arrivals          → /collections/new-arrivals
+  │   ├─ Perfume               → /collections/perfume
+  │   ├─ Home fragrance        → /collections/home-fragrance
+  │   ├─ Candles               → /collections/candles
+  │   └─ All products          → /collections/all
+  ├─ Brands
+  │   ├─ Atelier Maison Noir   → /collections/atelier-maison-noir
+  │   ├─ House of Velour       → /collections/house-of-velour
+  │   ├─ Studio Linnea         → /collections/studio-linnea
+  │   ├─ Maison du Nord        → /collections/maison-du-nord
+  │   └─ All brands            → /collections/all-brands
+  └─ Discover
+      ├─ The journal           -> /blogs/journal
+      ├─ House studies         → /blogs/journal/tagged/house-study
+      ├─ Field notes           → /blogs/journal/tagged/field-notes
+      └─ About us              → /pages/about
+{%- endcomment -%}
+
+<!-- ── Scrim overlay ── -->
+<div class="pa-drawer-scrim" id="pa-drawer-scrim" aria-hidden="true"></div>
+
+<!-- ── Navigation Drawer ── -->
+<div class="pa-drawer" id="pa-drawer" role="dialog" aria-modal="true" aria-label="Navigation" aria-hidden="true">
+
+  <div class="pa-drawer__head">
+    <button class="pa-drawer__tab is-active" data-tab="nav" onclick="paDrawerTab('nav')">Menu</button>
+    <button class="pa-drawer__tab" data-tab="search" onclick="paDrawerTab('search')">Search</button>
+  </div>
+
+  <div class="pa-drawer__body">
+
+    <!-- Nav section -->
+    <div class="pa-drawer__section is-active" id="pa-drawer-nav">
+      <nav class="pa-drawer__nav" aria-label="Site navigation">
+        {%- for link in nav_links -%}
+          <div class="pa-drawer__nav-item">
+            {%- if link.links != empty -%}
+              <button
+                class="pa-drawer__nav-link"
+                type="button"
+                onclick="paDrawerToggle(this)"
+                aria-expanded="false"
+              >
+                {{- link.title -}}
+                <svg class="pa-drawer__chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+              <div class="pa-drawer__sub">
+                <div class="pa-drawer__sub-inner">
+                  {%- for sub in link.links -%}
+                    <a href="{{ sub.url }}" class="pa-drawer__sub-link">{{ sub.title }}</a>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- else -%}
+              <a href="{{ link.url }}" class="pa-drawer__nav-link"
+                 {% if link.active %}aria-current="page"{% endif %}>
+                {{- link.title -}}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </nav>
+    </div>
+
+    <!-- Search section -->
+    <div class="pa-drawer__section" id="pa-drawer-search">
+      <div class="pa-drawer__search">
+        <form action="{{ routes.search_url }}" method="get" role="search">
+          <input type="hidden" name="type" value="product">
+          <div class="pa-drawer__search-form">
+            <input
+              id="pa-drawer-search-input"
+              class="pa-drawer__search-input"
+              type="search"
+              name="q"
+              placeholder="Search fragrances, houses, notes…"
+              autocomplete="off"
+              aria-label="{{ 'general.search.search' | t }}"
+            >
+            <button type="submit" class="pa-drawer__search-btn" aria-label="{{ 'general.search.search' | t }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="1.5"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div><!-- /pa-drawer__body -->
+
+  <!-- Mobile footer: Account + Contact -->
+  <div class="pa-drawer__footer">
+    {%- if shop.customer_accounts_enabled -%}
+      <a
+        href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+        class="pa-drawer__footer-link"
+        rel="nofollow"
+      >Account</a>
+    {%- endif -%}
+    <a href="{{ routes.root_url }}pages/contact" class="pa-drawer__footer-link">Contact</a>
+  </div>
+
+</div><!-- /pa-drawer -->
+
 <script>
   (function () {
     var header = document.getElementById('pa-site-header');
@@ -349,6 +666,68 @@
     window.addEventListener('resize', setHeight);
     onScroll();
     setHeight();
+  })();
+</script>
+
+<script>
+  (function () {
+    var drawer = document.getElementById('pa-drawer');
+    var scrim  = document.getElementById('pa-drawer-scrim');
+    if (!drawer || !scrim) return;
+
+    function openDrawer(tab) {
+      drawer.classList.add('is-open');
+      scrim.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (tab) paDrawerTab(tab);
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('is-open');
+      scrim.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function paDrawerTab(tab) {
+      drawer.querySelectorAll('.pa-drawer__tab').forEach(function (btn) {
+        btn.classList.toggle('is-active', btn.dataset.tab === tab);
+      });
+      drawer.querySelectorAll('.pa-drawer__section').forEach(function (sec) {
+        sec.classList.toggle('is-active', sec.id === 'pa-drawer-' + tab);
+      });
+      if (tab === 'search') {
+        setTimeout(function () {
+          var input = document.getElementById('pa-drawer-search-input');
+          if (input) input.focus();
+        }, 60);
+      }
+    }
+
+    function paDrawerToggle(btn) {
+      var item   = btn.closest('.pa-drawer__nav-item');
+      var isOpen = item.classList.contains('is-open');
+      drawer.querySelectorAll('.pa-drawer__nav-item.is-open').forEach(function (el) {
+        el.classList.remove('is-open');
+        var t = el.querySelector('[aria-expanded]');
+        if (t) t.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    scrim.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+    window.paOpenDrawer  = openDrawer;
+    window.paCloseDrawer = closeDrawer;
+    window.paDrawerTab   = paDrawerTab;
+    window.paDrawerToggle = paDrawerToggle;
   })();
 </script>
 
