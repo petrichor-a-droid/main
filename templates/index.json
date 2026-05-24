@@ -28,7 +28,7 @@
     "pa_featured_collection": {
       "type": "pa-featured-collection",
       "settings": {
-        "collection": "",
+        "collection": "what-we-reach-for",
         "products_to_show": 4,
         "eyebrow": "In the atelier",
         "heading": "Four pieces we keep <em>reaching for.</em>",
