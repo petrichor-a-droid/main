@@ -141,8 +141,8 @@
   .pa-header--transparent:not(.is-scrolled) .pa-header__logo--dark { display: none; }
   .pa-header--transparent:not(.is-scrolled) .pa-header__logo--light { display: block; }
 
-  /* Secondary (stacked) logo hidden on desktop; swapped in on mobile */
-  .pa-header__logo--secondary { display: none; }
+  /* Mobile logo slot — hidden on desktop */
+  .pa-header__mob-logo { display: none; }
 
   /* CSS-native fallback: hero present → transparent until scrolled, frosted-glass after */
   body:has(.section-pa-hero) .pa-header:not(.is-scrolled) {
@@ -172,13 +172,11 @@
     .pa-header__nav,
     .pa-header__util              { display: none; }
     .pa-header__row--utility      { grid-template-columns: auto 1fr auto; }
+    .pa-header__row--logo         { display: none; }
     .pa-header__mob-left,
     .pa-header__mob-right         { display: flex; align-items: center; }
-    .pa-header__mob-right         { gap: 18px; }
-
-    /* Swap primary logo → secondary (stacked) logo on mobile */
-    .pa-header__logo--primary                                { display: none; }
-    .pa-header__logo--secondary.pa-header__logo--dark        { display: block; }
+    .pa-header__mob-right         { gap: 18px; grid-column: 3; }
+    .pa-header__mob-logo          { display: flex; justify-content: center; align-items: center; }
   }
 
   /* Push page content below the fixed header.
@@ -207,6 +205,22 @@
           <line x1="4" x2="20" y1="18" y2="18"/>
         </svg>
       </button>
+
+      <!-- Mobile: centred secondary logo -->
+      <div class="pa-header__mob-logo">
+        <a href="{{ routes.root_url }}" class="pa-header__logo-link">
+          <img src="{{ 'secondary-logo-2-cocoa.svg' | asset_url }}"
+               class="pa-header__logo pa-header__logo--dark"
+               alt="{{ shop.name | escape }}"
+               height="18"
+               width="auto">
+          <img src="{{ 'secondary-logo-2-ivory.svg' | asset_url }}"
+               class="pa-header__logo pa-header__logo--light"
+               alt="{{ shop.name | escape }}"
+               height="18"
+               width="auto">
+        </a>
+      </div>
 
       <!-- Desktop: primary nav + search -->
       <nav class="pa-header__nav" aria-label="Primary navigation">
@@ -284,22 +298,12 @@
 
         <a href="{{ routes.root_url }}" class="pa-header__logo-link">
           <img src="{{ 'primary-logo-cocoa.svg' | asset_url }}"
-               class="pa-header__logo pa-header__logo--dark pa-header__logo--primary"
+               class="pa-header__logo pa-header__logo--dark"
                alt="{{ shop.name | escape }}"
                height="18"
                width="auto">
           <img src="{{ 'primary-logo-ivory.svg' | asset_url }}"
-               class="pa-header__logo pa-header__logo--light pa-header__logo--primary"
-               alt="{{ shop.name | escape }}"
-               height="18"
-               width="auto">
-          <img src="{{ 'secondary-logo-2-cocoa.svg' | asset_url }}"
-               class="pa-header__logo pa-header__logo--dark pa-header__logo--secondary"
-               alt="{{ shop.name | escape }}"
-               height="18"
-               width="auto">
-          <img src="{{ 'secondary-logo-2-ivory.svg' | asset_url }}"
-               class="pa-header__logo pa-header__logo--light pa-header__logo--secondary"
+               class="pa-header__logo pa-header__logo--light"
                alt="{{ shop.name | escape }}"
                height="18"
                width="auto">
