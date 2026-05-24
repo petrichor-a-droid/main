@@ -175,6 +175,7 @@
     .pa-header__row--logo         { display: none; }
     .pa-header__mob-left,
     .pa-header__mob-right         { display: flex; align-items: center; }
+    .pa-header__mob-left          { gap: 18px; }
     .pa-header__mob-right         { gap: 18px; grid-column: 3; }
     .pa-header__mob-logo          { display: flex; justify-content: center; align-items: center; }
   }
@@ -190,21 +191,31 @@
     <!-- ── Row 1: utility nav ── -->
     <div class="pa-header__row--utility">
 
-      <!-- Mobile: hamburger -->
-      <button
-        class="pa-header__link pa-header__mob-left"
-        type="button"
-        aria-label="{{ 'sections.header.menu' | t }}"
-        onclick="document.querySelector('header-drawer details')?.setAttribute('open','')"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor" stroke-width="1.5"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-          <line x1="4" x2="20" y1="6"  y2="6"/>
-          <line x1="4" x2="20" y1="12" y2="12"/>
-          <line x1="4" x2="20" y1="18" y2="18"/>
-        </svg>
-      </button>
+      <!-- Mobile: hamburger + search -->
+      <div class="pa-header__mob-left">
+        <button
+          class="pa-header__link"
+          type="button"
+          aria-label="{{ 'sections.header.menu' | t }}"
+          onclick="document.querySelector('header-drawer details')?.setAttribute('open','')"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <line x1="4" x2="20" y1="6"  y2="6"/>
+            <line x1="4" x2="20" y1="12" y2="12"/>
+            <line x1="4" x2="20" y1="18" y2="18"/>
+          </svg>
+        </button>
+        <a href="{{ routes.search_url }}" class="pa-header__link" aria-label="{{ 'general.search.search' | t }}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+        </a>
+      </div>
 
       <!-- Mobile: centred secondary logo -->
       <div class="pa-header__mob-logo">
