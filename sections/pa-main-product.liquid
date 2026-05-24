@@ -10,8 +10,10 @@
 -%}
 
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'pa-toast.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'pa-toast.js' | asset_url }}" defer="defer"></script>
 
 <style>
   /* ── Page layout ── */
@@ -420,26 +422,29 @@
       {%- endif -%}
 
       <div class="pa-pp__actions">
-        {%- form 'product', product,
-              id: product_form_id,
-              class: 'pa-pp__form',
-              novalidate: 'novalidate',
-              data-type: 'add-to-cart-form'
-        -%}
-          <input type="hidden"
-                 name="id"
-                 value="{{ first_variant.id }}"
-                 class="product-variant-id"
-                 data-productid="{{ product.id }}">
-          <button
-            type="submit"
-            name="add"
-            class="pa-pp-btn pa-pp-btn--primary"
-            {% unless first_variant.available %}disabled{% endunless %}
-          >
-            {%- if first_variant.available -%}Add to cart{%- else -%}Sold out{%- endif -%}
-          </button>
-        {%- endform -%}
+        <product-form data-product-title="{{ product.title | escape }}" data-product-vendor="{{ product.vendor | escape }}">
+          {%- form 'product', product,
+                id: product_form_id,
+                class: 'pa-pp__form',
+                novalidate: 'novalidate',
+                data-type: 'add-to-cart-form'
+          -%}
+            <input type="hidden"
+                   name="id"
+                   value="{{ first_variant.id }}"
+                   class="product-variant-id"
+                   data-productid="{{ product.id }}">
+            <button
+              type="submit"
+              name="add"
+              class="pa-pp-btn pa-pp-btn--primary"
+              {% unless first_variant.available %}disabled{% endunless %}
+            >
+              <span>{%- if first_variant.available -%}Add to cart{%- else -%}Sold out{%- endif -%}</span>
+              {%- render 'loading-spinner' -%}
+            </button>
+          {%- endform -%}
+        </product-form>
 
         <button type="button" class="pa-pp-btn pa-pp-btn--secondary">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"

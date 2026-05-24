@@ -1,0 +1,39 @@
+/* PA Toast Notification */
+
+#pa-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  z-index: 9999;
+  background: var(--pa-ink, #1d1d1b);
+  color: var(--pa-ivory, #f9f8f4);
+  padding: 14px 22px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease, transform 280ms ease;
+}
+
+#pa-toast.pa-toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+@media (max-width: 749px) {
+  #pa-toast {
+    bottom: 20px;
+    left: 16px;
+    right: 16px;
+    transform: translateY(16px);
+    white-space: normal;
+  }
+
+  #pa-toast.pa-toast--visible {
+    transform: translateY(0);
+  }
+}

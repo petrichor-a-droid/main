@@ -67,6 +67,9 @@
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--fg-1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     text-decoration: none;
     border-bottom: 1px solid var(--fg-1);
     padding-bottom: 4px;
@@ -109,7 +112,13 @@
       {%- if section.settings.view_all_label != blank -%}
         {%- assign view_url = section.settings.view_all_url | default: col.url | default: routes.collections_url -%}
         <a href="{{ view_url }}" class="pa-fc__view-all">
-          {{- section.settings.view_all_label | escape }} &rarr;
+          {{- section.settings.view_all_label | escape }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M5 12h14"/>
+            <path d="m12 5 7 7-7 7"/>
+          </svg>
         </a>
       {%- endif -%}
     </div>
