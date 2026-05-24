@@ -1451,5 +1451,25 @@
         "default": "scheme-1"
       }
     ]
+  },
+  {
+    "name": "Petrichor Atelier",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "select",
+        "id": "pa_max_content_width",
+        "label": "Max content width",
+        "options": [
+          { "value": "1280", "label": "1280px (default)" },
+          { "value": "1440", "label": "1440px (wide)" }
+        ],
+        "default": "1280",
+        "info": "Controls the maximum width of all Petrichor Atelier sections."
+      }
+    ]
   }
 ]
