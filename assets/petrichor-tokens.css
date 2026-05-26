@@ -5,54 +5,50 @@
      {{ 'petrichor-tokens.css' | asset_url | stylesheet_tag }}
    ============================================================ */
 
-/* ---------- Font faces — upload TTFs to Shopify Assets ----------
-   Upload all fonts from the design system /fonts/ folder to
-   Shopify Admin → Online Store → Themes → Assets.
-   Then update the urls below to use {{ 'FontName.ttf' | asset_url }}
-   ---------------------------------------------------------------- */
+/* ---------- Font faces ---------- */
 @font-face {
   font-family: "EB Garamond";
-  src: url("{{ 'EBGaramond-Regular.ttf' | asset_url }}") format("truetype");
+  src: url("https://petrichor-atelier.myshopify.com/cdn/shop/t/7/assets/EBGaramond-Regular.ttf") format("truetype");
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "EB Garamond";
-  src: url("{{ 'EBGaramond-Italic.ttf' | asset_url }}") format("truetype");
+  src: url("https://petrichor-atelier.myshopify.com/cdn/shop/t/7/assets/EBGaramond-Italic.ttf") format("truetype");
   font-weight: 400; font-style: italic; font-display: swap;
 }
 @font-face {
   font-family: "EB Garamond";
-  src: url("{{ 'EBGaramond-Medium.ttf' | asset_url }}") format("truetype");
+  src: url("https://petrichor-atelier.myshopify.com/cdn/shop/t/7/assets/EBGaramond-Medium.ttf") format("truetype");
   font-weight: 500; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "EB Garamond";
-  src: url("{{ 'EBGaramond-SemiBold.ttf' | asset_url }}") format("truetype");
+  src: url("https://petrichor-atelier.myshopify.com/cdn/shop/t/7/assets/EBGaramond-SemiBold.ttf") format("truetype");
   font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "EB Garamond";
-  src: url("{{ 'EBGaramond-Bold.ttf' | asset_url }}") format("truetype");
+  src: url("https://petrichor-atelier.myshopify.com/cdn/shop/t/7/assets/EBGaramond-Bold.ttf") format("truetype");
   font-weight: 700; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "Instrument Sans";
-  src: url("{{ 'InstrumentSans-Regular.ttf' | asset_url }}") format("truetype");
+  src: url("https://petrichor-atelier.myshopify.com/cdn/shop/t/7/assets/InstrumentSans-Regular.ttf") format("truetype");
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "Instrument Sans";
-  src: url("{{ 'InstrumentSans-Medium.ttf' | asset_url }}") format("truetype");
+  src: url("https://petrichor-atelier.myshopify.com/cdn/shop/t/7/assets/InstrumentSans-Medium.ttf") format("truetype");
   font-weight: 500; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "Instrument Sans";
-  src: url("{{ 'InstrumentSans-SemiBold.ttf' | asset_url }}") format("truetype");
+  src: url("https://petrichor-atelier.myshopify.com/cdn/shop/t/7/assets/InstrumentSans-SemiBold.ttf") format("truetype");
   font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "Instrument Sans";
-  src: url("{{ 'InstrumentSans-Bold.ttf' | asset_url }}") format("truetype");
+  src: url("https://petrichor-atelier.myshopify.com/cdn/shop/t/7/assets/InstrumentSans-Bold.ttf") format("truetype");
   font-weight: 700; font-style: normal; font-display: swap;
 }
 

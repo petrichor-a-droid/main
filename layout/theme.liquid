@@ -307,6 +307,12 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="{{ 'PA_512x512 (light).svg' | asset_url }}" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/svg+xml" href="{{ 'PA_D_512x512 (dark).svg' | asset_url }}" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ 'PA_iOS_180x180.png' | asset_url }}">
+    <link rel="manifest" href="{{ 'manifest.json' | asset_url }}">
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">

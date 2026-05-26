@@ -1,0 +1,355 @@
+{% comment %}
+  Petrichor Atelier — Shop Teaser (Password Page)
+  Full-screen cocoa panel: wordmark, opening-soon subtitle, newsletter form.
+  Uses {% form 'customer' %} — same subscriber mechanic as the footer.
+  The PA monogram at the bottom acts as a subtle admin password trigger.
+{% endcomment %}
+
+<style>
+  /* ── Body background ── */
+  body.password {
+    background: #342627 !important;
+  }
+
+  /* ── Reposition Dawn's password header as a tiny corner element ── */
+  #shopify-section-main-password-header {
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 28px !important;
+    z-index: 200 !important;
+    background: transparent !important;
+  }
+
+  #shopify-section-main-password-header > div {
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  .password-header {
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  /* Hide logo, shop name, and password message — keep only the modal */
+  .password-header > :not(password-modal) {
+    display: none !important;
+  }
+
+  /* Remove the section HR */
+  #shopify-section-main-password-header hr {
+    display: none !important;
+  }
+
+  /* Style the "Enter using password" link to be subtle */
+  #shopify-section-main-password-header .modal__toggle-open {
+    font-family: "Instrument Sans", sans-serif !important;
+    font-size: 9px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.18em !important;
+    text-transform: uppercase !important;
+    color: rgba(249, 248, 244, 0.20) !important;
+    text-decoration: none !important;
+    gap: 5px !important;
+    transition: color 200ms ease !important;
+  }
+
+  #shopify-section-main-password-header .modal__toggle-open:hover {
+    color: rgba(249, 248, 244, 0.50) !important;
+  }
+
+  #shopify-section-main-password-header .modal__toggle-close {
+    display: none !important;
+  }
+
+  /* ── Full-screen teaser panel ── */
+  .pa-teaser {
+    min-height: 100dvh;
+    background: #342627;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 80px 24px 120px;
+    box-sizing: border-box;
+  }
+
+  /* ── Central content ── */
+  .pa-teaser__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  .pa-teaser__wordmark {
+    font-family: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+    font-size: clamp(22px, 4.2vw, 52px);
+    font-weight: 400;
+    letter-spacing: 0.40em;
+    text-transform: uppercase;
+    color: #f9f8f4;
+    margin: 0 0 14px;
+    line-height: 1.1;
+  }
+
+  .pa-teaser__tagline {
+    font-family: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+    font-size: clamp(9px, 1vw, 12px);
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: rgba(249, 248, 244, 0.40);
+    margin: 0 0 52px;
+    line-height: 1;
+  }
+
+  .pa-teaser__subtitle {
+    font-family: "Instrument Serif", "EB Garamond", "Garamond", serif;
+    font-style: italic;
+    font-size: clamp(22px, 2.8vw, 34px);
+    font-weight: 400;
+    color: rgba(249, 248, 244, 0.72);
+    margin: 0 0 52px;
+    line-height: 1.3;
+  }
+
+  /* ── Subscribe form ── */
+  .pa-teaser__form-wrap {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .pa-teaser__success {
+    font-family: "Instrument Serif", "EB Garamond", serif;
+    font-style: italic;
+    font-size: 20px;
+    color: rgba(249, 248, 244, 0.70);
+    margin: 0;
+  }
+
+  .pa-teaser__form-row {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .pa-teaser__input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(249, 248, 244, 0.25);
+    outline: none;
+    font-family: "Instrument Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #f9f8f4;
+    padding: 10px 0;
+    min-width: 0;
+    transition: border-color 200ms ease;
+  }
+
+  .pa-teaser__input::placeholder {
+    color: rgba(249, 248, 244, 0.32);
+  }
+
+  .pa-teaser__input:focus {
+    border-bottom-color: rgba(249, 248, 244, 0.60);
+  }
+
+  .pa-teaser__submit {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(249, 248, 244, 0.25);
+    cursor: pointer;
+    font-family: "Instrument Sans", sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: #f9f8f4;
+    padding: 10px 0 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .pa-teaser__submit:hover {
+    opacity: 0.60;
+  }
+
+  .pa-teaser__error {
+    font-family: "Instrument Sans", sans-serif;
+    font-size: 11px;
+    color: #d4837a;
+    margin: 8px 0 0;
+    text-align: left;
+  }
+
+  .pa-teaser__disclaimer {
+    font-family: "Instrument Sans", sans-serif;
+    font-size: 11px;
+    color: rgba(249, 248, 244, 0.26);
+    margin: 14px 0 0;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+  }
+
+  /* ── PA monogram (bottom centre) ── */
+  .pa-teaser__monogram {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .pa-teaser__monogram img {
+    width: 44px;
+    height: 44px;
+    opacity: 0.32;
+    display: block;
+    transition: opacity 200ms ease;
+  }
+
+  .pa-teaser__monogram img:hover {
+    opacity: 0.55;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 749px) {
+    .pa-teaser__wordmark {
+      letter-spacing: 0.26em;
+    }
+
+    .pa-teaser__form-wrap {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<div class="pa-teaser">
+
+  <div class="pa-teaser__body">
+
+    <p class="pa-teaser__wordmark">{{ section.settings.wordmark | escape }}</p>
+    <p class="pa-teaser__tagline">{{ section.settings.tagline | escape }}</p>
+    <p class="pa-teaser__subtitle">{{ section.settings.subtitle }}</p>
+
+    <div class="pa-teaser__form-wrap">
+      {%- if customer.email_marketing_consent.state == 'subscribed' -%}
+        <p class="pa-teaser__success">{{ section.settings.success_message | escape }}</p>
+      {%- else -%}
+        {%- form 'customer', id: 'pa-teaser-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+
+          {%- if form.posted_successfully? -%}
+            <p class="pa-teaser__success">{{ section.settings.success_message | escape }}</p>
+          {%- else -%}
+            <div class="pa-teaser__form-row">
+              <input
+                class="pa-teaser__input"
+                type="email"
+                name="contact[email]"
+                id="pa-teaser-email-{{ section.id }}"
+                value="{{ form.email }}"
+                autocomplete="email"
+                autocorrect="off"
+                autocapitalize="off"
+                placeholder="{{ section.settings.email_placeholder | escape }}"
+                aria-label="{{ section.settings.email_placeholder | escape }}"
+                {% if form.errors %}aria-invalid="true"{% endif %}
+                required
+              >
+              <button type="submit" name="commit" class="pa-teaser__submit">
+                {{ section.settings.button_label | escape }}
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="1.5"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14"/>
+                  <path d="m12 5 7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+
+            {%- if form.errors -%}
+              <p class="pa-teaser__error" role="alert">{{ form.errors.messages.email }}</p>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endform -%}
+      {%- endif -%}
+
+      <p class="pa-teaser__disclaimer">{{ section.settings.disclaimer | escape }}</p>
+    </div>
+
+  </div>
+
+  <div class="pa-teaser__monogram">
+    <img
+      src="{{ 'PA_512x512 (light).svg' | asset_url }}"
+      alt="{{ shop.name }}"
+      width="44"
+      height="44"
+    >
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "PA Shop Teaser",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "wordmark",
+      "label": "Wordmark",
+      "default": "Petrichor Atelier"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Fragrance Deeply Felt"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "opening soon..."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "your@email.com"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Subscribe button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "default": "Quiet. Unsubscribe whenever. No third parties, ever."
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "You're on the list."
+    }
+  ],
+  "presets": [
+    {
+      "name": "PA Shop Teaser"
+    }
+  ]
+}
+{% endschema %}
