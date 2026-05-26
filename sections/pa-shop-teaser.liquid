@@ -88,26 +88,12 @@
     width: 100%;
   }
 
-  .pa-teaser__wordmark {
-    font-family: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
-    font-size: clamp(22px, 4.2vw, 52px);
-    font-weight: 400;
-    letter-spacing: 0.40em;
-    text-transform: uppercase;
-    color: #f9f8f4;
-    margin: 0 0 14px;
-    line-height: 1.1;
-  }
-
-  .pa-teaser__tagline {
-    font-family: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
-    font-size: clamp(9px, 1vw, 12px);
-    font-weight: 500;
-    letter-spacing: 0.34em;
-    text-transform: uppercase;
-    color: rgba(249, 248, 244, 0.40);
+  .pa-teaser__logo {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    height: auto;
     margin: 0 0 52px;
-    line-height: 1;
   }
 
   .pa-teaser__subtitle {
@@ -240,8 +226,13 @@
 
   <div class="pa-teaser__body">
 
-    <p class="pa-teaser__wordmark">{{ section.settings.wordmark | escape }}</p>
-    <p class="pa-teaser__tagline">{{ section.settings.tagline | escape }}</p>
+    <img
+      class="pa-teaser__logo"
+      src="{{ 'secondary-logo-1-ivory.svg' | asset_url }}"
+      alt="{{ shop.name }}"
+      width="340"
+      height="auto"
+    >
     <p class="pa-teaser__subtitle">{{ section.settings.subtitle }}</p>
 
     <div class="pa-teaser__form-wrap">
@@ -308,18 +299,6 @@
   "name": "PA Shop Teaser",
   "tag": "section",
   "settings": [
-    {
-      "type": "text",
-      "id": "wordmark",
-      "label": "Wordmark",
-      "default": "Petrichor Atelier"
-    },
-    {
-      "type": "text",
-      "id": "tagline",
-      "label": "Tagline",
-      "default": "Fragrance Deeply Felt"
-    },
     {
       "type": "text",
       "id": "subtitle",
