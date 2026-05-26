@@ -9,6 +9,11 @@
   #shopify-section-{{ section.id }} .pa-hero {
     min-height: {% if section.settings.full_height %}100svh{% else %}{{ section.settings.min_height }}px{% endif %};
   }
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .pa-hero {
+      min-height: {% if section.settings.full_height %}100svh{% else %}{{ section.settings.min_height_mobile }}px{% endif %};
+    }
+  }
   {%- if section.index == 1 -%}
   /* Pull the hero up behind the fixed header so it fills from the very top */
   #shopify-section-{{ section.id }} {
@@ -181,8 +186,13 @@
 
   /* ── Mobile ── */
   @media (max-width: 749px) {
+    /* Switch to top-aligned so content sizes to its content with no dead space */
+    #shopify-section-{{ section.id }} .pa-hero {
+      align-items: flex-start;
+      min-height: 0;
+    }
     #shopify-section-{{ section.id }} .pa-hero__inner {
-      padding: 140px var(--gutter-mobile, 20px) 56px;
+      padding: calc(var(--pa-header-height, 80px) + 36px) var(--gutter-mobile, 20px) 48px;
     }
     #shopify-section-{{ section.id }} .pa-hero__heading {
       max-width: 100%;
@@ -190,8 +200,8 @@
     #shopify-section-{{ section.id }} .pa-hero__foot {
       flex-direction: column;
       align-items: flex-start;
-      margin-top: 40px;
-      gap: 28px;
+      margin-top: 36px;
+      gap: 24px;
     }
   }
 </style>
@@ -339,9 +349,20 @@
       "max": 1080,
       "step": 40,
       "unit": "px",
-      "label": "Minimum height",
+      "label": "Minimum height — desktop",
       "default": 720,
       "info": "Ignored when \"Full viewport height\" is on."
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "min": 320,
+      "max": 720,
+      "step": 40,
+      "unit": "px",
+      "label": "Minimum height — mobile",
+      "default": 560,
+      "info": "Applies on screens narrower than 750px. Ignored when \"Full viewport height\" is on."
     },
     {
       "type": "header",

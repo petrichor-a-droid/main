@@ -412,12 +412,15 @@ cart-drawer-items {
   cursor: not-allowed;
 }
 
-/* ── Mobile ── */
-@media (max-width: 749px) {
+/* ── Tablet + mobile: match nav drawer's 86vw width ── */
+@media (max-width: 989px) {
   .pa-cd__panel {
-    max-width: 100% !important;
+    max-width: 86vw !important;
   }
+}
 
+/* ── Mobile: tighter padding ── */
+@media (max-width: 749px) {
   .pa-cd__head {
     padding: 18px 20px;
   }
