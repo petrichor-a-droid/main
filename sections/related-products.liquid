@@ -19,6 +19,21 @@
 {%- endstyle -%}
 
 <style>
+  /* Constrain to PA max-content — Dawn's page-width resolves ~1920px at default settings */
+  .section-{{ section.id }} product-recommendations.page-width {
+    max-width: var(--max-content, 1280px);
+    padding-left: var(--gutter, 40px);
+    padding-right: var(--gutter, 40px);
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 749px) {
+    .section-{{ section.id }} product-recommendations.page-width {
+      padding-left: var(--gutter-mobile, 20px);
+      padding-right: var(--gutter-mobile, 20px);
+    }
+  }
+
   .section-{{ section.id }} .pa-fc__related-heading {
     font-family: var(--font-display);
     font-weight: var(--fw-regular, 400);
