@@ -277,7 +277,7 @@
 
   /* ── Fragrance notes ── */
   .pa-pp__notes-section {
-    margin-bottom: 24px;
+    margin-bottom: 0;
   }
 
   .pa-pp__meta-label {
@@ -287,7 +287,12 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--fg-3, #8a8078);
-    margin: 0 0 0;
+    margin: 0 0 13px;
+  }
+
+  /* Suppress double border when notes sit directly above ingredients */
+  .pa-pp__notes-section + .pa-pp__accordion summary {
+    border-top: none;
   }
 
   .pa-pp__notes-list {
