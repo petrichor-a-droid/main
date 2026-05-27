@@ -5,38 +5,32 @@
 {%- endif -%}
 
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-{%- endstyle -%}
-
-<style>
-  /* ID selector beats .page-width specificity unconditionally */
-  #shopify-section-{{ section.id }} .related-products {
+  .pa-related-inner-{{ section.id }} {
     max-width: 1280px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 40px;
     padding-right: 40px;
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
     box-sizing: border-box;
   }
 
+  @media screen and (min-width: 750px) {
+    .pa-related-inner-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
   @media (max-width: 749px) {
-    #shopify-section-{{ section.id }} .related-products {
+    .pa-related-inner-{{ section.id }} {
       padding-left: 20px;
       padding-right: 20px;
     }
   }
 
-  #shopify-section-{{ section.id }} .pa-fc__related-heading {
+  .pa-related-inner-{{ section.id }} .pa-fc__related-heading {
     font-family: var(--font-display);
     font-weight: var(--fw-regular, 400);
     font-size: clamp(28px, 3vw, 40px);
@@ -44,24 +38,26 @@
     color: var(--fg-1, #1d1d1b);
     margin: 0 0 40px;
   }
-</style>
+{%- endstyle -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
-  <product-recommendations
-    class="section-{{ section.id }} related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-    data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
-    data-section-id="{{ section.id }}"
-    data-product-id="{{ product.id }}"
-  >
-    {% if recommendations.performed and recommendations.products_count > 0 %}
-      <h2 class="pa-fc__related-heading">{{ section.settings.heading }}</h2>
-      <div class="pa-fc__grid">
-        {% for recommendation in recommendations.products %}
-          {%- render 'pa-product-card', card_product: recommendation -%}
-        {% endfor %}
-      </div>
-    {% endif %}
-  </product-recommendations>
+  <div class="pa-related-inner-{{ section.id }}">
+    <product-recommendations
+      class="related-products isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
+      data-section-id="{{ section.id }}"
+      data-product-id="{{ product.id }}"
+    >
+      {% if recommendations.performed and recommendations.products_count > 0 %}
+        <h2 class="pa-fc__related-heading">{{ section.settings.heading }}</h2>
+        <div class="pa-fc__grid">
+          {% for recommendation in recommendations.products %}
+            {%- render 'pa-product-card', card_product: recommendation -%}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </product-recommendations>
+  </div>
   {% if section.settings.image_shape == 'arch' %}
     {{ 'mask-arch.svg' | inline_asset_content }}
   {%- endif -%}
