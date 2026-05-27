@@ -332,8 +332,13 @@
 
   /* ── Ingredients accordion ── */
   .pa-pp__accordion {
-    margin-bottom: 28px;
+    margin-bottom: 56px;
     border-bottom: 1px solid var(--border-soft, #e3ddd1);
+  }
+
+  /* Notes-only (no ingredients): also give 56px before buttons */
+  .pa-pp__notes-section + .pa-pp__actions {
+    margin-top: 56px;
   }
 
   .pa-pp__accordion summary {
