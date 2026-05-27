@@ -20,7 +20,7 @@
 
 <style>
   /* Constrain to PA max-content — Dawn's page-width resolves ~1920px at default settings */
-  .section-{{ section.id }} product-recommendations.page-width {
+  .section-{{ section.id }}.page-width {
     max-width: var(--max-content, 1280px);
     padding-left: var(--gutter, 40px);
     padding-right: var(--gutter, 40px);
@@ -28,7 +28,7 @@
   }
 
   @media (max-width: 749px) {
-    .section-{{ section.id }} product-recommendations.page-width {
+    .section-{{ section.id }}.page-width {
       padding-left: var(--gutter-mobile, 20px);
       padding-right: var(--gutter-mobile, 20px);
     }
