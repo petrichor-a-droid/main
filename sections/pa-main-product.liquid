@@ -275,6 +275,98 @@
     color: var(--pa-ivory, #f9f8f4);
   }
 
+  /* ── Fragrance notes ── */
+  .pa-pp__notes-section {
+    margin-bottom: 24px;
+  }
+
+  .pa-pp__meta-label {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-3, #8a8078);
+    margin: 0 0 0;
+  }
+
+  .pa-pp__notes-list {
+    margin: 0;
+    padding: 0;
+  }
+
+  .pa-pp__note-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border-soft, #e3ddd1);
+  }
+  .pa-pp__note-row:first-child {
+    border-top: 1px solid var(--border-soft, #e3ddd1);
+  }
+
+  .pa-pp__note-key {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--fg-3, #8a8078);
+    width: 44px;
+    flex-shrink: 0;
+  }
+
+  .pa-pp__note-val {
+    font-family: var(--font-display, 'EB Garamond', serif);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--fg-2, #4a4540);
+    margin: 0;
+  }
+
+  /* ── Ingredients accordion ── */
+  .pa-pp__accordion {
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border-soft, #e3ddd1);
+  }
+
+  .pa-pp__accordion summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 0;
+    border-top: 1px solid var(--border-soft, #e3ddd1);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-3, #8a8078);
+    transition: color 160ms ease;
+  }
+  .pa-pp__accordion summary:hover { color: var(--fg-1, #1d1d1b); }
+  .pa-pp__accordion summary::-webkit-details-marker { display: none; }
+
+  .pa-pp__accordion-chevron {
+    flex-shrink: 0;
+    transition: transform 240ms var(--ease-out, ease);
+  }
+  .pa-pp__accordion[open] .pa-pp__accordion-chevron {
+    transform: rotate(180deg);
+  }
+
+  .pa-pp__accordion-body {
+    padding: 4px 0 20px;
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--fg-2, #4a4540);
+  }
+
   /* ── Mobile ── */
   @media (max-width: 989px) {
     .pa-pp {
@@ -419,6 +511,56 @@
         <div class="pa-pp__description">
           {{ product.description }}
         </div>
+      {%- endif -%}
+
+      {%- liquid
+        assign pa_notes_top   = product.metafields.fragrance.notes_top
+        assign pa_notes_heart = product.metafields.fragrance.notes_heart
+        assign pa_notes_base  = product.metafields.fragrance.notes_base
+        assign pa_ingredients = product.metafields.fragrance.ingredients
+      -%}
+
+      {%- if pa_notes_top != blank or pa_notes_heart != blank or pa_notes_base != blank -%}
+        <div class="pa-pp__notes-section">
+          <p class="pa-pp__meta-label">Notes</p>
+          <dl class="pa-pp__notes-list">
+            {%- if pa_notes_top != blank -%}
+              <div class="pa-pp__note-row">
+                <dt class="pa-pp__note-key">Top</dt>
+                <dd class="pa-pp__note-val">{{ pa_notes_top.value }}</dd>
+              </div>
+            {%- endif -%}
+            {%- if pa_notes_heart != blank -%}
+              <div class="pa-pp__note-row">
+                <dt class="pa-pp__note-key">Heart</dt>
+                <dd class="pa-pp__note-val">{{ pa_notes_heart.value }}</dd>
+              </div>
+            {%- endif -%}
+            {%- if pa_notes_base != blank -%}
+              <div class="pa-pp__note-row">
+                <dt class="pa-pp__note-key">Base</dt>
+                <dd class="pa-pp__note-val">{{ pa_notes_base.value }}</dd>
+              </div>
+            {%- endif -%}
+          </dl>
+        </div>
+      {%- endif -%}
+
+      {%- if pa_ingredients != blank -%}
+        <details class="pa-pp__accordion">
+          <summary>
+            <span>Ingredients</span>
+            <svg class="pa-pp__accordion-chevron"
+                 xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="1.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </summary>
+          <div class="pa-pp__accordion-body">
+            {{ pa_ingredients.value | newline_to_br }}
+          </div>
+        </details>
       {%- endif -%}
 
       <div class="pa-pp__actions">
