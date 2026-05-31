@@ -1,0 +1,330 @@
+{%- comment -%}
+  Petrichor Atelier — Footer (v2)
+  Pine background, ivory text. Columns powered by Navigation menus.
+{%- endcomment -%}
+
+<footer class="pa-fv2" aria-label="Footer">
+  <div class="pa-fv2__inner">
+    <div class="pa-fv2__top">
+
+      <div class="pa-fv2__brand">
+        {%- if section.settings.logo != blank -%}
+          <img class="pa-fv2__logo"
+               src="{{ section.settings.logo | image_url: width: 440 }}"
+               alt="{{ shop.name | escape }}" width="220" loading="lazy">
+        {%- else -%}
+          <img class="pa-fv2__logo"
+               src="{{ 'secondary-logo-2-ivory.svg' | asset_url }}"
+               alt="{{ shop.name | escape }}" width="220" loading="lazy">
+        {%- endif -%}
+        {%- if section.settings.tagline != blank -%}
+          <p class="pa-fv2__tagline">{{ section.settings.tagline }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'column' -%}
+          <div {{ block.shopify_attributes }}>
+            {%- if block.settings.heading != blank -%}
+              <div class="pa-fv2__col-head">{{ block.settings.heading }}</div>
+            {%- endif -%}
+            {%- if block.settings.menu != blank -%}
+              <ul class="pa-fv2__list">
+                {%- for link in block.settings.menu.links -%}
+                  <li>
+                    <a class="pa-fv2__link" href="{{ link.url }}">{{ link.title }}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+    </div>
+
+    <div class="pa-fv2__bottom">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ section.settings.copyright }}</span>
+      {%- if section.settings.signoff != blank -%}
+        <span class="pa-fv2__signoff">{{ section.settings.signoff }}</span>
+      {%- endif -%}
+      {%- liquid
+        assign has_social = false
+        if section.settings.instagram_url != blank or section.settings.tiktok_url != blank or section.settings.facebook_url != blank or section.settings.pinterest_url != blank
+          assign has_social = true
+        endif
+      -%}
+      {%- if has_social -%}
+        <span class="pa-fv2__social">
+          {%- if section.settings.instagram_url != blank -%}
+            <a href="{{ section.settings.instagram_url }}" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.tiktok_url != blank -%}
+            <a href="{{ section.settings.tiktok_url }}" aria-label="TikTok" target="_blank" rel="noopener">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 7v8a3 3 0 1 1-3-3"/>
+                <path d="M15 4c0 2 1 4 4 4"/>
+                <line x1="15" y1="4" x2="15" y2="14"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.facebook_url != blank -%}
+            <a href="{{ section.settings.facebook_url }}" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 2h-3a4 4 0 0 0-4 4v3H8v4h3v8h4v-8h3l1-4h-4V6a1 1 0 0 1 1-1h3z"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.pinterest_url != blank -%}
+            <a href="{{ section.settings.pinterest_url }}" aria-label="Pinterest" target="_blank" rel="noopener">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 21V14"/>
+                <path d="M12 14l-3 7"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pa-fv2 {
+    background: var(--pa-pine, #304b3d);
+    color: var(--pa-ivory, #f9f8f4);
+    padding-top: 96px;
+    padding-bottom: 32px;
+    margin-top: 96px;
+  }
+
+  .pa-fv2__inner {
+    max-width: var(--max-content, 1280px);
+    margin: 0 auto;
+    padding: 0 var(--gutter, 40px);
+    box-sizing: border-box;
+  }
+
+  .pa-fv2__top {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 60px;
+    padding-bottom: 64px;
+    border-bottom: 1px solid rgba(var(--color-base-background-1, 249, 248, 244), 0.18);
+  }
+
+  .pa-fv2__logo {
+    width: 220px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .pa-fv2__tagline {
+    font-family: var(--font-display, 'EB Garamond', serif);
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.4;
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.78);
+    margin: 22px 0 0;
+    max-width: 320px;
+  }
+
+  .pa-fv2__col-head {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.55);
+    margin-bottom: 18px;
+  }
+
+  .pa-fv2__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pa-fv2__link {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 14px;
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.92);
+    text-decoration: none;
+    width: fit-content;
+    transition: color 240ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+  .pa-fv2__link:hover {
+    color: var(--pa-ivory, #f9f8f4);
+  }
+
+  .pa-fv2__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-top: 28px;
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 12px;
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.55);
+  }
+
+  .pa-fv2__signoff {
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .pa-fv2__social {
+    display: inline-flex;
+    gap: 14px;
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.92);
+  }
+  .pa-fv2__social a {
+    color: inherit;
+    display: inline-flex;
+    transition: color 240ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+  .pa-fv2__social a:hover {
+    color: var(--pa-ivory, #f9f8f4);
+  }
+
+  @media (max-width: 989px) {
+    .pa-fv2__top {
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 40px;
+    }
+    .pa-fv2__brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .pa-fv2 {
+      padding-top: 64px;
+      padding-bottom: 28px;
+      margin-top: 64px;
+    }
+    .pa-fv2__inner {
+      padding: 0 var(--gutter-mobile, 20px);
+    }
+    .pa-fv2__top {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding-bottom: 40px;
+    }
+    .pa-fv2__brand {
+      grid-column: auto;
+    }
+    .pa-fv2__logo { width: 200px; }
+    .pa-fv2__tagline { font-size: 17px; margin-top: 18px; }
+    .pa-fv2__col-head { margin-bottom: 14px; }
+    .pa-fv2__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      padding-top: 24px;
+    }
+    .pa-fv2__signoff { display: none; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "PA — Footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo (ivory)",
+      "info": "Leave empty to use secondary-logo-2-ivory.svg from assets."
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "A small Sydney atelier importing niche houses that rarely cross the equator."
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright text",
+      "default": "Petrichor Atelier — Sydney, AU"
+    },
+    {
+      "type": "text",
+      "id": "signoff",
+      "label": "Sign-off",
+      "default": "Fragrance deeply felt"
+    },
+    {
+      "type": "header",
+      "content": "Social links",
+      "info": "Icons appear only when a URL is filled in."
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "pinterest_url",
+      "label": "Pinterest URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Menu column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Atelier"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "PA — Footer",
+      "blocks": [
+        { "type": "column", "settings": { "heading": "Atelier" } },
+        { "type": "column", "settings": { "heading": "Index" } },
+        { "type": "column", "settings": { "heading": "Service" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
