@@ -51,7 +51,7 @@
       ],
       "name": "PA — Footer",
       "settings": {
-        "show_brand": true,
+        "show_brand": false,
         "tagline": "A small Sydney atelier importing niche houses that rarely cross the equator.",
         "copyright": "Petrichor Atelier",
         "signoff": "Fragrance deeply felt",
