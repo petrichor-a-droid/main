@@ -1,0 +1,306 @@
+{% comment %}
+  Petrichor Atelier — Footer
+  Pine background, ivory text. 4-column grid + bottom bar.
+{% endcomment %}
+
+<style>
+  .pa-footer {
+    background: var(--pa-pine, #304b3d);
+    color: var(--pa-ivory, #f9f8f4);
+    padding: 96px 0 32px;
+    margin-top: 96px;
+  }
+
+  .pa-footer__inner {
+    max-width: var(--max-content, 1280px);
+    margin: 0 auto;
+    padding: 0 var(--gutter, 40px);
+    box-sizing: border-box;
+  }
+
+  /* ── Top grid ── */
+  .pa-footer__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 60px;
+    padding-bottom: 64px;
+    border-bottom: 1px solid rgba(249, 248, 244, 0.18);
+  }
+
+  /* Brand column */
+  .pa-footer__logo {
+    display: block;
+    width: 220px;
+    max-width: 100%;
+  }
+
+  .pa-footer__tagline {
+    font-family: var(--font-display, 'EB Garamond', serif);
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.4;
+    color: rgba(249, 248, 244, 0.78);
+    margin: 22px 0 0;
+    max-width: 320px;
+  }
+
+  /* Nav columns */
+  .pa-footer__col-heading {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(249, 248, 244, 0.55);
+    margin: 0 0 18px;
+    display: block;
+  }
+
+  .pa-footer__nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pa-footer__nav a {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 14px;
+    color: rgba(249, 248, 244, 0.92);
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+  .pa-footer__nav a:hover {
+    color: var(--pa-ivory, #f9f8f4);
+  }
+
+  /* ── Bottom bar ── */
+  .pa-footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 28px;
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 12px;
+    color: rgba(249, 248, 244, 0.55);
+    gap: 24px;
+  }
+
+  .pa-footer__bottom-tagline {
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .pa-footer__social {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .pa-footer__social a {
+    color: rgba(249, 248, 244, 0.55);
+    display: flex;
+    align-items: center;
+    transition: color 160ms ease;
+  }
+  .pa-footer__social a:hover {
+    color: var(--pa-ivory, #f9f8f4);
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 989px) {
+    .pa-footer__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 32px;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .pa-footer {
+      padding: 64px 0 28px;
+      margin-top: 64px;
+    }
+    .pa-footer__inner {
+      padding: 0 var(--gutter-mobile, 20px);
+    }
+    .pa-footer__grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .pa-footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .pa-footer__bottom-tagline {
+      display: none;
+    }
+  }
+</style>
+
+<footer class="pa-footer" role="contentinfo">
+  <div class="pa-footer__inner">
+
+    <div class="pa-footer__grid">
+
+      <!-- Brand column -->
+      <div>
+        <img
+          class="pa-footer__logo"
+          src="{{ 'secondary-logo-2-ivory.svg' | asset_url }}"
+          alt="{{ shop.name }}"
+          width="220"
+          height="auto"
+          loading="lazy"
+        >
+        {%- if section.settings.tagline != blank -%}
+          <p class="pa-footer__tagline">{{ section.settings.tagline }}</p>
+        {%- endif -%}
+      </div>
+
+      <!-- Nav columns -->
+      {%- for i in (1..3) -%}
+        {%- liquid
+          case i
+          when 1
+            assign col_heading = section.settings.col_1_heading
+            assign col_menu    = section.settings.col_1_menu
+          when 2
+            assign col_heading = section.settings.col_2_heading
+            assign col_menu    = section.settings.col_2_menu
+          when 3
+            assign col_heading = section.settings.col_3_heading
+            assign col_menu    = section.settings.col_3_menu
+          endcase
+          assign col_linklist = linklists[col_menu]
+        -%}
+        {%- if col_linklist.links.size > 0 -%}
+          <div>
+            {%- if col_heading != blank -%}
+              <span class="pa-footer__col-heading">{{ col_heading }}</span>
+            {%- endif -%}
+            <ul class="pa-footer__nav">
+              {%- for link in col_linklist.links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="pa-footer__bottom">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }} &mdash; Sydney, AU</span>
+
+      {%- if section.settings.bottom_tagline != blank -%}
+        <span class="pa-footer__bottom-tagline">{{ section.settings.bottom_tagline }}</span>
+      {%- endif -%}
+
+      <div class="pa-footer__social">
+        {%- if section.settings.instagram_url != blank -%}
+          <a href="{{ section.settings.instagram_url }}" aria-label="Instagram" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="1.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "PA — Footer",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "A small Sydney atelier importing niche houses that rarely cross the equator."
+    },
+    {
+      "type": "header",
+      "content": "Navigation column 1"
+    },
+    {
+      "type": "text",
+      "id": "col_1_heading",
+      "label": "Heading",
+      "default": "Atelier"
+    },
+    {
+      "type": "link_list",
+      "id": "col_1_menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Navigation column 2"
+    },
+    {
+      "type": "text",
+      "id": "col_2_heading",
+      "label": "Heading",
+      "default": "Index"
+    },
+    {
+      "type": "link_list",
+      "id": "col_2_menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Navigation column 3"
+    },
+    {
+      "type": "text",
+      "id": "col_3_heading",
+      "label": "Heading",
+      "default": "Service"
+    },
+    {
+      "type": "link_list",
+      "id": "col_3_menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Bottom bar"
+    },
+    {
+      "type": "text",
+      "id": "bottom_tagline",
+      "label": "Bottom tagline",
+      "default": "Fragrance deeply felt"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PA — Footer"
+    }
+  ]
+}
+{% endschema %}
