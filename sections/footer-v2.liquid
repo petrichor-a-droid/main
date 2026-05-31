@@ -124,7 +124,10 @@
     border-bottom: 1px solid rgba(var(--color-base-accent-2, 52, 38, 39), 0.18);
   }
   .pa-fv2__top--no-brand {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .pa-fv2__top--no-brand > *:first-child {
+    grid-column-start: 2;
   }
 
   .pa-fv2__logo {
