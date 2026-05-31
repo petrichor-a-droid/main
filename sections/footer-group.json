@@ -1,7 +1,57 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
+    "footer_v2_J3triR": {
+      "type": "footer-v2",
+      "blocks": {
+        "column_DV3fUb": {
+          "type": "column",
+          "settings": {
+            "heading": "Atelier",
+            "menu": ""
+          }
+        },
+        "column_LKHFqi": {
+          "type": "column",
+          "settings": {
+            "heading": "Index",
+            "menu": ""
+          }
+        },
+        "column_tHDbUc": {
+          "type": "column",
+          "settings": {
+            "heading": "Service",
+            "menu": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_DV3fUb",
+        "column_LKHFqi",
+        "column_tHDbUc"
+      ],
+      "name": "PA — Footer",
+      "settings": {
+        "tagline": "A small Sydney atelier importing niche houses that rarely cross the equator.",
+        "copyright": "Petrichor Atelier",
+        "signoff": "Fragrance deeply felt",
+        "instagram_url": "https://www.instagram.com/petrichor_atelier_au/",
+        "tiktok_url": "",
+        "facebook_url": "",
+        "pinterest_url": ""
+      }
+    },
     "pa-footer": {
       "type": "footer-v2",
       "blocks": {
@@ -33,13 +83,19 @@
         "col-service"
       ],
       "settings": {
+        "logo": "{{ shop.brand.square_logo }}",
         "tagline": "A small Sydney atelier importing niche houses that rarely cross the equator.",
-        "copyright": "Petrichor Atelier — Sydney, AU",
-        "signoff": "Fragrance deeply felt"
+        "copyright": "Petrichor Atelier",
+        "signoff": "Fragrance deeply felt",
+        "instagram_url": "https://www.instagram.com/petrichor_atelier_au",
+        "tiktok_url": "",
+        "facebook_url": "",
+        "pinterest_url": ""
       }
     }
   },
   "order": [
+    "footer_v2_J3triR",
     "pa-footer"
   ]
 }
