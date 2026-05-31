@@ -1,45 +1,59 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
-    "pa-footer": {
+    "footer_v2_J3triR": {
       "type": "footer-v2",
       "blocks": {
-        "col-atelier": {
+        "column_DV3fUb": {
           "type": "column",
           "settings": {
             "heading": "Atelier",
-            "menu": "main-menu"
+            "menu": ""
           }
         },
-        "col-index": {
+        "column_LKHFqi": {
           "type": "column",
           "settings": {
             "heading": "Index",
-            "menu": "main-menu"
+            "menu": ""
           }
         },
-        "col-service": {
+        "column_tHDbUc": {
           "type": "column",
           "settings": {
             "heading": "Service",
-            "menu": "main-menu"
+            "menu": ""
           }
         }
       },
       "block_order": [
-        "col-atelier",
-        "col-index",
-        "col-service"
+        "column_DV3fUb",
+        "column_LKHFqi",
+        "column_tHDbUc"
       ],
+      "name": "PA — Footer",
       "settings": {
         "tagline": "A small Sydney atelier importing niche houses that rarely cross the equator.",
-        "copyright": "Petrichor Atelier — Sydney, AU",
-        "signoff": "Fragrance deeply felt"
+        "copyright": "Petrichor Atelier",
+        "signoff": "Fragrance deeply felt",
+        "instagram_url": "https://www.instagram.com/petrichor_atelier_au/",
+        "tiktok_url": "",
+        "facebook_url": "",
+        "pinterest_url": ""
       }
     }
   },
   "order": [
-    "pa-footer"
+    "footer_v2_J3triR"
   ]
 }
