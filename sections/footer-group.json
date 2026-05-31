@@ -17,28 +17,28 @@
         "column_kdBWBa": {
           "type": "column",
           "settings": {
-            "heading": "Atelier",
+            "heading": "Shop",
             "menu": ""
           }
         },
         "column_DV3fUb": {
           "type": "column",
           "settings": {
-            "heading": "Atelier",
+            "heading": "Customer care",
             "menu": ""
           }
         },
         "column_LKHFqi": {
           "type": "column",
           "settings": {
-            "heading": "Index",
+            "heading": "About us",
             "menu": ""
           }
         },
         "column_tHDbUc": {
           "type": "column",
           "settings": {
-            "heading": "Service",
+            "heading": "Legal & privacy",
             "menu": ""
           }
         }
