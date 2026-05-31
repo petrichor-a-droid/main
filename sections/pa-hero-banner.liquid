@@ -233,7 +233,7 @@
           alt: section.settings.image.alt | default: shop.name | escape
       }}
     </div>
-    <div class="pa-hero__overlay" aria-hidden="true" style="background: rgba(29, 29, 27, {{ section.settings.overlay_opacity | divided_by: 100.0 }});"></div>
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background:rgba(29,29,27,{{ section.settings.overlay_opacity | divided_by: 100.0 }});"></div>
   {%- endif -%}
 
   <div class="pa-hero__atmosphere" aria-hidden="true"></div>
