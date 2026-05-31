@@ -51,51 +51,9 @@
         "facebook_url": "",
         "pinterest_url": ""
       }
-    },
-    "pa-footer": {
-      "type": "footer-v2",
-      "blocks": {
-        "col-atelier": {
-          "type": "column",
-          "settings": {
-            "heading": "Atelier",
-            "menu": "main-menu"
-          }
-        },
-        "col-index": {
-          "type": "column",
-          "settings": {
-            "heading": "Index",
-            "menu": "main-menu"
-          }
-        },
-        "col-service": {
-          "type": "column",
-          "settings": {
-            "heading": "Service",
-            "menu": "main-menu"
-          }
-        }
-      },
-      "block_order": [
-        "col-atelier",
-        "col-index",
-        "col-service"
-      ],
-      "settings": {
-        "logo": "{{ shop.brand.square_logo }}",
-        "tagline": "A small Sydney atelier importing niche houses that rarely cross the equator.",
-        "copyright": "Petrichor Atelier",
-        "signoff": "Fragrance deeply felt",
-        "instagram_url": "https://www.instagram.com/petrichor_atelier_au",
-        "tiktok_url": "",
-        "facebook_url": "",
-        "pinterest_url": ""
-      }
     }
   },
   "order": [
-    "footer_v2_J3triR",
-    "pa-footer"
+    "footer_v2_J3triR"
   ]
 }
