@@ -5,8 +5,9 @@
 
 <footer class="pa-fv2" aria-label="Footer">
   <div class="pa-fv2__inner">
-    <div class="pa-fv2__top">
+    <div class="pa-fv2__top{% unless section.settings.show_brand %} pa-fv2__top--no-brand{% endunless %}">
 
+      {%- if section.settings.show_brand -%}
       <div class="pa-fv2__brand">
         {%- if section.settings.logo != blank -%}
           <img class="pa-fv2__logo"
@@ -21,6 +22,7 @@
           <p class="pa-fv2__tagline">{{ section.settings.tagline }}</p>
         {%- endif -%}
       </div>
+      {%- endif -%}
 
       {%- for block in section.blocks -%}
         {%- if block.type == 'column' -%}
@@ -110,8 +112,6 @@
   }
 
   .pa-fv2__inner {
-    max-width: var(--max-content, 1280px);
-    margin: 0 auto;
     padding: 0 var(--gutter, 40px);
     box-sizing: border-box;
   }
@@ -122,6 +122,9 @@
     gap: 60px;
     padding-bottom: 64px;
     border-bottom: 1px solid rgba(var(--color-base-background-1, 249, 248, 244), 0.18);
+  }
+  .pa-fv2__top--no-brand {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 
   .pa-fv2__logo {
@@ -204,7 +207,7 @@
 
   @media (max-width: 989px) {
     .pa-fv2__top {
-      grid-template-columns: 1.4fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 40px;
     }
     .pa-fv2__brand {
@@ -226,9 +229,7 @@
       gap: 40px;
       padding-bottom: 40px;
     }
-    .pa-fv2__brand {
-      grid-column: auto;
-    }
+    .pa-fv2__brand { grid-column: auto; }
     .pa-fv2__logo { width: 200px; }
     .pa-fv2__tagline { font-size: 17px; margin-top: 18px; }
     .pa-fv2__col-head { margin-bottom: 14px; }
@@ -246,6 +247,12 @@
 {
   "name": "PA — Footer",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_brand",
+      "label": "Show brand column",
+      "default": true
+    },
     {
       "type": "image_picker",
       "id": "logo",
