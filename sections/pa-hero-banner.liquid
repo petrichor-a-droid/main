@@ -221,7 +221,8 @@
 <div class="pa-hero">
 
   {%- if section.settings.image != blank -%}
-    <div class="pa-hero__media">
+    {%- assign brightness = 100 | minus: section.settings.overlay_opacity | divided_by: 100.0 -%}
+    <div class="pa-hero__media" style="filter: brightness({{ brightness }});">
       {{
         section.settings.image
         | image_url: width: 3840
@@ -233,7 +234,6 @@
           alt: section.settings.image.alt | default: shop.name | escape
       }}
     </div>
-    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background:rgba(29,29,27,{{ section.settings.overlay_opacity | divided_by: 100.0 }});"></div>
   {%- endif -%}
 
   <div class="pa-hero__atmosphere" aria-hidden="true"></div>
