@@ -23,9 +23,7 @@
   #shopify-section-{{ section.id }} .pa-hero__img {
     object-position: {{ section.settings.image_position }};
   }
-  #shopify-section-{{ section.id }} .pa-hero__overlay {
-    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
-  }
+  /* overlay opacity applied inline on the element — see HTML below */
 {%- endstyle -%}
 
 <style>
@@ -236,7 +234,7 @@
           alt: section.settings.image.alt | default: shop.name | escape
       }}
     </div>
-    <div class="pa-hero__overlay" aria-hidden="true"></div>
+    <div class="pa-hero__overlay" aria-hidden="true" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
   {%- endif -%}
 
   <div class="pa-hero__atmosphere" aria-hidden="true"></div>
