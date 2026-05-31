@@ -11,11 +11,26 @@
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
+    "pa_footer_BjywPg": {
+      "type": "pa-footer",
+      "name": "PA — Footer",
+      "settings": {
+        "tagline": "A small Sydney atelier importing niche houses that rarely cross the equator.",
+        "col_1_heading": "Atelier",
+        "col_1_menu": "main-menu",
+        "col_2_heading": "Index",
+        "col_2_menu": "main-menu",
+        "col_3_heading": "Service",
+        "col_3_menu": "main-menu",
+        "bottom_tagline": "Fragrance deeply felt",
+        "instagram_url": ""
+      }
+    },
     "footer": {
       "type": "footer",
       "settings": {
         "color_scheme": "scheme-1",
-        "newsletter_enable": true,
+        "newsletter_enable": false,
         "newsletter_heading": "Subscribe to our emails",
         "enable_follow_on_shop": true,
         "show_social": true,
@@ -30,6 +45,7 @@
     }
   },
   "order": [
+    "pa_footer_BjywPg",
     "footer"
   ]
 }
