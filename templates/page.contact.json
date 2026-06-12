@@ -1,7 +1,24 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "pa-contact": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "pa_contact_form_9WVnWD": {
       "type": "pa-contact-form",
+      "name": "PA — Contact Form",
       "settings": {
         "eyebrow": "Get in touch",
         "heading": "We'd love to hear from you.",
@@ -12,6 +29,7 @@
     }
   },
   "order": [
-    "pa-contact"
+    "main",
+    "pa_contact_form_9WVnWD"
   ]
 }
