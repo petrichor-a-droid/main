@@ -201,7 +201,7 @@
 
         {%- if form.posted_successfully? -%}
           <div class="pa-cf__success" role="status" tabindex="-1" autofocus>
-            {{ section.settings.success_message | default: 'Your message has been sent. We\'ll be in touch shortly.' }}
+            {{ section.settings.success_message | default: "Your message has been sent. We'll be in touch shortly." }}
           </div>
         {%- endif -%}
 
