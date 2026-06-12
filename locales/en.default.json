@@ -549,7 +549,8 @@
         }
       },
       "shop_policies": {
-        "terms_of_service": "Terms & Conditions"
+        "terms_of_service": "Terms & Conditions",
+        "shipping_policy": "Shipping & Delivery"
       }
     }
   }
