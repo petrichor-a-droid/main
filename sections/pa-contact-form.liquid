@@ -159,6 +159,17 @@
     border-color: var(--pa-pine, #304b3d);
   }
 
+  /* ── Fill viewport: footer always at bottom, form stays top-aligned ── */
+  body:has(.section-pa-contact) {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+  }
+  body:has(.section-pa-contact) #MainContent {
+    flex: 1;
+    background: var(--bg-canvas, #f9f8f4);
+  }
+
   /* ── Mobile ── */
   @media (max-width: 989px) {
     .pa-cf__inner {
