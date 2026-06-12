@@ -9,8 +9,28 @@
  */
 {
   "sections": {
+    "pa_hero_banner_xKHhqw": {
+      "type": "pa-hero-banner",
+      "name": "PA — Hero Banner",
+      "settings": {
+        "image": "shopify://shop_images/Liis_2048x_c82e4145-5eea-4e67-ab6e-56c7f4d4784e.webp",
+        "image_position": "center center",
+        "overlay_opacity": 40,
+        "full_height": false,
+        "min_height": 720,
+        "min_height_mobile": 560,
+        "eyebrow": "",
+        "heading": "Liis Fragrances",
+        "subheading": "Liis is made from exceptionally high quality, conscious ingredients from around the world and organic sugarcane alcohol. Formulated without preservatives, dyes, phthalates, sulfates, Liis is cruelty-free, vegan, and allergy-tested. Liis is made in California.",
+        "cta_label": "",
+        "cta_url": "",
+        "cta_2_label": "",
+        "cta_2_url": ""
+      }
+    },
     "banner": {
       "type": "main-collection-banner",
+      "disabled": true,
       "settings": {
         "show_collection_description": true,
         "show_collection_image": false,
@@ -22,6 +42,7 @@
       "settings": {
         "products_per_page": 16,
         "columns_desktop": 4,
+        "columns_mobile": "2",
         "color_scheme": "scheme-1",
         "image_ratio": "adapt",
         "image_shape": "default",
@@ -32,13 +53,13 @@
         "enable_filtering": true,
         "filter_type": "horizontal",
         "enable_sorting": true,
-        "columns_mobile": "2",
-        "padding_top": 36,
+        "padding_top": 64,
         "padding_bottom": 36
       }
     }
   },
   "order": [
+    "pa_hero_banner_xKHhqw",
     "banner",
     "product-grid"
   ]

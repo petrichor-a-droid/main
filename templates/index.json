@@ -12,10 +12,12 @@
     "pa_hero_banner": {
       "type": "pa-hero-banner",
       "settings": {
+        "image": "shopify://shop_images/Group_1.png",
         "image_position": "center center",
-        "overlay_opacity": 40,
+        "overlay_opacity": 30,
         "full_height": false,
         "min_height": 720,
+        "min_height_mobile": 560,
         "eyebrow": "",
         "heading": "Fragrance <em>deeply</em> <em>felt</em>.",
         "subheading": "A curation of rare houses, brought home to Australia — for the people who want to feel something rare.",

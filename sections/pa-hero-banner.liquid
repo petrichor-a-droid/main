@@ -49,11 +49,10 @@
     display: block;
   }
 
-  /* Flat dark scrim (opacity set per-section via Liquid above) */
+  /* Flat dark scrim — background rgba set inline on the element */
   #shopify-section-{{ section.id }} .pa-hero__overlay {
     position: absolute;
     inset: 0;
-    background: var(--pa-ink);
     pointer-events: none;
   }
 
@@ -222,7 +221,8 @@
 <div class="pa-hero">
 
   {%- if section.settings.image != blank -%}
-    <div class="pa-hero__media">
+    {%- assign brightness = 100 | minus: section.settings.overlay_opacity | divided_by: 100.0 -%}
+    <div class="pa-hero__media" style="filter: brightness({{ brightness }});">
       {{
         section.settings.image
         | image_url: width: 3840
@@ -234,7 +234,6 @@
           alt: section.settings.image.alt | default: shop.name | escape
       }}
     </div>
-    <div class="pa-hero__overlay" aria-hidden="true" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
   {%- endif -%}
 
   <div class="pa-hero__atmosphere" aria-hidden="true"></div>

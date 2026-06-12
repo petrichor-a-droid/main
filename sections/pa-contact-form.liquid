@@ -1,0 +1,341 @@
+{%- comment -%}
+  Petrichor Atelier — Contact Form
+  Two-column split: editorial heading left, form right.
+  Uses Shopify's native {% form 'contact' %} for submission handling.
+{%- endcomment -%}
+
+<style>
+  .pa-cf {
+    background: var(--bg-canvas, #f9f8f4);
+    padding: 96px var(--gutter, 40px);
+    box-sizing: border-box;
+  }
+
+  .pa-cf__inner {
+    max-width: var(--max-content, 1280px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  /* ── Left: heading ── */
+  .pa-cf__lede {
+    position: sticky;
+    top: calc(var(--pa-header-height, 80px) + 40px);
+  }
+
+  .pa-cf__eyebrow {
+    display: block;
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--fg-3, #8a8078);
+    margin-bottom: 16px;
+  }
+
+  .pa-cf__heading {
+    font-family: var(--font-display, 'EB Garamond', serif);
+    font-weight: 400;
+    font-size: clamp(36px, 4vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.012em;
+    color: var(--fg-1, #1d1d1b);
+    margin: 0 0 24px;
+  }
+
+  .pa-cf__sub {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--fg-2, #4a4540);
+    margin: 0;
+    max-width: 340px;
+  }
+
+  /* ── Form fields ── */
+  .pa-cf__form { width: 100%; }
+
+  .pa-cf__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .pa-cf__field { display: flex; flex-direction: column; gap: 7px; }
+  .pa-cf__field--full { margin-bottom: 20px; }
+
+  .pa-cf__label {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-3, #8a8078);
+  }
+  .pa-cf__label--required::after {
+    content: ' *';
+    color: var(--fg-2, #4a4540);
+  }
+
+  .pa-cf__input,
+  .pa-cf__textarea {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 14px;
+    color: var(--fg-1, #1d1d1b);
+    background: var(--pa-ivory, #f9f8f4);
+    border: 1px solid var(--border-default, #cbc4b3);
+    border-radius: var(--radius-sm, 4px);
+    padding: 12px 14px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .pa-cf__input::placeholder,
+  .pa-cf__textarea::placeholder {
+    color: var(--fg-3, #8a8078);
+    opacity: 0.6;
+  }
+  .pa-cf__input:focus,
+  .pa-cf__textarea:focus {
+    border-color: var(--pa-pine, #304b3d);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--pa-pine, #304b3d) 18%, transparent);
+  }
+
+  .pa-cf__textarea {
+    resize: vertical;
+    min-height: 160px;
+    line-height: 1.6;
+  }
+
+  /* ── Status messages ── */
+  .pa-cf__success {
+    padding: 20px 24px;
+    background: color-mix(in srgb, var(--pa-pine, #304b3d) 8%, var(--pa-ivory, #f9f8f4));
+    border: 1px solid color-mix(in srgb, var(--pa-pine, #304b3d) 25%, transparent);
+    border-radius: var(--radius-sm, 4px);
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 14px;
+    color: var(--pa-pine, #304b3d);
+    margin-bottom: 28px;
+  }
+
+  .pa-cf__error {
+    padding: 16px 20px;
+    background: color-mix(in srgb, var(--status-danger, #8a3a2f) 8%, var(--pa-ivory, #f9f8f4));
+    border: 1px solid color-mix(in srgb, var(--status-danger, #8a3a2f) 25%, transparent);
+    border-radius: var(--radius-sm, 4px);
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 13px;
+    color: var(--status-danger, #8a3a2f);
+    margin-bottom: 24px;
+  }
+
+  /* ── Submit button ── */
+  .pa-cf__submit {
+    margin-top: 32px;
+    width: 100%;
+    padding: 17px 24px;
+    background: var(--pa-ink, #1d1d1b);
+    color: var(--pa-ivory, #f9f8f4);
+    border: 1px solid var(--pa-ink, #1d1d1b);
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+  }
+  .pa-cf__submit:hover {
+    background: var(--pa-pine, #304b3d);
+    border-color: var(--pa-pine, #304b3d);
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 989px) {
+    .pa-cf__inner {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .pa-cf__lede { position: static; }
+    .pa-cf__sub { max-width: 100%; }
+  }
+
+  @media (max-width: 749px) {
+    .pa-cf {
+      padding: 64px var(--gutter-mobile, 20px);
+    }
+    .pa-cf__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="pa-cf">
+  <div class="pa-cf__inner">
+
+    <!-- Left: heading -->
+    <div class="pa-cf__lede">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="pa-cf__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 class="pa-cf__heading">{{ section.settings.heading | escape }}</h1>
+      {%- endif -%}
+      {%- if section.settings.subtext != blank -%}
+        <p class="pa-cf__sub">{{ section.settings.subtext | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <!-- Right: form -->
+    <div class="pa-cf__form-wrap">
+      {%- form 'contact', id: 'PAContactForm' -%}
+
+        {%- if form.posted_successfully? -%}
+          <div class="pa-cf__success" role="status" tabindex="-1" autofocus>
+            {{ section.settings.success_message | default: "Your message has been sent. We'll be in touch shortly." }}
+          </div>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <div class="pa-cf__error" role="alert" tabindex="-1" autofocus>
+            {{ 'templates.contact.form.error_heading' | t }}
+            {%- if form.errors contains 'email' -%}
+              — {{ form.errors.translated_fields.email }} {{ form.errors.messages.email }}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <!-- Row 1: Name + Email -->
+        <div class="pa-cf__row">
+          <div class="pa-cf__field">
+            <label class="pa-cf__label pa-cf__label--required" for="PAContact-name">Name</label>
+            <input
+              class="pa-cf__input"
+              type="text"
+              id="PAContact-name"
+              name="contact[Name]"
+              autocomplete="name"
+              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+              required
+            >
+          </div>
+          <div class="pa-cf__field">
+            <label class="pa-cf__label pa-cf__label--required" for="PAContact-email">Email</label>
+            <input
+              class="pa-cf__input"
+              type="email"
+              id="PAContact-email"
+              name="contact[email]"
+              autocomplete="email"
+              autocapitalize="off"
+              spellcheck="false"
+              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              aria-required="true"
+              {% if form.errors contains 'email' %}aria-invalid="true"{% endif %}
+              required
+            >
+          </div>
+        </div>
+
+        <!-- Row 2: Phone + Order number -->
+        <div class="pa-cf__row">
+          <div class="pa-cf__field">
+            <label class="pa-cf__label" for="PAContact-phone">Phone</label>
+            <input
+              class="pa-cf__input"
+              type="tel"
+              id="PAContact-phone"
+              name="contact[Phone]"
+              autocomplete="tel"
+              pattern="[0-9\-\+\s\(\)]*"
+              value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+            >
+          </div>
+          <div class="pa-cf__field">
+            <label class="pa-cf__label" for="PAContact-order">Order number</label>
+            <input
+              class="pa-cf__input"
+              type="text"
+              id="PAContact-order"
+              name="contact[Order number]"
+            >
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div class="pa-cf__field pa-cf__field--full">
+          <label class="pa-cf__label" for="PAContact-message">Message</label>
+          <textarea
+            class="pa-cf__textarea"
+            id="PAContact-message"
+            name="contact[Body]"
+            rows="7"
+          >{{- form.body -}}</textarea>
+        </div>
+
+        <button type="submit" class="pa-cf__submit">
+          {{ section.settings.button_label | default: 'Send' }}
+        </button>
+
+      {%- endform -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "PA — Contact Form",
+  "tag": "section",
+  "class": "section-pa-contact",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Get in touch"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "We'd love to hear from you."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Questions about an order, a fragrance, or just want to say hello — we're here."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Send"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Your message has been sent. We'll be in touch shortly."
+    }
+  ],
+  "presets": [
+    {
+      "name": "PA — Contact Form"
+    }
+  ]
+}
+{% endschema %}
