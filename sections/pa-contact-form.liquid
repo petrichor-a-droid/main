@@ -273,12 +273,13 @@
 
         <!-- Message -->
         <div class="pa-cf__field pa-cf__field--full">
-          <label class="pa-cf__label" for="PAContact-message">Message</label>
+          <label class="pa-cf__label pa-cf__label--required" for="PAContact-message">Message</label>
           <textarea
             class="pa-cf__textarea"
             id="PAContact-message"
             name="contact[Body]"
             rows="7"
+            required
           >{{- form.body -}}</textarea>
         </div>
 
