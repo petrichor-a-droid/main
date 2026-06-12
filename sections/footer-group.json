@@ -39,7 +39,7 @@
           "type": "column",
           "settings": {
             "heading": "Legal & privacy",
-            "menu": ""
+            "menu": "legal-privacy"
           }
         }
       },
