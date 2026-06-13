@@ -1,9 +1,18 @@
 {% comment %}
   Petrichor Atelier — Hero Banner
-  Cinematic pine hero with layered atmospheric gradients, optional full-bleed
-  photography, display heading with editorial italics, and a two-column footer
-  (subheading left, CTA right) matching the Storefront.jsx design.
+  Two modes (image_mode setting):
+    single   — one image with optional mobile art-direction swap via <picture>
+    carousel — blocks-based auto-play carousel; per-slide content overrides
+               fall back to section-level content when blank
 {% endcomment %}
+
+{%- liquid
+  assign is_carousel = false
+  if section.settings.image_mode == 'carousel' and section.blocks.size > 0
+    assign is_carousel = true
+  endif
+  assign brightness = 100 | minus: section.settings.overlay_opacity | divided_by: 100.0
+-%}
 
 {%- style -%}
   #shopify-section-{{ section.id }} .pa-hero {
@@ -15,19 +24,18 @@
     }
   }
   {%- if section.index == 1 -%}
-  /* Pull the hero up behind the fixed header so it fills from the very top */
   #shopify-section-{{ section.id }} {
     margin-top: calc(-1 * var(--pa-header-height, 80px));
   }
   {%- endif -%}
+  {%- unless is_carousel -%}
   #shopify-section-{{ section.id }} .pa-hero__img {
     object-position: {{ section.settings.image_position }};
   }
-  /* overlay opacity applied inline on the element — see HTML below */
+  {%- endunless -%}
 {%- endstyle -%}
 
 <style>
-  /* Scoped to this section type — safe to inline once */
   #shopify-section-{{ section.id }} .pa-hero {
     position: relative;
     overflow: hidden;
@@ -37,7 +45,7 @@
     align-items: flex-end;
   }
 
-  /* ── Background photo ── */
+  /* ── Media layer ── */
   #shopify-section-{{ section.id }} .pa-hero__media {
     position: absolute;
     inset: 0;
@@ -49,14 +57,7 @@
     display: block;
   }
 
-  /* Flat dark scrim — background rgba set inline on the element */
-  #shopify-section-{{ section.id }} .pa-hero__overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  /* Atmospheric layered gradients — always present, mirrors the JSX */
+  /* ── Atmosphere ── */
   #shopify-section-{{ section.id }} .pa-hero__atmosphere {
     position: absolute;
     inset: 0;
@@ -70,7 +71,7 @@
   /* ── Content ── */
   #shopify-section-{{ section.id }} .pa-hero__inner {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     width: 100%;
     max-width: var(--max-content, 1280px);
     margin: 0 auto;
@@ -99,15 +100,12 @@
     text-wrap: balance;
     max-width: 14ch;
   }
-
-  /* Italic words use the editorial serif (merchant adds <em> via rich text editor) */
   #shopify-section-{{ section.id }} .pa-hero__heading em,
   #shopify-section-{{ section.id }} .pa-hero__heading i {
     font-family: var(--font-editorial);
     font-style: italic;
   }
 
-  /* ── Two-column footer row ── */
   #shopify-section-{{ section.id }} .pa-hero__foot {
     display: flex;
     align-items: flex-end;
@@ -127,7 +125,6 @@
     color: rgba(249, 248, 244, 0.85);
   }
 
-  /* CTA group */
   #shopify-section-{{ section.id }} .pa-hero__ctas {
     display: flex;
     align-items: center;
@@ -135,7 +132,7 @@
     flex-shrink: 0;
   }
 
-  /* Primary CTA — accent (mint) button */
+  /* Primary CTA — accent (mint) */
   #shopify-section-{{ section.id }} .pa-hero__cta {
     display: inline-flex;
     align-items: center;
@@ -151,8 +148,7 @@
     border: none;
     padding: 14px 24px;
     white-space: nowrap;
-    transition: background var(--dur-base) var(--ease-soft),
-                opacity    var(--dur-base) var(--ease-soft);
+    transition: background var(--dur-base) var(--ease-soft);
   }
   #shopify-section-{{ section.id }} .pa-hero__cta:hover {
     background: color-mix(in srgb, var(--pa-mint) 82%, var(--pa-ink));
@@ -164,12 +160,11 @@
 
   /* Secondary CTA — mint underline */
   #shopify-section-{{ section.id }} .pa-hero__cta--secondary {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0 3px;
     color: var(--pa-mint);
     border-bottom: 1px solid color-mix(in srgb, var(--pa-mint) 45%, transparent);
-    padding-bottom: 3px;
-    background: none;
     transition: border-color var(--dur-base) var(--ease-soft);
   }
   #shopify-section-{{ section.id }} .pa-hero__cta--secondary:hover {
@@ -178,12 +173,52 @@
     border-color: var(--pa-mint);
   }
 
+  /* ── Carousel slides ── */
+  #shopify-section-{{ section.id }} .pa-hero__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 700ms ease;
+    display: flex;
+    align-items: flex-end;
+  }
+  #shopify-section-{{ section.id }} .pa-hero__slide.is-active {
+    opacity: 1;
+  }
+
+  /* ── Carousel dots ── */
+  #shopify-section-{{ section.id }} .pa-hero__dots {
+    position: absolute;
+    bottom: 36px;
+    right: var(--gutter, 40px);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    z-index: 3;
+  }
+  #shopify-section-{{ section.id }} .pa-hero__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(249, 248, 244, 0.35);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 240ms ease, transform 240ms ease;
+  }
+  #shopify-section-{{ section.id }} .pa-hero__dot.is-active {
+    background: var(--pa-ivory);
+    transform: scale(1.4);
+  }
+
   /* ── Mobile ── */
   @media (max-width: 749px) {
-    /* Switch to top-aligned so content sizes to its content with no dead space */
     #shopify-section-{{ section.id }} .pa-hero {
       align-items: flex-start;
       min-height: 0;
+    }
+    #shopify-section-{{ section.id }} .pa-hero__slide {
+      align-items: flex-start;
     }
     #shopify-section-{{ section.id }} .pa-hero__inner {
       padding: calc(var(--pa-header-height, 80px) + 36px) var(--gutter-mobile, 20px) 48px;
@@ -197,13 +232,14 @@
       margin-top: 36px;
       gap: 24px;
     }
+    #shopify-section-{{ section.id }} .pa-hero__dots {
+      bottom: 20px;
+      right: var(--gutter-mobile, 20px);
+    }
   }
 </style>
 
-{%- comment -%}
-  Tell the sticky header to start transparent so it floats over the hero.
-  Runs synchronously — no flash.
-{%- endcomment -%}
+{%- comment -%}Tell sticky header to start transparent{%- endcomment -%}
 <script>
   (function () {
     function applyTransparent() {
@@ -215,98 +251,277 @@
   })();
 </script>
 
-<div class="pa-hero">
+{%- comment -%}── CONTENT SNIPPET — reused by both single and carousel ──{%- endcomment -%}
+{%- capture hero_content -%}
+  {%- assign s_eyebrow = eyebrow_out -%}
+  {%- assign s_heading = heading_out -%}
+  {%- assign s_sub     = sub_out -%}
+  {%- assign s_cta_l   = cta_label_out -%}
+  {%- assign s_cta_u   = cta_url_out -%}
+  {%- assign s_cta2_l  = cta2_label_out -%}
+  {%- assign s_cta2_u  = cta2_url_out -%}
+{%- endcapture -%}
 
-  {%- if section.settings.image != blank -%}
-    {%- assign brightness = 100 | minus: section.settings.overlay_opacity | divided_by: 100.0 -%}
-    <div class="pa-hero__media" style="filter: brightness({{ brightness }});">
-      {{
-        section.settings.image
-        | image_url: width: 3840
-        | image_tag:
-          class: 'pa-hero__img',
-          sizes: '100vw',
-          widths: '750, 1100, 1500, 1780, 2000, 3000, 3840',
-          fetchpriority: 'high',
-          alt: section.settings.image.alt | default: shop.name | escape
-      }}
+<div class="pa-hero" id="pa-hero-{{ section.id }}">
+
+  {%- if is_carousel -%}
+
+    {%- comment -%}── CAROUSEL MODE ──{%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign sl_heading   = block.settings.heading
+        if sl_heading == blank
+          assign sl_heading = section.settings.heading
+        endif
+        assign sl_sub       = block.settings.subheading
+        if sl_sub == blank
+          assign sl_sub = section.settings.subheading
+        endif
+        assign sl_eyebrow   = block.settings.eyebrow
+        if sl_eyebrow == blank
+          assign sl_eyebrow = section.settings.eyebrow
+        endif
+        assign sl_cta_l     = block.settings.cta_label
+        if sl_cta_l == blank
+          assign sl_cta_l = section.settings.cta_label
+        endif
+        assign sl_cta_u     = block.settings.cta_url
+        if sl_cta_u == blank
+          assign sl_cta_u = section.settings.cta_url | default: routes.collections_url
+        endif
+        assign sl_cta2_l    = block.settings.cta_2_label
+        if sl_cta2_l == blank
+          assign sl_cta2_l = section.settings.cta_2_label
+        endif
+        assign sl_cta2_u    = block.settings.cta_2_url
+        if sl_cta2_u == blank
+          assign sl_cta2_u = section.settings.cta_2_url
+        endif
+        assign sl_brightness = 100 | minus: section.settings.overlay_opacity | divided_by: 100.0
+      -%}
+
+      <div class="pa-hero__slide{% if forloop.first %} is-active{% endif %}"
+           data-index="{{ forloop.index0 }}"
+           {{ block.shopify_attributes }}>
+
+        {%- if block.settings.image != blank -%}
+          <div class="pa-hero__media" style="filter: brightness({{ sl_brightness }});">
+            {{
+              block.settings.image
+              | image_url: width: 3840
+              | image_tag:
+                class: 'pa-hero__img',
+                sizes: '100vw',
+                widths: '750, 1100, 1500, 1780, 2000, 3000, 3840',
+                loading: forloop.first | then: 'eager' | default: 'lazy',
+                style: 'object-position: ' | append: block.settings.image_position,
+                alt: block.settings.image.alt | default: shop.name | escape
+            }}
+          </div>
+        {%- endif -%}
+
+        <div class="pa-hero__atmosphere" aria-hidden="true"></div>
+
+        <div class="pa-hero__inner">
+          {%- if sl_eyebrow != blank -%}
+            <span class="pa-hero__eyebrow">{{ sl_eyebrow | escape }}</span>
+          {%- endif -%}
+          {%- if sl_heading != blank -%}
+            <h2 class="pa-hero__heading">{{ sl_heading }}</h2>
+          {%- endif -%}
+          <div class="pa-hero__foot">
+            {%- if sl_sub != blank -%}
+              <p class="pa-hero__sub">{{ sl_sub | escape }}</p>
+            {%- endif -%}
+            {%- if sl_cta_l != blank or sl_cta2_l != blank -%}
+              <div class="pa-hero__ctas">
+                {%- if sl_cta_l != blank -%}
+                  <a href="{{ sl_cta_u }}" class="pa-hero__cta">
+                    {{ sl_cta_l | escape }}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.5"
+                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                    </svg>
+                  </a>
+                {%- endif -%}
+                {%- if sl_cta2_l != blank and sl_cta2_u != blank -%}
+                  <a href="{{ sl_cta2_u }}" class="pa-hero__cta pa-hero__cta--secondary">
+                    {{ sl_cta2_l | escape }}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+
+      </div>
+    {%- endfor -%}
+
+    {%- if section.blocks.size > 1 -%}
+      <div class="pa-hero__dots" aria-hidden="true">
+        {%- for block in section.blocks -%}
+          <button class="pa-hero__dot{% if forloop.first %} is-active{% endif %}"
+                  type="button"
+                  data-target="{{ forloop.index0 }}"
+                  aria-label="Go to slide {{ forloop.index }}"></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  {%- else -%}
+
+    {%- comment -%}── SINGLE MODE ──{%- endcomment -%}
+    {%- if section.settings.image != blank -%}
+      <div class="pa-hero__media" style="filter: brightness({{ brightness }});">
+        <picture>
+          {%- if section.settings.image_mobile != blank -%}
+            <source
+              media="(max-width: 749px)"
+              srcset="{{ section.settings.image_mobile | image_url: width: 750 }} 750w,
+                      {{ section.settings.image_mobile | image_url: width: 1100 }} 1100w"
+              sizes="100vw">
+          {%- endif -%}
+          {{
+            section.settings.image
+            | image_url: width: 3840
+            | image_tag:
+              class: 'pa-hero__img',
+              sizes: '100vw',
+              widths: '750, 1100, 1500, 1780, 2000, 3000, 3840',
+              fetchpriority: 'high',
+              alt: section.settings.image.alt | default: shop.name | escape
+          }}
+        </picture>
+      </div>
+    {%- endif -%}
+
+    <div class="pa-hero__atmosphere" aria-hidden="true"></div>
+
+    <div class="pa-hero__inner">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="pa-hero__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 class="pa-hero__heading">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+      <div class="pa-hero__foot">
+        {%- if section.settings.subheading != blank -%}
+          <p class="pa-hero__sub">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.cta_label != blank or section.settings.cta_2_label != blank -%}
+          <div class="pa-hero__ctas">
+            {%- if section.settings.cta_label != blank -%}
+              <a href="{{ section.settings.cta_url | default: routes.collections_url }}" class="pa-hero__cta">
+                {{ section.settings.cta_label | escape }}
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="1.5"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                </svg>
+              </a>
+            {%- endif -%}
+            {%- if section.settings.cta_2_label != blank and section.settings.cta_2_url != blank -%}
+              <a href="{{ section.settings.cta_2_url }}" class="pa-hero__cta pa-hero__cta--secondary">
+                {{ section.settings.cta_2_label | escape }}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
     </div>
+
   {%- endif -%}
 
-  <div class="pa-hero__atmosphere" aria-hidden="true"></div>
-
-  <div class="pa-hero__inner">
-
-    {%- if section.settings.eyebrow != blank -%}
-      <span class="pa-hero__eyebrow">{{ section.settings.eyebrow | escape }}</span>
-    {%- endif -%}
-
-    {%- if section.settings.heading != blank -%}
-      <h1 class="pa-hero__heading">{{ section.settings.heading }}</h1>
-    {%- endif -%}
-
-    <div class="pa-hero__foot">
-
-      {%- if section.settings.subheading != blank -%}
-        <p class="pa-hero__sub">{{ section.settings.subheading | escape }}</p>
-      {%- endif -%}
-
-      {%- if section.settings.cta_label != blank or section.settings.cta_2_label != blank -%}
-        <div class="pa-hero__ctas">
-
-          {%- if section.settings.cta_label != blank -%}
-            <a
-              href="{{ section.settings.cta_url | default: routes.collections_url }}"
-              class="pa-hero__cta"
-            >
-              {{ section.settings.cta_label | escape }}
-              {%- comment -%} Lucide arrow-right — 14px / 1.5 stroke {%- endcomment -%}
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                   fill="none" stroke="currentColor" stroke-width="1.5"
-                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                <path d="M5 12h14"/>
-                <path d="m12 5 7 7-7 7"/>
-              </svg>
-            </a>
-          {%- endif -%}
-
-          {%- if section.settings.cta_2_label != blank and section.settings.cta_2_url != blank -%}
-            <a
-              href="{{ section.settings.cta_2_url }}"
-              class="pa-hero__cta pa-hero__cta--secondary"
-            >{{ section.settings.cta_2_label | escape }}</a>
-          {%- endif -%}
-
-        </div>
-      {%- endif -%}
-
-    </div>
-  </div>
 </div>
+
+{%- if is_carousel and section.blocks.size > 1 -%}
+<script>
+  (function () {
+    var hero    = document.getElementById('pa-hero-{{ section.id }}');
+    if (!hero) return;
+    var slides  = Array.from(hero.querySelectorAll('.pa-hero__slide'));
+    var dots    = Array.from(hero.querySelectorAll('.pa-hero__dot'));
+    var speed   = {{ section.settings.autoplay_speed | times: 1000 }};
+    var current = 0;
+    var timer   = null;
+
+    function goTo(index) {
+      slides[current].classList.remove('is-active');
+      if (dots[current]) dots[current].classList.remove('is-active');
+      current = ((index % slides.length) + slides.length) % slides.length;
+      slides[current].classList.add('is-active');
+      if (dots[current]) dots[current].classList.add('is-active');
+    }
+
+    function start() { timer = setInterval(function () { goTo(current + 1); }, speed); }
+    function stop()  { clearInterval(timer); }
+
+    start();
+    hero.addEventListener('mouseenter', stop);
+    hero.addEventListener('mouseleave', start);
+    hero.addEventListener('focusin',    stop);
+    hero.addEventListener('focusout',   start);
+
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () { stop(); goTo(i); start(); });
+    });
+
+    var touchStartX = null;
+    hero.addEventListener('touchstart', function (e) {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    hero.addEventListener('touchend', function (e) {
+      if (touchStartX === null) return;
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 44) { stop(); goTo(dx < 0 ? current + 1 : current - 1); start(); }
+      touchStartX = null;
+    }, { passive: true });
+  })();
+</script>
+{%- endif -%}
 
 {% schema %}
 {
   "name": "PA — Hero Banner",
   "tag": "section",
   "class": "section-pa-hero",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
+  "disabled_on": { "groups": ["header", "footer"] },
   "settings": [
     {
       "type": "header",
-      "content": "Background"
+      "content": "Image mode"
+    },
+    {
+      "type": "select",
+      "id": "image_mode",
+      "label": "Mode",
+      "options": [
+        { "value": "single",   "label": "Single image" },
+        { "value": "carousel", "label": "Carousel" }
+      ],
+      "default": "single",
+      "info": "Carousel: add slides using the blocks panel below."
+    },
+    {
+      "type": "header",
+      "content": "Single image"
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Background image",
-      "info": "Omit to use the brand pine colour and atmospheric gradients alone."
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image (optional)",
+      "info": "Replaces the desktop image on screens narrower than 750px. Use for art-directed crops or a pre-composed split."
     },
     {
       "type": "select",
       "id": "image_position",
-      "label": "Image focal point",
+      "label": "Focal point",
       "options": [
         { "value": "center center", "label": "Centre" },
         { "value": "top center",    "label": "Top" },
@@ -323,8 +538,23 @@
       "max": 80,
       "step": 5,
       "unit": "%",
-      "label": "Image overlay darkness",
-      "default": 40
+      "label": "Image darkness",
+      "default": 40,
+      "info": "Applies to all slides in carousel mode."
+    },
+    {
+      "type": "header",
+      "content": "Carousel"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Slide duration (seconds)",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "info": "Pauses on hover and touch."
     },
     {
       "type": "header",
@@ -344,8 +574,7 @@
       "step": 40,
       "unit": "px",
       "label": "Minimum height — desktop",
-      "default": 720,
-      "info": "Ignored when \"Full viewport height\" is on."
+      "default": 720
     },
     {
       "type": "range",
@@ -355,12 +584,12 @@
       "step": 40,
       "unit": "px",
       "label": "Minimum height — mobile",
-      "default": 560,
-      "info": "Applies on screens narrower than 750px. Ignored when \"Full viewport height\" is on."
+      "default": 560
     },
     {
       "type": "header",
-      "content": "Content"
+      "content": "Default content",
+      "info": "Used on single image. In carousel mode, used as fallback when a slide has no content set."
     },
     {
       "type": "text",
@@ -411,6 +640,73 @@
       "label": "Button link"
     }
   ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Focal point",
+          "options": [
+            { "value": "center center", "label": "Centre" },
+            { "value": "top center",    "label": "Top" },
+            { "value": "bottom center", "label": "Bottom" },
+            { "value": "center left",   "label": "Left" },
+            { "value": "center right",  "label": "Right" }
+          ],
+          "default": "center center"
+        },
+        {
+          "type": "header",
+          "content": "Content override",
+          "info": "Leave blank to use the section's default content."
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Primary button label"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Primary button link"
+        },
+        {
+          "type": "text",
+          "id": "cta_2_label",
+          "label": "Secondary button label"
+        },
+        {
+          "type": "url",
+          "id": "cta_2_url",
+          "label": "Secondary button link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
   "presets": [
     {
       "name": "PA — Hero Banner"
