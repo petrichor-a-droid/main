@@ -394,7 +394,7 @@
   },
   "platform_customizations": {
     "custom_css": [
-      ".template-policy #MainContent {background-color: #f9f8f4;}"
+      "main#MainContent {background: #f9f8f4 !important;}"
     ]
   }
 }
