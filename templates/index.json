@@ -100,17 +100,6 @@
         "eyebrow": "The journal",
         "heading": "Notes on what we're wearing."
       }
-    },
-    "pa_newsletter": {
-      "type": "pa-newsletter",
-      "settings": {
-        "heading": "No sales. <em>One letter a month.</em>",
-        "subheading": "On what we're wearing, the houses we keep coming back to, and the things that smell good before they look it.",
-        "placeholder": "hello@petrichor.com.au",
-        "button_label": "Subscribe",
-        "disclaimer": "Quiet. Unsubscribe whenever. No third parties, ever.",
-        "success_message": "You're on the list. One letter a month — nothing more."
-      }
     }
   },
   "order": [
@@ -118,7 +107,6 @@
     "pa_featured_collection",
     "pa_editorial_split",
     "pa_collection_row",
-    "pa_journal",
-    "pa_newsletter"
+    "pa_journal"
   ]
 }

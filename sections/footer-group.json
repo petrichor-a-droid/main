@@ -21,13 +21,6 @@
             "menu": ""
           }
         },
-        "column_DV3fUb": {
-          "type": "column",
-          "settings": {
-            "heading": "Customer care",
-            "menu": ""
-          }
-        },
         "column_LKHFqi": {
           "type": "column",
           "settings": {
@@ -45,7 +38,6 @@
       },
       "block_order": [
         "column_kdBWBa",
-        "column_DV3fUb",
         "column_LKHFqi",
         "column_tHDbUc"
       ],
