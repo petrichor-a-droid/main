@@ -1,17 +1,11 @@
 {% comment %}
   Petrichor Atelier — Hero Banner
-  Two modes (image_mode setting):
-    single   — one image with optional mobile art-direction swap via <picture>
-    carousel — blocks-based auto-play carousel; per-slide content overrides
-               fall back to section-level content when blank
+  Mode is automatic: no slide blocks → single image; slide blocks present → carousel.
 {% endcomment %}
 
 {%- liquid
-  assign is_carousel = false
-  if section.settings.image_mode == 'carousel' and section.blocks.size > 0
-    assign is_carousel = true
-  endif
-  assign brightness = 100 | minus: section.settings.overlay_opacity | divided_by: 100.0
+  assign is_carousel = section.blocks.size > 0
+  assign brightness  = 100 | minus: section.settings.overlay_opacity | divided_by: 100.0
 -%}
 
 {%- style -%}
@@ -490,35 +484,19 @@
   "settings": [
     {
       "type": "header",
-      "content": "Image mode"
-    },
-    {
-      "type": "select",
-      "id": "image_mode",
-      "label": "Mode",
-      "options": [
-        { "value": "single",   "label": "Single image" },
-        { "value": "carousel", "label": "Carousel" }
-      ],
-      "default": "single",
-      "info": "Carousel: add slides using the blocks panel below."
-    },
-    {
-      "type": "header",
-      "content": "Single image"
+      "content": "Background image",
+      "info": "Used as a static image. Ignored when slide blocks are added below."
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Desktop image",
-      "conditions": [{ "setting_id": "image_mode", "value": "single" }]
+      "label": "Desktop image"
     },
     {
       "type": "image_picker",
       "id": "image_mobile",
       "label": "Mobile image (optional)",
-      "info": "Replaces the desktop image on screens narrower than 750px. Use for art-directed crops or a pre-composed split.",
-      "conditions": [{ "setting_id": "image_mode", "value": "single" }]
+      "info": "Replaces the desktop image on screens narrower than 750px. Use for art-directed crops or a pre-composed split."
     },
     {
       "type": "select",
@@ -531,8 +509,7 @@
         { "value": "center left",   "label": "Left" },
         { "value": "center right",  "label": "Right" }
       ],
-      "default": "center center",
-      "conditions": [{ "setting_id": "image_mode", "value": "single" }]
+      "default": "center center"
     },
     {
       "type": "range",
@@ -547,7 +524,8 @@
     },
     {
       "type": "header",
-      "content": "Carousel"
+      "content": "Carousel",
+      "info": "Only applies when slide blocks are added in the blocks panel below."
     },
     {
       "type": "range",
@@ -557,8 +535,7 @@
       "max": 10,
       "step": 1,
       "default": 5,
-      "info": "Pauses on hover and touch.",
-      "conditions": [{ "setting_id": "image_mode", "value": "carousel" }]
+      "info": "Pauses on hover and touch."
     },
     {
       "type": "header",
