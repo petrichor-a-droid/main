@@ -1,6 +1,6 @@
 {%- comment -%}
   Petrichor Atelier — Footer (v2)
-  Pine background, ivory text. Columns powered by Navigation menus.
+  Cocoa background, ivory text. Nav columns + optional newsletter column.
 {%- endcomment -%}
 
 <footer class="pa-fv2" aria-label="Footer">
@@ -8,23 +8,24 @@
     <div class="pa-fv2__top{% unless section.settings.show_brand %} pa-fv2__top--no-brand{% endunless %}">
 
       {%- if section.settings.show_brand -%}
-      <div class="pa-fv2__brand">
-        {%- if section.settings.logo != blank -%}
-          <img class="pa-fv2__logo"
-               src="{{ section.settings.logo | image_url: width: 440 }}"
-               alt="{{ shop.name | escape }}" width="220" loading="lazy">
-        {%- else -%}
-          <img class="pa-fv2__logo"
-               src="{{ 'secondary-logo-2-cocoa.svg' | asset_url }}"
-               alt="{{ shop.name | escape }}" width="220" loading="lazy">
-        {%- endif -%}
-        {%- if section.settings.tagline != blank -%}
-          <p class="pa-fv2__tagline">{{ section.settings.tagline }}</p>
-        {%- endif -%}
-      </div>
+        <div class="pa-fv2__brand">
+          {%- if section.settings.logo != blank -%}
+            <img class="pa-fv2__logo"
+                 src="{{ section.settings.logo | image_url: width: 440 }}"
+                 alt="{{ shop.name | escape }}" width="220" loading="lazy">
+          {%- else -%}
+            <img class="pa-fv2__logo"
+                 src="{{ 'secondary-logo-2-ivory.svg' | asset_url }}"
+                 alt="{{ shop.name | escape }}" width="220" loading="lazy">
+          {%- endif -%}
+          {%- if section.settings.tagline != blank -%}
+            <p class="pa-fv2__tagline">{{ section.settings.tagline }}</p>
+          {%- endif -%}
+        </div>
       {%- endif -%}
 
       {%- for block in section.blocks -%}
+
         {%- if block.type == 'column' -%}
           <div {{ block.shopify_attributes }}>
             {%- if block.settings.heading != blank -%}
@@ -40,7 +41,60 @@
               </ul>
             {%- endif -%}
           </div>
+
+        {%- elsif block.type == 'newsletter' -%}
+          <div class="pa-fv2__nl" {{ block.shopify_attributes }}>
+            {%- if block.settings.heading != blank -%}
+              <div class="pa-fv2__col-head">{{ block.settings.heading }}</div>
+            {%- endif -%}
+            {%- if block.settings.subheading != blank -%}
+              <p class="pa-fv2__nl-sub">{{ block.settings.subheading | escape }}</p>
+            {%- endif -%}
+
+            {%- if customer.email_marketing_consent.state == 'subscribed' -%}
+              <p class="pa-fv2__nl-success">{{ block.settings.success_message | escape }}</p>
+            {%- else -%}
+              {%- form 'customer', id: 'pa-footer-nl-form-{{ block.id }}' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                {%- if form.posted_successfully? -%}
+                  <p class="pa-fv2__nl-success">{{ block.settings.success_message | escape }}</p>
+                {%- else -%}
+                  <div class="pa-fv2__nl-row">
+                    <input
+                      class="pa-fv2__nl-input"
+                      type="email"
+                      name="contact[email]"
+                      id="pa-footer-nl-email-{{ block.id }}"
+                      value="{{ form.email }}"
+                      autocomplete="email"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      placeholder="{{ block.settings.placeholder | default: 'your@email.com' | escape }}"
+                      required
+                      aria-label="{{ block.settings.placeholder | default: 'your@email.com' | escape }}"
+                    >
+                    <button type="submit" class="pa-fv2__nl-submit">
+                      {{ block.settings.button_label | default: 'Subscribe' | escape }}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="1.5"
+                           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14"/>
+                        <path d="m12 5 7 7-7 7"/>
+                      </svg>
+                    </button>
+                  </div>
+                  {%- if form.errors -%}
+                    <p class="pa-fv2__nl-disclaimer" role="alert">{{ form.errors.messages['email'] }}</p>
+                  {%- endif -%}
+                  {%- if block.settings.disclaimer != blank -%}
+                    <p class="pa-fv2__nl-disclaimer">{{ block.settings.disclaimer | escape }}</p>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endform -%}
+            {%- endif -%}
+          </div>
         {%- endif -%}
+
       {%- endfor -%}
 
     </div>
@@ -104,8 +158,8 @@
 
 <style>
   .pa-fv2 {
-    background: var(--pa-sage, #c6d1b5);
-    color: var(--pa-cocoa, #342627);
+    background: var(--pa-cocoa, #342627);
+    color: var(--pa-ivory, #f9f8f4);
     padding-top: 96px;
     padding-bottom: 32px;
     margin-top: 0;
@@ -118,15 +172,16 @@
 
   .pa-fv2__top {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1.2fr;
     gap: 60px;
     padding-bottom: 64px;
-    border-bottom: 1px solid rgba(var(--color-base-accent-2, 52, 38, 39), 0.18);
+    border-bottom: 1px solid rgba(var(--color-base-background-1, 249, 248, 244), 0.15);
   }
   .pa-fv2__top--no-brand {
     grid-template-columns: repeat(4, 1fr);
   }
 
+  /* ── Brand column ── */
   .pa-fv2__logo {
     width: 220px;
     max-width: 100%;
@@ -139,18 +194,19 @@
     font-style: italic;
     font-size: 18px;
     line-height: 1.4;
-    color: rgba(var(--color-base-accent-2, 52, 38, 39), 0.78);
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.72);
     margin: 22px 0 0;
     max-width: 320px;
   }
 
+  /* ── Nav columns ── */
   .pa-fv2__col-head {
     font-family: var(--font-body, 'Instrument Sans', sans-serif);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgba(var(--color-base-accent-2, 52, 38, 39), 0.55);
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.50);
     margin-bottom: 18px;
   }
 
@@ -166,15 +222,85 @@
   .pa-fv2__link {
     font-family: var(--font-body, 'Instrument Sans', sans-serif);
     font-size: 14px;
-    color: rgba(var(--color-base-accent-2, 52, 38, 39), 0.92);
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.88);
     text-decoration: none;
     width: fit-content;
     transition: color 240ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
   }
   .pa-fv2__link:hover {
-    color: var(--pa-cocoa, #342627);
+    color: var(--pa-ivory, #f9f8f4);
   }
 
+  /* ── Newsletter column ── */
+  .pa-fv2__nl-sub {
+    font-family: var(--font-display, 'EB Garamond', serif);
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.45;
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.72);
+    margin: 0 0 22px;
+  }
+
+  .pa-fv2__nl-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(var(--color-base-background-1, 249, 248, 244), 0.35);
+    padding-bottom: 10px;
+  }
+
+  .pa-fv2__nl-input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: none;
+    color: var(--pa-ivory, #f9f8f4);
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 13px;
+    padding: 0;
+    min-width: 0;
+  }
+  .pa-fv2__nl-input::placeholder {
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.38);
+  }
+
+  .pa-fv2__nl-submit {
+    background: transparent;
+    border: 0;
+    color: var(--pa-ivory, #f9f8f4);
+    cursor: pointer;
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    white-space: nowrap;
+    transition: opacity 200ms ease;
+    flex-shrink: 0;
+  }
+  .pa-fv2__nl-submit:hover { opacity: 0.6; }
+
+  .pa-fv2__nl-disclaimer {
+    font-family: var(--font-body, 'Instrument Sans', sans-serif);
+    font-size: 10px;
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.40);
+    margin: 10px 0 0;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+  }
+
+  .pa-fv2__nl-success {
+    font-family: var(--font-display, 'EB Garamond', serif);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--pa-ivory, #f9f8f4);
+  }
+
+  /* ── Bottom bar ── */
   .pa-fv2__bottom {
     display: flex;
     align-items: center;
@@ -183,7 +309,7 @@
     padding-top: 28px;
     font-family: var(--font-body, 'Instrument Sans', sans-serif);
     font-size: 12px;
-    color: rgba(var(--color-base-accent-2, 52, 38, 39), 0.55);
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.45);
   }
 
   .pa-fv2__signoff {
@@ -198,36 +324,30 @@
   .pa-fv2__social {
     display: inline-flex;
     gap: 14px;
-    color: rgba(var(--color-base-accent-2, 52, 38, 39), 0.92);
+    color: rgba(var(--color-base-background-1, 249, 248, 244), 0.88);
   }
   .pa-fv2__social a {
     color: inherit;
     display: inline-flex;
     transition: color 240ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
   }
-  .pa-fv2__social a:hover {
-    color: var(--pa-cocoa, #342627);
-  }
+  .pa-fv2__social a:hover { color: var(--pa-ivory, #f9f8f4); }
 
+  /* ── Responsive ── */
   @media (max-width: 989px) {
     .pa-fv2__top {
       grid-template-columns: 1fr 1fr;
       gap: 40px;
     }
-    .pa-fv2__brand {
-      grid-column: 1 / -1;
-    }
+    .pa-fv2__brand { grid-column: 1 / -1; }
   }
 
   @media (max-width: 749px) {
     .pa-fv2 {
       padding-top: 64px;
       padding-bottom: 28px;
-      margin-top: 0;
     }
-    .pa-fv2__inner {
-      padding: 0 var(--gutter-mobile, 20px);
-    }
+    .pa-fv2__inner { padding: 0 var(--gutter-mobile, 20px); }
     .pa-fv2__top {
       grid-template-columns: 1fr;
       gap: 40px;
@@ -324,16 +444,60 @@
           "label": "Menu"
         }
       ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Stay in touch"
+        },
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "One letter a month. No sales, no noise."
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Email placeholder",
+          "default": "your@email.com"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Subscribe"
+        },
+        {
+          "type": "text",
+          "id": "disclaimer",
+          "label": "Disclaimer",
+          "default": "Quiet. Unsubscribe whenever."
+        },
+        {
+          "type": "text",
+          "id": "success_message",
+          "label": "Success message",
+          "default": "You're on the list."
+        }
+      ]
     }
   ],
-  "max_blocks": 4,
+  "max_blocks": 5,
   "presets": [
     {
       "name": "PA — Footer",
       "blocks": [
         { "type": "column", "settings": { "heading": "Atelier" } },
         { "type": "column", "settings": { "heading": "Index" } },
-        { "type": "column", "settings": { "heading": "Service" } }
+        { "type": "column", "settings": { "heading": "Service" } },
+        { "type": "newsletter", "settings": {} }
       ]
     }
   ]
