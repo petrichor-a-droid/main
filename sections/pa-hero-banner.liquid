@@ -135,7 +135,7 @@
     flex-shrink: 0;
   }
 
-  /* Primary CTA — outline-inverse button */
+  /* Primary CTA — accent (mint) button */
   #shopify-section-{{ section.id }} .pa-hero__cta {
     display: inline-flex;
     align-items: center;
@@ -145,23 +145,20 @@
     font-size: var(--t-cta);
     letter-spacing: var(--ls-cta);
     text-transform: uppercase;
-    color: var(--pa-ivory);
+    color: var(--pa-ink);
+    background: var(--pa-mint);
     text-decoration: none;
-    border: 1px solid rgba(249, 248, 244, 0.55);
+    border: none;
     padding: 14px 24px;
     white-space: nowrap;
-    transition:
-      background   var(--dur-base) var(--ease-soft),
-      color        var(--dur-base) var(--ease-soft),
-      border-color var(--dur-base) var(--ease-soft);
+    transition: background var(--dur-base) var(--ease-soft),
+                opacity    var(--dur-base) var(--ease-soft);
   }
   #shopify-section-{{ section.id }} .pa-hero__cta:hover {
-    background: var(--pa-ivory);
-    color: var(--pa-pine);
-    border-color: var(--pa-ivory);
+    background: color-mix(in srgb, var(--pa-mint) 82%, var(--pa-ink));
   }
   #shopify-section-{{ section.id }} .pa-hero__cta:focus-visible {
-    outline: 2px solid var(--pa-ivory);
+    outline: 2px solid var(--pa-mint);
     outline-offset: 3px;
   }
 
