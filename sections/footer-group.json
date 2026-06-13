@@ -34,12 +34,24 @@
             "heading": "Legal & privacy",
             "menu": "legal-privacy"
           }
+        },
+        "newsletter_wjJnxP": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Stay in touch",
+            "subheading": "One letter a month. No sales, no noise.",
+            "placeholder": "your@email.com",
+            "button_label": "Subscribe",
+            "disclaimer": "Quiet. Unsubscribe whenever.",
+            "success_message": "You're on the list."
+          }
         }
       },
       "block_order": [
         "column_kdBWBa",
         "column_LKHFqi",
-        "column_tHDbUc"
+        "column_tHDbUc",
+        "newsletter_wjJnxP"
       ],
       "name": "PA — Footer",
       "settings": {
